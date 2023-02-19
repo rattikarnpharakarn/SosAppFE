@@ -1,16 +1,89 @@
 import 'package:flutter/material.dart';
 
 import 'otp.dart';
+import 'dart:convert';
+import 'dart:developer';
+import 'dart:io';
+import 'dart:typed_data';
 
+import 'package:http/http.dart';
+import 'dart:convert' as convert;
+
+import 'package:http/http.dart' as http;
+import 'package:file/local.dart';
+import 'package:sos/src/screen/home.dart';
+import 'package:sos/src/screen/signupPhoneNumber.dart';
+import 'dart:developer' as developer;
 
 class SignupPhoneNumber extends StatefulWidget {
-  const SignupPhoneNumber({super.key});
+  const SignupPhoneNumber({Key? key}) : super(key: key);
 
   @override
   State<SignupPhoneNumber> createState() => _SignupPhoneNumberState();
 }
 
 class _SignupPhoneNumberState extends State<SignupPhoneNumber> {
+  final TextEditingController _controllerPhone = TextEditingController();
+
+  Future<Data>? _futureOTP;
+
+  String _phone = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _controllerPhone.addListener(() {
+      setState(() {
+        _phone = _controllerPhone.text;
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    // Clean up the controller when the widget is disposed.
+    _controllerPhone.dispose();
+
+    super.dispose();
+  }
+
+  Future<Data> singupwithphone(String phoneNumber) async {
+    final response = await http.post(
+      Uri.parse('http://10.0.2.2:80/SosApp/accounts/sendOTP'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'phoneNumber': phoneNumber,
+      }),
+    );
+    developer.log(response.body);
+
+    if (response.statusCode == 200) {
+      developer.log('iiiii');
+      // If the server did return a 201 CREATED response,
+      // then parse the JSON.
+      final vf = json.decode(response.body);
+      final item = Param(
+        phone: phoneNumber,
+        verifyCode: vf["data"],
+      );
+      developer.log('aaa');
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => OTP(data: item),
+        ),
+      );
+      developer.log(response.body);
+      return Data.fromJson(jsonDecode(response.body));
+    } else {
+      // If the server did not return a 201 CREATED response,
+      // then throw an exception.
+      throw Exception('Failed to create album.');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,7 +126,8 @@ class _SignupPhoneNumberState extends State<SignupPhoneNumber> {
                   Container(
                     padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
                     margin: const EdgeInsets.all(15),
-                    child: const TextField(
+                    child: TextField(
+                      controller: _controllerPhone,
                       decoration: InputDecoration(
                         labelText: 'Phone number',
                         labelStyle: TextStyle(color: Colors.white),
@@ -89,10 +163,9 @@ class _SignupPhoneNumberState extends State<SignupPhoneNumber> {
                                     side: const BorderSide(
                                         width: 3, color: Colors.black)))),
                         onPressed: () {
-                          Navigator.push(context,
-                              MaterialPageRoute(builder: (context) {
-                            return OTP();
-                          }));
+                          setState(() {
+                            _futureOTP = singupwithphone(_controllerPhone.text);
+                          });
                         },
                         child: const Text(
                           "Request OTP",
@@ -108,3 +181,28 @@ class _SignupPhoneNumberState extends State<SignupPhoneNumber> {
     );
   }
 }
+
+class Data {
+  Data(this.otp, this.verifyCode);
+  final Null otp;
+  final Null verifyCode;
+  // named constructor
+  Data.fromJson(Map<String, dynamic> json)
+      : otp = json['otp'],
+        verifyCode = json['verifyCode'];
+  // method
+  Map<String, dynamic> toJson() {
+    return {
+      'otp': otp,
+      'verifyCode': verifyCode,
+    };
+  }
+}
+
+class Param {
+  String phone;
+  dynamic verifyCode;
+
+  Param({required this.phone, required this.verifyCode});
+}
+

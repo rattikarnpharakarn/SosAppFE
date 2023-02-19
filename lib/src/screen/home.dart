@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:sos/src/screen/signin.dart';
 
 import '../component/bottom_bar.dart';
+import '../component/form_data.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -32,40 +33,125 @@ class _HomeState extends State<Home> {
       body: Padding(
         padding: const EdgeInsets.all(10),
         child: SingleChildScrollView(
-          child: Form(
-            child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                textDirection: TextDirection.ltr,
-                children: <Widget>[
-                  Container(
-                    padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
-                    child: SizedBox(
-                      width: double.infinity,
-                      height: 63.4,
-                      // child: ElevatedButton(
-                      //   style: ButtonStyle(
-                      //       backgroundColor:
-                      //           MaterialStateProperty.all(Colors.black),
-                      //       shape: MaterialStateProperty.all(
-                      //           RoundedRectangleBorder(
-                      //               borderRadius: BorderRadius.circular(15.29),
-                      //               side: const BorderSide(
-                      //                   width: 3, color: Colors.black)))),
-                      //   onPressed: () {
-                      //     Navigator.push(context,
-                      //         MaterialPageRoute(builder: (context) {
-                      //       return const Signin();
-                      //     }));
-                      //   },
-                      //   child: const Text(
-                      //     "Continue",
-                      //     style: TextStyle(fontSize: 24),
-                      //   ),
-                      // ),
+          child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              textDirection: TextDirection.ltr,
+              children: <Widget>[
+                Container(
+                  padding: const EdgeInsets.fromLTRB(1, 1, 1, 0),
+                  child: Column(
+                    children: <Widget>[
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        child: Column(
+                          children: <Widget>[
+                            Text(
+                              "Good morning Gig.",
+                              style: Theme.of(context).textTheme.headline4,
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(0, 25, 0, 25),
+                        child: Container(
+                          alignment: Alignment.centerLeft,
+                          padding: const EdgeInsets.all(0.0),
+                          child: Text(
+                            'You need any help?',
+                            style: TextStyle(
+                              color: Colors.red.shade800,
+                              fontSize: 25,
+                              decoration: TextDecoration.underline,
+                              decorationColor: Colors.red,
+                              decorationStyle: TextDecorationStyle.solid,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  height: 200,
+                  child: Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15.0),
+                    ),
+                    elevation: 20,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        const ListTile(
+                          // leading: Icon(Icons.album, size: 60),
+                          title: Text('Sonu Nigam',
+                              style: TextStyle(fontSize: 30.0)),
+                          subtitle: Text('Best of Sonu Nigam Music.',
+                              style: TextStyle(fontSize: 18.0)),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.all(
+                              15), //apply padding to all four sides
+                        ),
+                        ElevatedButton(
+                          child: Text(
+                            'View Detail',
+                            style: TextStyle(
+                              color: Color.fromARGB(255, 45, 28, 178),
+                            ),
+                          ),
+                          style: ElevatedButton.styleFrom(
+                            primary: Color.fromARGB(255, 255, 255, 255),
+                          ),
+                          onPressed: () {},
+                        ),
+                      ],
                     ),
                   ),
-                ]),
-          ),
+                ),
+                Container(
+                  padding: const EdgeInsets.fromLTRB(1, 1, 1, 0),
+                  child: GridView.count(
+                    primary: false,
+                    padding: const EdgeInsets.all(20),
+                    crossAxisSpacing: 10,
+                    mainAxisSpacing: 10,
+                    crossAxisCount: 2,
+                    children: <Widget>[
+                      Container(
+                        padding: const EdgeInsets.all(8),
+                        color: Colors.teal[100],
+                        child: const Text("He'd have you all unravel at the"),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.all(8),
+                        color: Colors.teal[200],
+                        child: const Text('Heed not the rabble'),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.all(8),
+                        color: Colors.teal[300],
+                        child: const Text('Sound of screams but the'),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.all(8),
+                        color: Colors.teal[400],
+                        child: const Text('Who scream'),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.all(8),
+                        color: Colors.teal[500],
+                        child: const Text('Revolution is coming...'),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.all(8),
+                        color: Colors.teal[600],
+                        child: const Text('Revolution, they...'),
+                      ),
+                    ],
+                  ),
+                )
+              ]),
         ),
       ),
     );
