@@ -72,46 +72,40 @@ class _SignupState extends State<Signup> {
           ),
           flexibleSpace: Container(
             padding: const EdgeInsets.fromLTRB(0, 150, 0, 0),
-            alignment: Alignment.center,
-            child: Container(
-              child: Align(
-                alignment: Alignment.center,
-                child: Column(
-                  children: <Widget>[
-                    Container(
-                      width: 200,
-                      height: 200,
-                      child: Stack(
-                        children: [
-                          ClipRRect(
-                              borderRadius: BorderRadius.circular(360),
-                              child: Image.asset(
-                                "assets/images/Image1.jpeg",
-                                width: 200,
-                                height: 200,
-                                fit: BoxFit.cover,
-                              )),
-                          Container(
-                            alignment: Alignment.bottomRight,
-                            child: FloatingActionButton(
-                              child: Icon(Icons.add),
-                              onPressed: () {
-                                print('FAB tapped!');
-                              },
-                              backgroundColor: Color.fromARGB(255, 17, 17, 17),
-                            ),
-                          ),
-                        ],
+            child: Column(
+              children: <Widget>[
+                Container(
+                  width: 200,
+                  height: 200,
+                  child: Stack(
+                    children: [
+                      ClipRRect(
+                          borderRadius: BorderRadius.circular(360),
+                          child: Image.asset(
+                            "assets/images/Image1.jpeg",
+                            width: 200,
+                            height: 200,
+                            fit: BoxFit.cover,
+                          )),
+                      Container(
+                        alignment: Alignment.bottomRight,
+                        child: FloatingActionButton(
+                          child: Icon(Icons.add),
+                          onPressed: () {
+                            print('FAB tapped!');
+                          },
+                          backgroundColor: Color.fromARGB(255, 17, 17, 17),
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
+              ],
             ),
           ),
         ),
       ),
-      body: Padding(
+      body: Container(
         padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
         child: SingleChildScrollView(
           child: Form(
@@ -119,9 +113,17 @@ class _SignupState extends State<Signup> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                Form_Data("First Name", 10, 60, 10, 0, TextInputType.text),
-                Form_Data("Last Name", 10, 0, 10, 0, TextInputType.text),
-                Form_Data("ID Card", 10, 0, 10, 0, TextInputType.number),
+                Container(
+                  padding: const EdgeInsets.all(2.0),
+                  margin: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+                  child: Column(
+                    children: [
+                      Form_Data("First Name", 10, 0, 10, 0, TextInputType.text),
+                      Form_Data("Last Name", 10, 0, 10, 0, TextInputType.text),
+                      Form_Data("ID Card", 10, 0, 10, 0, TextInputType.number),
+                    ],
+                  ),
+                ),
                 Container(
                   alignment: Alignment.centerLeft,
                   child: Column(
@@ -132,12 +134,8 @@ class _SignupState extends State<Signup> {
                 )
               ],
             ),
-          
           ),
-        
-        
         ),
-      
       ),
     );
   }

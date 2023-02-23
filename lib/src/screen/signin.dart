@@ -67,9 +67,9 @@ class _SigninState extends State<Signin> {
     _controllerPass.dispose();
     super.dispose();
   }
+
   // static const String _baseUrl = "http://sos-app.thddns.net:7330/SosApp/signIn";
   Future<Album> createAlbum(String username, String password) async {
-   
     final response = await http.post(
       Uri.parse('http://10.0.2.2:80/SosApp/accounts/signIn'),
       headers: <String, String>{
@@ -85,10 +85,11 @@ class _SigninState extends State<Signin> {
     if (response.statusCode == 200) {
       // If the server did return a 201 CREATED response,
       // then parse the JSON.
+      // ignore: use_build_context_synchronously
       Navigator.push(context, MaterialPageRoute(builder: (context) {
         return const Home();
       }));
-       developer.log('aa');
+      developer.log('aa');
       return Album.fromJson(jsonDecode(response.body));
     } else {
       // If the server did not return a 201 CREATED response,
@@ -124,7 +125,7 @@ class _SigninState extends State<Signin> {
                 margin: const EdgeInsets.all(15),
                 child: TextField(
                   controller: _controllerPhone,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: 'Phone number',
                     labelStyle: TextStyle(color: Colors.white),
                     // helperText: 'Ex. 0812345678',
@@ -137,7 +138,7 @@ class _SigninState extends State<Signin> {
                     ),
                   ),
                   keyboardType: TextInputType.phone,
-                  style: TextStyle(color: Colors.white),
+                  style: const TextStyle(color: Colors.white),
                 ),
               ),
               Container(
@@ -145,7 +146,7 @@ class _SigninState extends State<Signin> {
                 margin: const EdgeInsets.all(15),
                 child: TextField(
                   controller: _controllerPass,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     suffixIcon: IconButton(
                         icon: Icon(Icons.remove_red_eye), onPressed: null),
                     labelText: 'Password',
@@ -161,7 +162,7 @@ class _SigninState extends State<Signin> {
                   obscureText: true,
                   enableSuggestions: false,
                   autocorrect: false,
-                  style: TextStyle(color: Colors.white),
+                  style: const TextStyle(color: Colors.white),
                 ),
               ),
               Container(

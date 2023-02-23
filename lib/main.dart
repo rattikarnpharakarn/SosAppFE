@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
-
-
-import 'package:sos/src/screen/index.dart';
-
-
+import 'package:sos/src/screen/signup.dart';
 
 void main() {
   runApp(const MyApp());
 }
+
 //
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -17,8 +14,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'SosApp',
       theme: ThemeData(primarySwatch: Colors.red),
-      home: const Index(),
-      // home: Signup(),
+      // home: const Index(),
+      home: Signup(),
     );
   }
 }

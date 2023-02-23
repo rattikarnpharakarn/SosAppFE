@@ -1,53 +1,95 @@
 import 'package:bottom_bar_matu/bottom_bar/bottom_bar_bubble.dart';
 import 'package:bottom_bar_matu/bottom_bar_item.dart';
 import 'package:flutter/material.dart';
-
+import 'package:sos/src/screen/home.dart';
+import 'package:sos/src/screen/test.dart';
 
 class Bottombar extends StatefulWidget {
-  const Bottombar({super.key});
+  Bottombar({
+    super.key,
+    required this.pageNumber,
+  });
+  int pageNumber;
 
   @override
-  State<Bottombar> createState() => _BottombarState();
+  // ignore: no_logic_in_create_state
+  State<Bottombar> createState() => _BottombarState(pageNumber: pageNumber);
 }
 
 class _BottombarState extends State<Bottombar> {
   final PageController controller = PageController();
+  _BottombarState({
+    required this.pageNumber,
+  });
+
+  int pageNumber;
 
   @override
   void dispose() {
     super.dispose();
   }
 
+  void _onItemTapped(int index) {
+    if (index != pageNumber) {
+      setState(() {
+        pageNumber = index;
+      });
+
+      if (pageNumber == 0) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => Home(),
+          ),
+        );
+      } else if (pageNumber == 1) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => TestPage(),
+          ),
+        );
+      } else if (pageNumber == 2) {
+      } else if (pageNumber == 3) {
+      } else if (pageNumber == 4) {}
+    }
+  }
+
+  // Home(),
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
-      child: BottomBarBubble(
-        items: [
-          BottomBarItem(
-            iconData: Icons.home,
-            // label: 'Home',
+      child: BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'หน้าแรก',
+            backgroundColor: Color.fromARGB(255, 250, 92, 92),
           ),
-          BottomBarItem(
-            iconData: Icons.perm_contact_cal_outlined,
-            // label: 'Chat',
+          BottomNavigationBarItem(
+            icon: Icon(Icons.library_books_rounded),
+            label: 'เบอร์โทรสารด่วน',
+            backgroundColor: Color.fromARGB(255, 250, 92, 92),
           ),
-          BottomBarItem(
-            iconData: Icons.sos_outlined,
-            // label: 'Notification',
+          BottomNavigationBarItem(
+            icon: Icon(Icons.adjust_rounded),
+            label: 'SOS',
           ),
-          BottomBarItem(
-            iconData: Icons.access_time_outlined,
-            // label: 'Calendar',
+          BottomNavigationBarItem(
+            icon: Icon(Icons.history),
+            label: 'ล่าสุด',
+            backgroundColor: Color.fromARGB(255, 250, 92, 92),
           ),
-          BottomBarItem(
-            iconData: Icons.chat_outlined,
-            // label: 'Setting',
+          BottomNavigationBarItem(
+            icon: Icon(Icons.chat_rounded),
+            label: 'แชท',
+            backgroundColor: Color.fromARGB(255, 250, 92, 92),
           ),
         ],
-        onSelect: (index) {
-          // implement your select function here
-        },
+        currentIndex: pageNumber,
+        selectedItemColor: Color.fromARGB(255, 255, 255, 255),
+        backgroundColor: Color.fromARGB(255, 250, 92, 92),
+        onTap: _onItemTapped,
       ),
     );
   }
