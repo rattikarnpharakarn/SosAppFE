@@ -57,25 +57,24 @@ class _SignupPhoneNumberState extends State<SignupPhoneNumber> {
         'phoneNumber': phoneNumber,
       }),
     );
-    developer.log(response.body);
 
     if (response.statusCode == 200) {
-      developer.log('iiiii');
-      // If the server did return a 201 CREATED response,
-      // then parse the JSON.
       final vf = json.decode(response.body);
+      print('OTP');
+      print(vf);
+      print('OTP');
       final item = Param(
         phone: phoneNumber,
         verifyCode: vf["data"],
       );
-      developer.log('aaa');
+      // ignore: use_build_context_synchronously
       Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => OTP(data: item),
         ),
       );
-      developer.log(response.body);
+
       return Data.fromJson(jsonDecode(response.body));
     } else {
       // If the server did not return a 201 CREATED response,
@@ -128,7 +127,7 @@ class _SignupPhoneNumberState extends State<SignupPhoneNumber> {
                     margin: const EdgeInsets.all(15),
                     child: TextField(
                       controller: _controllerPhone,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         labelText: 'Phone number',
                         labelStyle: TextStyle(color: Colors.white),
                         // helperText: 'Ex. 0812345678',
@@ -145,7 +144,7 @@ class _SignupPhoneNumberState extends State<SignupPhoneNumber> {
                         ),
                       ),
                       keyboardType: TextInputType.number,
-                      style: TextStyle(color: Colors.white),
+                      style: const TextStyle(color: Colors.white),
                     ),
                   ),
                   Container(
@@ -205,4 +204,3 @@ class Param {
 
   Param({required this.phone, required this.verifyCode});
 }
-

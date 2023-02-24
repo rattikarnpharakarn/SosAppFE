@@ -2,7 +2,6 @@ import 'package:bottom_bar_matu/bottom_bar/bottom_bar_bubble.dart';
 import 'package:bottom_bar_matu/bottom_bar_item.dart';
 import 'package:flutter/material.dart';
 import 'package:sos/src/screen/home.dart';
-import 'package:sos/src/screen/test.dart';
 
 class Bottombar extends StatefulWidget {
   Bottombar({
@@ -43,12 +42,12 @@ class _BottombarState extends State<Bottombar> {
           ),
         );
       } else if (pageNumber == 1) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => TestPage(),
-          ),
-        );
+        // Navigator.push(
+        //   context,
+        //   MaterialPageRoute(
+        //     builder: (context) => TestPage(),
+        //   ),
+        // );
       } else if (pageNumber == 2) {
       } else if (pageNumber == 3) {
       } else if (pageNumber == 4) {}
