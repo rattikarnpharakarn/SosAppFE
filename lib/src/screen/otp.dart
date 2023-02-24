@@ -79,7 +79,6 @@ class _OTPState extends State<OTP> {
       String box1, String box2, String box3, String box4) async {
     final otpValue =
         box1.toString() + box2.toString() + box3.toString() + box4.toString();
-
     final response = await http.post(
       Uri.parse('http://10.0.2.2:80/SosApp/accounts/verifyOTP'),
       headers: <String, String>{

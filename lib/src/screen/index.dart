@@ -13,9 +13,8 @@ class Index extends StatefulWidget {
 class _IndexState extends State<Index> {
   @override
   Widget build(BuildContext context) {
-    // return Scaffold(body: Signin());
     return Scaffold(
-      bottomNavigationBar: const Home(),
+      body: Home(),
     );
   }
 }

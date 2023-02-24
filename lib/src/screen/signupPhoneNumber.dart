@@ -2,18 +2,11 @@ import 'package:flutter/material.dart';
 
 import 'otp.dart';
 import 'dart:convert';
-import 'dart:developer';
-import 'dart:io';
-import 'dart:typed_data';
-
-import 'package:http/http.dart';
-import 'dart:convert' as convert;
 
 import 'package:http/http.dart' as http;
-import 'package:file/local.dart';
-import 'package:sos/src/screen/home.dart';
-import 'package:sos/src/screen/signupPhoneNumber.dart';
-import 'dart:developer' as developer;
+import 'dart:io';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:path_provider/path_provider.dart';
 
 class SignupPhoneNumber extends StatefulWidget {
   const SignupPhoneNumber({Key? key}) : super(key: key);
@@ -60,9 +53,6 @@ class _SignupPhoneNumberState extends State<SignupPhoneNumber> {
 
     if (response.statusCode == 200) {
       final vf = json.decode(response.body);
-      print('OTP');
-      print(vf);
-      print('OTP');
       final item = Param(
         phone: phoneNumber,
         verifyCode: vf["data"],
