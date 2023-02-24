@@ -40,40 +40,62 @@ class _HomeState extends State<Home> {
           textDirection: TextDirection.ltr,
           children: <Widget>[
             Container(
-              alignment: Alignment.centerLeft,
-              child: Column(
-                children: <Widget>[
-                  Text(
-                    "Good morning Gig.",
-                    style: Theme.of(context).textTheme.headline5,
+              child: Row(
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(1),
+                        child: const Text(
+                          "Good morning Gig.",
+                          style: TextStyle(
+                            color: Color.fromARGB(255, 0, 0, 0),
+                            fontSize: 24,
+                            decorationStyle: TextDecorationStyle.solid,
+                          ),
+                        ),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.all(1),
+                        child: Text(
+                          'You need any help?',
+                          style: TextStyle(
+                            color: Colors.red.shade800,
+                            fontSize: 18,
+                            decoration: TextDecoration.underline,
+                            decorationColor: Colors.red,
+                            decorationStyle: TextDecorationStyle.solid,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
+                  Spacer(),
+                  Container(
+                    padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(360),
+                      child: Image.asset(
+                        'assets/images/profile.jpg',
+                        width: 45,
+                        height: 45,
+                        fit: BoxFit.cover,
+                      ),
+                      // Image.memory( base64Decode(imageBase64), fit: BoxFit.cover )
+                    ),
+                  )
                 ],
               ),
             ),
             Container(
-              padding: const EdgeInsets.fromLTRB(0, 5, 0, 10),
-              child: Container(
-                alignment: Alignment.centerLeft,
-                padding: const EdgeInsets.all(0.0),
-                child: Text(
-                  'You need any help?',
-                  style: TextStyle(
-                    color: Colors.red.shade800,
-                    fontSize: 18,
-                    decoration: TextDecoration.underline,
-                    decorationColor: Colors.red,
-                    decorationStyle: TextDecorationStyle.solid,
-                  ),
-                ),
-              ),
-            ),
-            Container(
+              padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
               height: 200,
               child: Card(
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(15.0),
                 ),
-                elevation: 20,
+                elevation: 10,
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
@@ -104,7 +126,7 @@ class _HomeState extends State<Home> {
               ),
             ),
             Container(
-              padding: const EdgeInsets.fromLTRB(10, 50, 10, 0),
+              padding: const EdgeInsets.fromLTRB(10, 30, 10, 0),
               child: const Text(
                 'แจ้งเหตุ',
                 style: TextStyle(
