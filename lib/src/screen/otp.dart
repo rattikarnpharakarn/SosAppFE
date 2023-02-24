@@ -11,10 +11,10 @@ import 'package:http/http.dart';
 import 'dart:convert' as convert;
 
 import 'package:http/http.dart' as http;
-import 'package:file/local.dart';
-import 'package:sos/src/screen/home.dart';
 import 'package:sos/src/screen/signupPhoneNumber.dart';
 import 'dart:developer' as developer;
+
+import '../model/signup.dart';
 
 class OTP extends StatefulWidget {
   const OTP({Key? key, required this.data}) : super(key: key);
@@ -77,29 +77,53 @@ class _OTPState extends State<OTP> {
 
   Future<Data> verifyOTP(
       String box1, String box2, String box3, String box4) async {
-    developer.log(widget.data.verifyCode.toString());
+    final otpValue =
+        box1.toString() + box2.toString() + box3.toString() + box4.toString();
+
     final response = await http.post(
       Uri.parse('http://10.0.2.2:80/SosApp/accounts/verifyOTP'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
       body: jsonEncode(<String, dynamic>{
-        'otp': box1.toString() +
-            box2.toString() +
-            box3.toString() +
-            box4.toString(),
-        'phoneNumber': widget.data.phone,
-        'verifyCode': widget.data.verifyCode['verifyCode'].toString(),
+        'otp': otpValue,
+        'phoneNumber': widget.call().data.phone,
+        'verifyCode': widget.call().data.verifyCode['verifyCode'].toString(),
       }),
     );
 
+    final UserInfo userinfo = UserInfo(
+      phoneNumber: widget.call().data.phone,
+      birthday: '',
+      confirmPassword: '',
+      email: '',
+      firstName: '',
+      gender: '',
+      imageProfile: '',
+      lastName: '',
+      password: '',
+      pathImage: '',
+      textIDCard: '',
+      address: '',
+      country: '',
+      district: '',
+      postalCode: '',
+      province: '',
+      subDistrict: '',
+      otp: otpValue,
+      verifyCode: widget.call().data.verifyCode['verifyCode'].toString(),
+    );
+
     if (response.statusCode == 200) {
-      // If the server did return a 201 CREATED response,
-      // then parse the JSON.
-      Navigator.push(context, MaterialPageRoute(builder: (context) {
-        return const Signup();
-      }));
-      developer.log('dddd');
+      // ignore: use_build_context_synchronously
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) {
+          return Signup(
+            userInfo: userinfo,
+          );
+        }),
+      );
       return Data.fromJson(jsonDecode(response.body));
     } else {
       // If the server did not return a 201 CREATED response,
@@ -128,8 +152,9 @@ class _OTPState extends State<OTP> {
                 children: <Widget>[
                   Container(
                     padding: const EdgeInsets.fromLTRB(10, 100, 10, 0),
-                    child:  Text(
-                      widget.data.verifyCode['verifyCode'].toString(),
+                    child: const Text(
+                      // widget.call().data.verifyCode['verifyCode'].toString(),
+                      "OTP",
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 45,
@@ -147,7 +172,6 @@ class _OTPState extends State<OTP> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    
                   ),
                   Container(
                     padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
@@ -175,7 +199,7 @@ class _OTPState extends State<OTP> {
                                   FocusScope.of(context).nextFocus();
                                 }
                               },
-                              style: Theme.of(context).textTheme.headline5,
+                              style: Theme.of(context).textTheme.headline4,
                               keyboardType: TextInputType.number,
                               textAlign: TextAlign.center,
                               inputFormatters: [
@@ -204,7 +228,7 @@ class _OTPState extends State<OTP> {
                                   FocusScope.of(context).nextFocus();
                                 }
                               },
-                              style: Theme.of(context).textTheme.headline5,
+                              style: Theme.of(context).textTheme.headline4,
                               keyboardType: TextInputType.number,
                               textAlign: TextAlign.center,
                               inputFormatters: [
@@ -233,7 +257,7 @@ class _OTPState extends State<OTP> {
                                   FocusScope.of(context).nextFocus();
                                 }
                               },
-                              style: Theme.of(context).textTheme.headline5,
+                              style: Theme.of(context).textTheme.headline4,
                               keyboardType: TextInputType.number,
                               textAlign: TextAlign.center,
                               inputFormatters: [
@@ -262,7 +286,7 @@ class _OTPState extends State<OTP> {
                                           255, 255, 255, 255)), //<-- SEE HERE
                                 ),
                               ),
-                              style: Theme.of(context).textTheme.headline5,
+                              style: Theme.of(context).textTheme.headline4,
                               keyboardType: TextInputType.number,
                               textAlign: TextAlign.center,
                               inputFormatters: [
