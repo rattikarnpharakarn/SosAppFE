@@ -13,8 +13,14 @@ class HhotlinePageState extends State<HotlinePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Chat'),
-        toolbarHeight: 70,
+        title: Container(
+          padding: const EdgeInsets.fromLTRB(40, 0, 0, 0),
+          child: const Text(
+            'Hotline',
+            style: TextStyle(fontSize: 24),
+          ),
+        ),
+        // toolbarHeight: 50,
         automaticallyImplyLeading: false,
         iconTheme: const IconThemeData(
           color: Colors.black, // <-- SEE HERE
@@ -23,6 +29,7 @@ class HhotlinePageState extends State<HotlinePage> {
         backgroundColor: const Color.fromARGB(255, 248, 0, 0),
         elevation: 0,
       ),
+      body: SingleChildScrollView(),
       bottomNavigationBar: Bottombar(
         pageNumber: 1,
       ),
