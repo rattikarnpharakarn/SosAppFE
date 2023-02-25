@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sos/src/component/bottom_bar.dart';
+import 'package:sos/src/component/navBar.dart';
 import 'package:sos/src/screen/home.dart';
 import 'package:sos/src/screen/signin.dart';
 

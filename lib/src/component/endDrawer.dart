@@ -13,11 +13,13 @@ class _EndDrawerState extends State<EndDrawer> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      padding: EdgeInsets.zero,
       width: MediaQuery.of(context).size.width * 0.55,
       child: Drawer(
         child: ListView(
           children: [
             Container(
+              padding: EdgeInsets.zero,
               child: UserAccountsDrawerHeader(
                 currentAccountPicture: Container(
                   width: 100,
