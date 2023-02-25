@@ -48,7 +48,7 @@ class _SignupState extends State<Signup> {
       setState(() {
         isPasswordError = true;
       });
-      var user = widget.call().userInfo;
+      var user = widget.userInfo;
 
       setState(() {
         userInfoRes = UserInfo(
@@ -73,6 +73,7 @@ class _SignupState extends State<Signup> {
           verifyCode: user.verifyCode,
         );
       });
+     
       createUserInfo();
 
       // print('======> UserInfo  <======\n');
@@ -415,6 +416,7 @@ class _SignupState extends State<Signup> {
                         ),
                       ],
                     ),
+                 
                   ),
                   Container(
                     padding: const EdgeInsets.fromLTRB(15, 10, 0, 0),
