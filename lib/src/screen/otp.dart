@@ -86,13 +86,13 @@ class _OTPState extends State<OTP> {
       },
       body: jsonEncode(<String, dynamic>{
         'otp': otpValue,
-        'phoneNumber': widget.data.phone,
-        'verifyCode': widget.data.verifyCode['verifyCode'].toString(),
+        'phoneNumber': widget.call().data.phone,
+        'verifyCode': widget.call().data.verifyCode['verifyCode'].toString(),
       }),
     );
 
     final UserInfo userinfo = UserInfo(
-      phoneNumber: widget.data.phone,
+      phoneNumber: widget.call().data.phone,
       birthday: '',
       confirmPassword: '',
       email: '',
@@ -110,7 +110,7 @@ class _OTPState extends State<OTP> {
       province: '',
       subDistrict: '',
       otp: otpValue,
-      verifyCode: widget.data.verifyCode['verifyCode'].toString(),
+      verifyCode: widget.call().data.verifyCode['verifyCode'].toString(),
     );
 
     if (response.statusCode == 200) {

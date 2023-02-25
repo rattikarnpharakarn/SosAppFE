@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sos/src/component/bottom_bar.dart';
+import 'package:sos/src/component/endDrawer.dart';
 
 class HotlinePage extends StatefulWidget {
   const HotlinePage({super.key});
@@ -9,27 +10,81 @@ class HotlinePage extends StatefulWidget {
 }
 
 class HhotlinePageState extends State<HotlinePage> {
+  final GlobalKey<ScaffoldState> _key = GlobalKey();
+
+  int _pageNumber = 1;
+
   @override
   Widget build(BuildContext context) {
-    int a = 10;
     return Scaffold(
+      key: _key,
+      bottomNavigationBar: Bottombar(pageNumber: _pageNumber),
+      // appBar: NavbarPages(),
       appBar: AppBar(
-        title: Container(
-          padding: const EdgeInsets.fromLTRB(40, 0, 0, 0),
-          child: const Text(
-            'Hotline',
-            style: TextStyle(fontSize: 24),
-          ),
-        ),
-        // toolbarHeight: 50,
-        automaticallyImplyLeading: false,
-        iconTheme: const IconThemeData(
-          color: Colors.black, // <-- SEE HERE
-        ),
-        titleSpacing: 0,
+        // toolbarHeight: 0,
         backgroundColor: const Color.fromARGB(255, 248, 0, 0),
         elevation: 0,
+        // centerTitle: false,
+        title: Container(
+          padding: const EdgeInsets.all(10),
+          child: Row(
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+                    child: const Text(
+                      "Hotline",
+                      style: TextStyle(
+                        color: Color.fromARGB(255, 255, 255, 255),
+                        fontSize: 20,
+                        decorationStyle: TextDecorationStyle.solid,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const Spacer(),
+              Container(
+                padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    shape: const CircleBorder(),
+                    backgroundColor: Color.fromARGB(255, 255, 255, 255),
+                  ),
+                  child: Container(
+                    width: 50,
+                    height: 50,
+                    alignment: Alignment.center,
+                    decoration: const BoxDecoration(shape: BoxShape.circle),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(360),
+                      child: Container(
+                        padding: EdgeInsets.zero,
+                        child: Image.asset(
+                          'assets/images/profile.webp',
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                  ),
+                  onPressed: () {
+                    _key.currentState!.openEndDrawer();
+                  },
+                ),
+              )
+            ],
+          ),
+        ),
+        automaticallyImplyLeading: false,
+        titleSpacing: 0,
+        actions: [
+          Container(),
+        ],
       ),
+      endDrawer: EndDrawer(),
+      endDrawerEnableOpenDragGesture: false,
       body: Container(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(10),
@@ -77,7 +132,9 @@ class HhotlinePageState extends State<HotlinePage> {
                                     Container(
                                       padding: const EdgeInsets.all(5.0),
                                       child: const Text('191',
-                                          style: TextStyle(fontSize: 23.0,color: Colors.red)),
+                                          style: TextStyle(
+                                              fontSize: 23.0,
+                                              color: Colors.red)),
                                     ),
                                     const Spacer(),
                                     Container(
@@ -114,7 +171,9 @@ class HhotlinePageState extends State<HotlinePage> {
                                     Container(
                                       padding: const EdgeInsets.all(5.0),
                                       child: const Text('1193',
-                                          style: TextStyle(fontSize: 23.0,color: Colors.red)),
+                                          style: TextStyle(
+                                              fontSize: 23.0,
+                                              color: Colors.red)),
                                     ),
                                     const Spacer(),
                                     Container(
@@ -151,7 +210,9 @@ class HhotlinePageState extends State<HotlinePage> {
                                     Container(
                                       padding: const EdgeInsets.all(5.0),
                                       child: const Text('1192',
-                                          style: TextStyle(fontSize: 23.0,color: Colors.red)),
+                                          style: TextStyle(
+                                              fontSize: 23.0,
+                                              color: Colors.red)),
                                     ),
                                     const Spacer(),
                                     Container(
@@ -188,7 +249,9 @@ class HhotlinePageState extends State<HotlinePage> {
                                     Container(
                                       padding: const EdgeInsets.all(5.0),
                                       child: const Text('1691',
-                                          style: TextStyle(fontSize: 23.0,color: Colors.red)),
+                                          style: TextStyle(
+                                              fontSize: 23.0,
+                                              color: Colors.red)),
                                     ),
                                     const Spacer(),
                                     Container(
@@ -225,7 +288,9 @@ class HhotlinePageState extends State<HotlinePage> {
                                     Container(
                                       padding: const EdgeInsets.all(5.0),
                                       child: const Text('1155',
-                                          style: TextStyle(fontSize: 23.0,color: Colors.red)),
+                                          style: TextStyle(
+                                              fontSize: 23.0,
+                                              color: Colors.red)),
                                     ),
                                     const Spacer(),
                                     Container(
@@ -262,7 +327,9 @@ class HhotlinePageState extends State<HotlinePage> {
                                     Container(
                                       padding: const EdgeInsets.all(5.0),
                                       child: const Text('1197',
-                                          style: TextStyle(fontSize: 23.0,color: Colors.red)),
+                                          style: TextStyle(
+                                              fontSize: 23.0,
+                                              color: Colors.red)),
                                     ),
                                     const Spacer(),
                                     Container(
@@ -299,7 +366,9 @@ class HhotlinePageState extends State<HotlinePage> {
                                     Container(
                                       padding: const EdgeInsets.all(5.0),
                                       child: const Text('1669',
-                                          style: TextStyle(fontSize: 23.0,color: Colors.red)),
+                                          style: TextStyle(
+                                              fontSize: 23.0,
+                                              color: Colors.red)),
                                     ),
                                     const Spacer(),
                                     Container(
@@ -320,9 +389,6 @@ class HhotlinePageState extends State<HotlinePage> {
             ],
           ),
         ),
-      ),
-      bottomNavigationBar: Bottombar(
-        pageNumber: 1,
       ),
     );
   }
