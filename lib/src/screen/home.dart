@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:bottom_bar_matu/bottom_bar/bottom_bar_bubble.dart';
 import 'package:bottom_bar_matu/bottom_bar_item.dart';
 import 'package:flutter/material.dart';
@@ -102,44 +104,46 @@ class _HomeState extends State<Home> {
           textDirection: TextDirection.ltr,
           children: <Widget>[
             Container(
-              padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-              height: 200,
-              child: Card(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15.0),
-                ),
-                elevation: 10,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    const ListTile(
-                      // leading: Icon(Icons.album, size: 60),
-                      title:
-                          Text('Sonu Nigam', style: TextStyle(fontSize: 30.0)),
-                      subtitle: Text('Best of Sonu Nigam Music.',
-                          style: TextStyle(fontSize: 18.0)),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.all(20),
-                      child: ElevatedButton(
-                        child: const Text(
-                          'View Detail',
-                          style: const TextStyle(
-                            color: const Color.fromARGB(255, 45, 28, 178),
-                          ),
+              width: 500,
+              height: 250,
+              padding: const EdgeInsets.fromLTRB(0, 90, 0, 0),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15),
+                image: const DecorationImage(
+                    image: AssetImage("assets/images/home.jpeg"),
+                    fit: BoxFit.cover),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  const ListTile(
+                    // leading: Icon(Icons.album, size: 60),
+                    title: Text('ข่าวสาร',
+                        style:
+                            TextStyle(fontSize: 20.0, color: Colors.white70)),
+                    subtitle: Text('เกิดเหตุการณ์ไฟไหม้ที่....',
+                        style: TextStyle(fontSize: 27.0, color: Colors.white)),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.fromLTRB(0, 20, 230, 0),
+                    child: ElevatedButton(
+                      child: const Text(
+                        'คลิกเพื่ออ่านต่อ',
+                        style: const TextStyle(
+                          color: Colors.black,
                         ),
-                        style: ElevatedButton.styleFrom(
-                          primary: Color.fromARGB(255, 255, 255, 255),
-                        ),
-                        onPressed: () {},
                       ),
+                      style: ElevatedButton.styleFrom(
+                        primary: Color.fromARGB(255, 255, 255, 255),
+                      ),
+                      onPressed: () {},
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
             Container(
-              padding: const EdgeInsets.fromLTRB(10, 30, 10, 0),
+              padding: const EdgeInsets.fromLTRB(10, 30, 0, 0),
               child: const Text(
                 'แจ้งเหตุ',
                 style: TextStyle(
@@ -149,31 +153,138 @@ class _HomeState extends State<Home> {
               ),
             ),
             Container(
-              padding: const EdgeInsets.all(10),
+              padding: EdgeInsets.zero,
               height: 400,
-              child: Card(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15.0),
-                ),
-                elevation: 20,
-                child: GridView.count(
-                  primary: true,
-                  padding: const EdgeInsets.all(10),
-                  crossAxisSpacing: 10,
-                  mainAxisSpacing: 10,
-                  crossAxisCount: 2,
-                  children: List.generate(
-                    4,
-                    (index) {
-                      a += 10;
-                      return Container(
-                        padding: const EdgeInsets.all(8),
-                        color: Colors.blue.withAlpha(a),
-                        child: Text('Item ${index}'),
-                      );
-                    },
+              width: 400,
+              child: GridView.count(
+                primary: true,
+                padding: const EdgeInsets.all(5),
+                crossAxisSpacing: 10,
+                mainAxisSpacing: 10,
+                crossAxisCount: 2,
+                children: [
+                  Container(
+                    padding: EdgeInsets.zero,
+                    child: Card(
+                      color: Color.fromRGBO(210, 250, 251, 1),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15.0),
+                      ),
+                      child: Column(
+                        children: [
+                          Container(
+                              alignment: Alignment.topLeft,
+                              padding: const EdgeInsets.fromLTRB(0, 10, 0, 15),
+                              child: Image.asset(
+                                'assets/images/hospital.png',
+                                height: 100,
+                              )),
+                          Container(
+                              alignment: Alignment.topLeft,
+                              padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                              child: const Text(
+                                'โรงพยาบาล',
+                                style: TextStyle(
+                                  color: Color.fromRGBO(12, 75, 142, 1),
+                                  fontSize: 25,
+                                ),
+                              )),
+                        ],
+                      ),
+                    ),
                   ),
-                ),
+                  Container(
+                    padding: EdgeInsets.zero,
+                    child: Card(
+                      color: const Color.fromRGBO(210, 250, 251, 1),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15.0),
+                      ),
+                      child: Column(
+                        children: [
+                          Container(
+                              alignment: Alignment.topLeft,
+                              padding: EdgeInsets.fromLTRB(0, 10, 0, 15),
+                              child: Image.asset(
+                                'assets/images/emg.png',
+                                height: 100,
+                              )),
+                          Container(
+                              alignment: Alignment.topLeft,
+                              padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                              child: const Text(
+                                'ปอเต็กตึ๊ง',
+                                style: TextStyle(
+                                  color: Color.fromRGBO(12, 75, 142, 1),
+                                  fontSize: 25,
+                                ),
+                              )),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Container(
+                    padding: EdgeInsets.zero,
+                    child: Card(
+                      color: const Color.fromRGBO(210, 250, 251, 1),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15.0),
+                      ),
+                      child: Column(
+                        children: [
+                          Container(
+                              alignment: Alignment.topLeft,
+                              padding: const EdgeInsets.fromLTRB(0, 10, 0, 15),
+                              child: Image.asset(
+                                'assets/images/fire.png',
+                                height: 100,
+                              )),
+                          Container(
+                              alignment: Alignment.topLeft,
+                              padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                              child: const Text(
+                                'สถานีดับเพลิง',
+                                style: TextStyle(
+                                  color: Color.fromRGBO(12, 75, 142, 1),
+                                  fontSize: 25,
+                                ),
+                              )),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Container(
+                    padding: EdgeInsets.zero,
+                    child: Card(
+                      color: const Color.fromRGBO(210, 250, 251, 1),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15.0),
+                      ),
+                      child: Column(
+                        children: [
+                          Container(
+                              alignment: Alignment.topLeft,
+                              padding: const EdgeInsets.fromLTRB(0, 10, 0, 15),
+                              child: Image.asset(
+                                'assets/images/other.png',
+                                height: 100,
+                              )),
+                          Container(
+                            alignment: Alignment.topLeft,
+                            padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                            child: const Text(
+                              'สถานีตำรวจ',
+                              style: TextStyle(
+                                color: Color.fromRGBO(12, 75, 142, 1),
+                                fontSize: 25,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ],
