@@ -64,12 +64,12 @@ class _BottombarState extends State<Bottombar> {
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: 'หน้าแรก',
-            backgroundColor: Color.fromARGB(255, 250, 92, 92),
+            backgroundColor: Color.fromARGB(255, 255, 255, 255),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.library_books_rounded),
             label: 'เบอร์โทรสารด่วน',
-            backgroundColor: Color.fromARGB(255, 250, 92, 92),
+            backgroundColor: Color.fromARGB(255, 255, 255, 255),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.adjust_rounded),
@@ -78,17 +78,18 @@ class _BottombarState extends State<Bottombar> {
           BottomNavigationBarItem(
             icon: Icon(Icons.history),
             label: 'ล่าสุด',
-            backgroundColor: Color.fromARGB(255, 250, 92, 92),
+            backgroundColor: Color.fromARGB(255, 255, 255, 255),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.chat_rounded),
             label: 'แชท',
-            backgroundColor: Color.fromARGB(255, 250, 92, 92),
+            backgroundColor: Color.fromARGB(255, 255, 255, 255),
           ),
         ],
         currentIndex: pageNumber,
-        selectedItemColor: Color.fromARGB(255, 255, 255, 255),
-        backgroundColor: Color.fromARGB(255, 250, 92, 92),
+        selectedItemColor: Color.fromARGB(255, 255, 0, 0),
+        unselectedItemColor: Color.fromARGB(255, 0, 0, 0),
+        backgroundColor: Color.fromARGB(255, 255, 255, 255),
         onTap: _onItemTapped,
       ),
     );
