@@ -19,8 +19,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'SosApp',
       theme: ThemeData(primarySwatch: Colors.red),
-      // home: const Index(),
-      home: HotlinePage(),
+      home: const Index(),
+      // home: HotlinePage(),
       // home: Signup(),
       // home: SignupPhoneNumber(),
       // home: Signin(), // หน้าแรกของแอบ
