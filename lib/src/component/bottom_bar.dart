@@ -3,6 +3,7 @@ import 'package:bottom_bar_matu/bottom_bar_item.dart';
 import 'package:flutter/material.dart';
 import 'package:sos/src/screen/home.dart';
 import 'package:sos/src/screen/hotline.dart';
+import 'package:sos/src/screen/sos.dart';
 
 class Bottombar extends StatefulWidget {
   Bottombar({
@@ -50,6 +51,12 @@ class _BottombarState extends State<Bottombar> {
           ),
         );
       } else if (pageNumber == 2) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const SosPage(),
+          ),
+        );
       } else if (pageNumber == 3) {
       } else if (pageNumber == 4) {}
     }
@@ -59,6 +66,7 @@ class _BottombarState extends State<Bottombar> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      padding: EdgeInsets.zero,
       child: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
