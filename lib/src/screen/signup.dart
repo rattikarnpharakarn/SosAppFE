@@ -48,7 +48,7 @@ class _SignupState extends State<Signup> {
       setState(() {
         isPasswordError = true;
       });
-      var user = widget.call().userInfo;
+      var user = widget.userInfo;
 
       setState(() {
         userInfoRes = UserInfo(
