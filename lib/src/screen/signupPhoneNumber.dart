@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../main.dart';
 import 'otp.dart';
 import 'dart:convert';
 
@@ -9,7 +10,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:path_provider/path_provider.dart';
 
 class SignupPhoneNumber extends StatefulWidget {
-  const SignupPhoneNumber({Key? key}) : super(key: key);
+  SignupPhoneNumber({Key? key}) : super(key: key);
 
   @override
   State<SignupPhoneNumber> createState() => _SignupPhoneNumberState();
@@ -40,7 +41,29 @@ class _SignupPhoneNumberState extends State<SignupPhoneNumber> {
     super.dispose();
   }
 
-  Future<Data> singupwithphone(String phoneNumber) async {
+  Future<void> _showNotification(String otp, verifyCode) async {
+    const AndroidNotificationDetails androidNotificationDetails =
+        AndroidNotificationDetails(
+      'nextflow_noti_001',
+      'แจ้งเตือน',
+      channelDescription: 'OTP',
+      importance: Importance.max,
+      priority: Priority.high,
+      ticker: 'ticker',
+    );
+
+    const NotificationDetails platformChannelDetails = NotificationDetails(
+      android: androidNotificationDetails,
+    );
+
+    await ShowflutterLocalNoificationPlugin.show(
+        1,
+        'OTP',
+        'OTP=${otp} [รหัสอ้างอิง:${verifyCode}] เพื่อใช้งานระบบ SOS',
+        platformChannelDetails);
+  }
+
+  Future<Data> Singupwithphone(String phoneNumber) async {
     final response = await http.post(
       Uri.parse('http://10.0.2.2:80/SosApp/accounts/sendOTP'),
       headers: <String, String>{
@@ -57,7 +80,11 @@ class _SignupPhoneNumberState extends State<SignupPhoneNumber> {
         phone: phoneNumber,
         verifyCode: vf["data"],
       );
+
+      String otp = vf["data"]['otp'];
+      String verifyCode = vf["data"]['verifyCode'];
       // ignore: use_build_context_synchronously
+      _showNotification(otp, verifyCode);
       Navigator.push(
         context,
         MaterialPageRoute(
@@ -153,7 +180,7 @@ class _SignupPhoneNumberState extends State<SignupPhoneNumber> {
                                         width: 3, color: Colors.black)))),
                         onPressed: () {
                           setState(() {
-                            _futureOTP = singupwithphone(_controllerPhone.text);
+                            _futureOTP = Singupwithphone(_controllerPhone.text);
                           });
                         },
                         child: const Text(
