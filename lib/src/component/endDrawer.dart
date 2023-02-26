@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:sos/src/screen/home.dart';
+import 'package:sos/src/screen/signin.dart';
 
 class EndDrawer extends StatefulWidget {
   const EndDrawer({super.key});
@@ -14,7 +16,7 @@ class _EndDrawerState extends State<EndDrawer> {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.zero,
-      width: MediaQuery.of(context).size.width * 0.55,
+      width: MediaQuery.of(context).size.width * 0.59,
       child: Drawer(
         child: ListView(
           children: [
@@ -96,7 +98,14 @@ class _EndDrawerState extends State<EndDrawer> {
             ListTile(
               leading: const Icon(Icons.logout),
               title: const Text("Logout"),
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const Signin(),
+                  ),
+                );
+              },
             )
           ],
         ),
