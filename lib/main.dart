@@ -20,11 +20,11 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'SosApp',
       theme: ThemeData(primarySwatch: Colors.red),
-      home: const SosPage(),
+      // home: const SosPage(),
       // home: HotlinePage(),
       // home: Signup(),
       // home: SignupPhoneNumber(),
-      // home: Signin(), // หน้าแรกของแอบ
+      home: Signin(), // หน้าแรกของแอบ
     );
   }
 }
