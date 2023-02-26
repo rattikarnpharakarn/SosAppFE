@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
+
 import 'package:sos/src/component/bottom_bar.dart';
 import 'package:sos/src/component/endDrawer.dart';
 import 'package:sos/src/component/sosComponent.dart';
+
+import 'package:image_picker/image_picker.dart';
+
+import 'dart:convert';
+import 'dart:io';
+import 'dart:typed_data';
 
 class SosPage extends StatefulWidget {
   const SosPage({super.key});
@@ -297,6 +304,34 @@ class _SosPage1State extends State<SosPage1> {
 
   final int _pageNumber = 2;
 
+  final ImagePicker imgpicker = ImagePicker();
+  String imagepath = '';
+
+  String images = '';
+  openImage() async {
+    try {
+      var pickedFile = await imgpicker.pickImage(source: ImageSource.gallery);
+
+      if (pickedFile != null) {
+        imagepath = pickedFile.path;
+        File imagefile = File(imagepath);
+        Uint8List imagebytes = await imagefile.readAsBytes();
+        String base64string = base64.encode(imagebytes);
+
+        Uint8List decodedbytes = base64.decode(base64string);
+
+        String tobase64 = base64Encode(decodedbytes);
+        setState(() {
+          images = tobase64;
+        });
+      } else {
+        print("No image is selected.");
+      }
+    } catch (e) {
+      print("error while picking file.");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -369,15 +404,13 @@ class _SosPage1State extends State<SosPage1> {
         child: Form(
           child: Container(
             alignment: Alignment.center,
-            padding: const EdgeInsets.all(20),
+            padding: const EdgeInsets.all(30),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               textDirection: TextDirection.ltr,
               children: <Widget>[
                 Container(
-                  padding: const EdgeInsets.all(10),
-                  height: 400,
-                  width: 400,
+                  padding: const EdgeInsets.all(0),
                   child: Column(children: [
                     Container(
                       padding: EdgeInsets.zero,
@@ -387,37 +420,36 @@ class _SosPage1State extends State<SosPage1> {
                             padding: EdgeInsets.zero,
                             child: const Text(
                               'ประเภทของการแจ้งเหต :  ',
-                              style: TextStyle(fontSize: 16),
+                              style: TextStyle(fontSize: 18),
                             ),
                           ),
                           Container(
                             padding: EdgeInsets.zero,
                             child: const SelectableText(
                               'อาคาร/สถานที่',
-                              style: TextStyle(fontSize: 16, color: Colors.red),
+                              style: TextStyle(fontSize: 18, color: Colors.red),
                             ),
                           )
                         ],
                       ),
                     ),
                     Container(
-                      alignment: Alignment.topLeft,
                       padding: const EdgeInsets.fromLTRB(0, 20, 10, 0),
                       child: Row(
                         children: [
                           Container(
                             margin: EdgeInsets.zero,
-                            alignment: Alignment.topLeft,
+                            alignment: Alignment.center,
                             child: const Text(
                               'รายละเอียด :  ',
-                              style: TextStyle(fontSize: 16),
+                              style: TextStyle(fontSize: 18),
                             ),
                           ),
                           Container(
                             padding: EdgeInsets.zero,
                             child: const SelectableText(
-                              'มีไฟไหม้ที่ ห้างสรรพสินค้า\nCentral World \nมีไฟไหม้ที่ ห้างสรรพสินค้า\nCentral World \n มีไฟไหม้ที่ ห้างสรรพสินค้า\nCentral World \n ',
-                              style: TextStyle(fontSize: 16, color: Colors.red),
+                              'มีไฟไหม้ที่ ห้างสรรพสินค้า',
+                              style: TextStyle(fontSize: 18, color: Colors.red),
                             ),
                           )
                         ],
@@ -426,14 +458,14 @@ class _SosPage1State extends State<SosPage1> {
                   ]),
                 ),
                 Container(
-                  padding: const EdgeInsets.all(10.0),
+                  padding: const EdgeInsets.fromLTRB(5, 35, 10, 5),
                   child: const Text(
                     'เบอร์โทรศัพท์สำหรับติดต่อกลับ',
                     style: TextStyle(fontSize: 16),
                   ),
                 ),
                 Container(
-                  padding: const EdgeInsets.all(0),
+                  padding: EdgeInsets.zero,
                   child: Card(
                     shape: RoundedRectangleBorder(
                       side: const BorderSide(
@@ -457,11 +489,60 @@ class _SosPage1State extends State<SosPage1> {
                     ),
                   ),
                 ),
+                Container(
+                  padding: const EdgeInsets.all(15),
+                  child: InkWell(
+                    onTap: () => {openImage()},
+                    child: Row(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.fromLTRB(0, 5, 10, 0),
+                          child: const Icon(
+                            Icons.camera_alt,
+                            size: 50.0,
+                          ),
+                        ),
+                        images == ''
+                            ? const Text(
+                                'กรุณา แนบรูปภาพ ***',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.transparent, // Step 2 SEE HERE
+                                  shadows: [
+                                    Shadow(
+                                        offset: Offset(0, -5),
+                                        color: Colors.black)
+                                  ],
+                                  decoration: TextDecoration.underline,
+                                  decorationColor:
+                                      Color.fromARGB(255, 177, 0, 0),
+                                ),
+                              )
+                            : const Text(
+                                'แนบรูปภาพ สำเร็จ',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  // fontWeight: FontWeight.bold,
+                                  color: Colors.transparent, // Step 2 SEE HERE
+                                  shadows: [
+                                    Shadow(
+                                        offset: Offset(0, -5),
+                                        color: Colors.black)
+                                  ],
+                                  decoration: TextDecoration.underline,
+                                  decorationColor:
+                                      Color.fromARGB(255, 34, 172, 0),
+                                ),
+                              ),
+                      ],
+                    ),
+                  ),
+                ),
                 Center(
                   child: Container(
                     padding: const EdgeInsets.fromLTRB(0, 40, 0, 10),
                     child: SizedBox(
-                      width: 312.48,
+                      width: 330.48,
                       height: 63.4,
                       child: ElevatedButton(
                         style: ButtonStyle(
