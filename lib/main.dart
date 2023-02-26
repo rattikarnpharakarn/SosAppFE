@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sos/src/screen/hotline.dart';
 import 'package:sos/src/screen/signin.dart';
 import 'package:sos/src/screen/signup.dart';
+import 'package:sos/src/screen/sos.dart';
 
 import 'src/screen/index.dart';
 import 'src/screen/signupPhoneNumber.dart';
@@ -19,7 +20,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'SosApp',
       theme: ThemeData(primarySwatch: Colors.red),
-      home: const Index(),
+      home: const SosPage(),
       // home: HotlinePage(),
       // home: Signup(),
       // home: SignupPhoneNumber(),

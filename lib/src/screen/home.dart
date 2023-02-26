@@ -97,7 +97,7 @@ class _HomeState extends State<Home> {
           Container(),
         ],
       ),
-      endDrawer: EndDrawer(),
+      endDrawer: const EndDrawer(),
       endDrawerEnableOpenDragGesture: false,
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(10),
