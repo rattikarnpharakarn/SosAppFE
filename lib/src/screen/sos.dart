@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:sos/src/component/bottom_bar.dart';
 import 'package:sos/src/component/endDrawer.dart';
+import 'package:sos/src/component/image_navBer.dart';
 import 'package:sos/src/component/sosComponent.dart';
 
 import 'package:image_picker/image_picker.dart';
@@ -61,21 +62,8 @@ class NSosPageState extends State<SosPage> {
                     shape: const CircleBorder(),
                     backgroundColor: const Color.fromARGB(255, 255, 255, 255),
                   ),
-                  child: Container(
-                    width: 50,
-                    height: 50,
-                    alignment: Alignment.center,
-                    decoration: const BoxDecoration(shape: BoxShape.circle),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(360),
-                      child: Container(
-                        padding: EdgeInsets.zero,
-                        child: Image.asset(
-                          'assets/images/profile.webp',
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ),
+                  child: Image_NavBer(
+                    imagebase64string: '',
                   ),
                   onPressed: () {
                     _key.currentState!.openEndDrawer();
