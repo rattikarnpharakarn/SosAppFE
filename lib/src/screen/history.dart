@@ -4,6 +4,7 @@ import 'package:bottom_bar_matu/bottom_bar/bottom_bar_bubble.dart';
 import 'package:bottom_bar_matu/bottom_bar_item.dart';
 import 'package:flutter/material.dart';
 import 'package:sos/src/component/endDrawer.dart';
+import 'package:sos/src/component/image_navBer.dart';
 import 'package:sos/src/component/navBar.dart';
 import 'package:sos/src/screen/signin.dart';
 
@@ -62,26 +63,13 @@ class _HistoryPageState extends State<HistoryPage> {
               const Spacer(),
               Container(
                 padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
-                child: ElevatedButton(
+                child: TextButton(
                   style: ElevatedButton.styleFrom(
                     shape: const CircleBorder(),
                     backgroundColor: Color.fromARGB(255, 255, 255, 255),
                   ),
-                  child: Container(
-                    width: 50,
-                    height: 50,
-                    alignment: Alignment.center,
-                    decoration: const BoxDecoration(shape: BoxShape.circle),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(360),
-                      child: Container(
-                        padding: EdgeInsets.zero,
-                        child: Image.asset(
-                          'assets/images/profile.webp',
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ),
+                  child: Image_NavBer(
+                    imagebase64string: '',
                   ),
                   onPressed: () {
                     _key.currentState!.openEndDrawer();
@@ -307,13 +295,12 @@ class _HistoryPageState extends State<HistoryPage> {
                                           style: TextStyle(fontSize: 20.0)),
                                     ),
                                     Container(
-                                      child:
-                                          const Text('มีรถชนกันหน้าctw',
-                                              style: TextStyle(
-                                                fontSize: 20.0,
-                                                color: Colors.black,
-                                                fontWeight: FontWeight.bold,
-                                              )),
+                                      child: const Text('มีรถชนกันหน้าctw',
+                                          style: TextStyle(
+                                            fontSize: 20.0,
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.bold,
+                                          )),
                                     ),
                                   ],
                                 ),
