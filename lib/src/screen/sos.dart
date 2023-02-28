@@ -85,18 +85,18 @@ class NSosPageState extends State<SosPage> {
         child: Form(
           child: Container(
             alignment: Alignment.center,
-            padding: const EdgeInsets.all(20),
+            padding: const EdgeInsets.all(10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               textDirection: TextDirection.ltr,
               children: <Widget>[
                 Container(
                   padding: EdgeInsets.zero,
-                  height: 400,
+                  height: 380,
                   width: 400,
                   child: GridView.count(
                     primary: true,
-                    padding: const EdgeInsets.all(5),
+                    padding: const EdgeInsets.all(20),
                     crossAxisSpacing: 10,
                     mainAxisSpacing: 10,
                     crossAxisCount: 2,
@@ -213,7 +213,7 @@ class NSosPageState extends State<SosPage> {
                   ),
                 ),
                 Container(
-                  padding: const EdgeInsets.all(0),
+                  padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                   child: Card(
                     shape: RoundedRectangleBorder(
                       side: const BorderSide(
@@ -239,7 +239,7 @@ class NSosPageState extends State<SosPage> {
                 ),
                 Center(
                   child: Container(
-                    padding: const EdgeInsets.fromLTRB(0, 40, 0, 10),
+                    padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
                     child: SizedBox(
                       width: 312.48,
                       height: 63.4,
@@ -291,14 +291,25 @@ class _SosPage1State extends State<SosPage1> {
   final GlobalKey<ScaffoldState> _key = GlobalKey();
 
   final int _pageNumber = 2;
+  String selected_location = '';
+  String location_on = '';
 
   final ImagePicker imgpicker = ImagePicker();
-  String imagepath = '';
 
+  String selected_camera_or_image = '';
+
+  String imagepath = '';
   String images = '';
-  openImage() async {
+
+  openImage(String imageSource) async {
     try {
-      var pickedFile = await imgpicker.pickImage(source: ImageSource.gallery);
+      var pickedFile;
+
+      if (imageSource == "gallery") {
+        pickedFile = await imgpicker.pickImage(source: ImageSource.gallery);
+      } else if (imageSource == "camera") {
+        pickedFile = await imgpicker.pickImage(source: ImageSource.camera);
+      } else {}
 
       if (pickedFile != null) {
         imagepath = pickedFile.path;
@@ -478,57 +489,101 @@ class _SosPage1State extends State<SosPage1> {
                   ),
                 ),
                 Container(
-                  padding: const EdgeInsets.all(15),
-                  child: InkWell(
-                    onTap: () => {openImage()},
-                    child: Row(
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.fromLTRB(0, 5, 10, 0),
-                          child: const Icon(
-                            Icons.camera_alt,
-                            size: 50.0,
-                          ),
+                  padding: const EdgeInsets.fromLTRB(5, 10, 10, 5),
+                  child: location_on != '' && images != ''
+                      ? const Text(
+                          'เพิ่มรูปภาพและเลือกที่อยู่สำเร็จ',
+                          style: TextStyle(fontSize: 16, color: Colors.green),
+                        )
+                      : const Text(
+                          '** กรุณาเลือกที่อยู่ และ เพิ่มรูปภาพเพื่อทำให้ข้อมูลครบถ้วนในการแจ้งเหตุ',
+                          style: TextStyle(fontSize: 16, color: Colors.red),
                         ),
-                        images == ''
-                            ? const Text(
-                                'กรุณา แนบรูปภาพ ***',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  color: Colors.transparent, // Step 2 SEE HERE
-                                  shadows: [
-                                    Shadow(
-                                        offset: Offset(0, -5),
-                                        color: Colors.black)
-                                  ],
-                                  decoration: TextDecoration.underline,
-                                  decorationColor:
-                                      Color.fromARGB(255, 177, 0, 0),
-                                ),
-                              )
-                            : const Text(
-                                'แนบรูปภาพ สำเร็จ',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  // fontWeight: FontWeight.bold,
-                                  color: Colors.transparent, // Step 2 SEE HERE
-                                  shadows: [
-                                    Shadow(
-                                        offset: Offset(0, -5),
-                                        color: Colors.black)
-                                  ],
-                                  decoration: TextDecoration.underline,
-                                  decorationColor:
-                                      Color.fromARGB(255, 34, 172, 0),
-                                ),
-                              ),
-                      ],
-                    ),
+                ),
+                Container(
+                  padding: const EdgeInsets.fromLTRB(0, 15, 15, 0),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container( // todo ยังไม่ได้เพิ่มในส่วนของ Location ให้สามารถเลือกได้
+                        padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+                        child: PopupMenuButton<String>(
+                          initialValue: selected_location,
+                          child: Icon(
+                            color:
+                                location_on == '' ? Colors.red : Colors.green,
+                            Icons.location_on,
+                            size: 40.0,
+                          ),
+                          // Callback that sets the selected popup menu item.
+                          onSelected: (String item) {
+                            setState(() {
+                              location_on = item;
+                              print(location_on);
+                            });
+                          },
+                          itemBuilder: (BuildContext context) =>
+                              <PopupMenuEntry<String>>[
+                            const PopupMenuItem<String>(
+                              value: 'newAddress',
+                              child: Text('เลือกที่อยู่'),
+                            ),
+                            const PopupMenuItem<String>(
+                              value: 'currentAddress',
+                              child: Text('ที่อยู่ปัจจุบัน'),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+                        child: PopupMenuButton<String>(
+                          initialValue: selected_camera_or_image,
+                          child: Icon(
+                            color: images == '' ? Colors.red : Colors.green,
+                            Icons.camera_alt,
+                            size: 40.0,
+                          ),
+                          // Callback that sets the selected popup menu item.
+                          onSelected: (String item) {
+                            setState(() {
+                              selected_camera_or_image = item;
+                              openImage(selected_camera_or_image);
+                            });
+                          },
+                          itemBuilder: (BuildContext context) =>
+                              <PopupMenuEntry<String>>[
+                            const PopupMenuItem<String>(
+                              value: 'camera',
+                              child: Text('เปิดกล้อง'),
+                            ),
+                            const PopupMenuItem<String>(
+                              value: 'gallery',
+                              child: Text('เลือกไฟล์'),
+                            ),
+                          ],
+                        ),
+                      ),
+                      // Container(
+                      //   padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+                      //   child: IconButton(
+                      //     icon: Icon(
+                      //       color: images == '' ? Colors.red : Colors.green,
+                      //       Icons.camera_alt,
+                      //       size: 40.0,
+                      //     ),
+                      //     onPressed: () {
+                      //       openImage();
+                      //     },
+                      //   ),
+                      // ),
+                    ],
                   ),
                 ),
                 Center(
                   child: Container(
-                    padding: const EdgeInsets.fromLTRB(0, 40, 0, 10),
+                    padding: const EdgeInsets.fromLTRB(0, 30, 0, 10),
                     child: SizedBox(
                       width: 330.48,
                       height: 63.4,
