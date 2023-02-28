@@ -367,21 +367,8 @@ class _SosPage1State extends State<SosPage1> {
                     shape: const CircleBorder(),
                     backgroundColor: const Color.fromARGB(255, 255, 255, 255),
                   ),
-                  child: Container(
-                    width: 50,
-                    height: 50,
-                    alignment: Alignment.center,
-                    decoration: const BoxDecoration(shape: BoxShape.circle),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(360),
-                      child: Container(
-                        padding: EdgeInsets.zero,
-                        child: Image.asset(
-                          'assets/images/profile.webp',
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ),
+                  child: Image_NavBer(
+                    imagebase64string: '',
                   ),
                   onPressed: () {
                     _key.currentState!.openEndDrawer();

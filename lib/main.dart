@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:sos/src/screen/chat.dart';
 import 'package:sos/src/screen/hotline.dart';
 import 'package:sos/src/screen/signin.dart';
 import 'package:sos/src/screen/signup.dart';
@@ -41,7 +42,8 @@ class MyApp extends StatelessWidget {
       // home: HotlinePage(),
       // home: Signup(),
       // home: SignupPhoneNumber(),
-      home: Index(),
+      // home: SosPage1(),
+      home: ChatPage(),
       // home: Signin(), // หน้าแรกของแอบ
     );
   }
