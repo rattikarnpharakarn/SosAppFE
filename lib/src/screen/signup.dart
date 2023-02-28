@@ -3,7 +3,6 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:intl/intl.dart';
 import 'package:sos/src/model/response.dart';
 import 'package:sos/src/model/signup.dart';
@@ -271,7 +270,7 @@ class _SignupState extends State<Signup> {
                                 borderRadius: BorderRadius.circular(360),
                                 child: imageProfile == ''
                                     ? Image.asset(
-                                        'assets/images/profile.jpg',
+                                        'assets/images/profile.webp',
                                         width: 200,
                                         height: 200,
                                         fit: BoxFit.cover,

@@ -1,14 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:sos/src/screen/signup.dart';
 
 import 'dart:convert';
-import 'dart:developer';
-import 'dart:io';
-import 'dart:typed_data';
-
-import 'package:http/http.dart';
-import 'dart:convert' as convert;
 
 import 'package:http/http.dart' as http;
 import 'package:sos/src/screen/signupPhoneNumber.dart';
@@ -152,7 +147,7 @@ class _OTPState extends State<OTP> {
                   Container(
                     padding: const EdgeInsets.fromLTRB(10, 100, 10, 0),
                     child: const Text(
-                      // widget.call().data.verifyCode['verifyCode'].toString(),
+                      // widget.data.verifyCode['verifyCode'].toString(),
                       "OTP",
                       style: TextStyle(
                         color: Colors.white,

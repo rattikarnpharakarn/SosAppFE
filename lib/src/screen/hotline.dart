@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sos/src/component/bottom_bar.dart';
 import 'package:sos/src/component/endDrawer.dart';
+import 'package:sos/src/component/image_navBer.dart';
 
 class HotlinePage extends StatefulWidget {
   const HotlinePage({super.key});
@@ -53,21 +54,8 @@ class HhotlinePageState extends State<HotlinePage> {
                     shape: const CircleBorder(),
                     backgroundColor: Color.fromARGB(255, 255, 255, 255),
                   ),
-                  child: Container(
-                    width: 50,
-                    height: 50,
-                    alignment: Alignment.center,
-                    decoration: const BoxDecoration(shape: BoxShape.circle),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(360),
-                      child: Container(
-                        padding: EdgeInsets.zero,
-                        child: Image.asset(
-                          'assets/images/profile.webp',
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ),
+                  child: Image_NavBer(
+                    imagebase64string: '',
                   ),
                   onPressed: () {
                     _key.currentState!.openEndDrawer();
