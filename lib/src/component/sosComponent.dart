@@ -45,13 +45,13 @@ class _SosComponentState extends State<SosComponent> {
             ),
           ),
           Container(
-            padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+            padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
             child: Text(
               // '${widget.call().isDisabledButton}',
               '${widget.call().title}',
               style: const TextStyle(
                 color: Color.fromRGBO(0, 0, 0, 1),
-                fontSize: 19.5,
+                fontSize: 16,
               ),
             ),
           ),
