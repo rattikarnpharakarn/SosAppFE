@@ -63,10 +63,10 @@ class _HistoryPageState extends State<HistoryPage> {
               const Spacer(),
               Container(
                 padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
-                child: TextButton(
+                child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     shape: const CircleBorder(),
-                    backgroundColor: Color.fromARGB(255, 255, 255, 255),
+                    backgroundColor: const Color.fromARGB(255, 255, 255, 255),
                   ),
                   child: Image_NavBer(
                     imagebase64string: '',
@@ -94,16 +94,6 @@ class _HistoryPageState extends State<HistoryPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             textDirection: TextDirection.ltr,
             children: <Widget>[
-              // Container(
-              //   padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
-              //   child: const Text(
-              //     'เบอร์โทรสายด่วน',
-              //     style: TextStyle(
-              //       fontSize: 18,
-              //       color: Colors.red,
-              //     ),
-              //   ),
-              // ),
               ListView(
                 shrinkWrap: true,
                 padding: const EdgeInsets.all(10),
