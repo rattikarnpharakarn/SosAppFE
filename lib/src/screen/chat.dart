@@ -169,6 +169,16 @@ class _ChatPage1State extends State<ChatPage1> {
     );
   }
 
+  Widget sendMessage() {
+    return IconButton(
+      icon: const Icon(
+        Icons.send,
+        color: Color(0xD3FF4646),
+      ),
+      onPressed: () => callCamera(),
+    );
+  }
+
   Widget attachFile() {
     return IconButton(
       icon: const Icon(
@@ -339,6 +349,7 @@ class _ChatPage1State extends State<ChatPage1> {
                     ),
                     attachFile(),
                     camera(),
+                    sendMessage(),
                   ],
                 ),
               ),
