@@ -260,15 +260,25 @@ class _ChatPage1State extends State<ChatPage1> {
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
                             Container(
-                              alignment: Alignment.topLeft,
-                              padding: EdgeInsets.fromLTRB(40, 0, 0, 0),
+                              alignment: Alignment.bottomRight,
+                              padding: EdgeInsets.zero,
+                              width: 310,
                               child: const Text(
-                                'ชื่อ ',
+                                'Chirapon',
                                 style: TextStyle(
                                     fontSize: 10, color: Colors.blueGrey),
                               ),
                             ),
-                            const Text('ข้อความ'),
+                            Container(
+                              alignment: Alignment.bottomRight,
+                              padding: EdgeInsets.zero,
+                              width: 310,
+                              child: const Text(
+                                'ข้อความ',
+                                style: TextStyle(
+                                    fontSize: 16, color: Colors.black),
+                              ),
+                            ),
                           ],
                         ),
                         Image_NavBer(imagebase64string: ''),
@@ -284,15 +294,25 @@ class _ChatPage1State extends State<ChatPage1> {
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
                             Container(
+                              width: 310,
                               alignment: Alignment.topLeft,
-                              padding: EdgeInsets.fromLTRB(0, 0, 40, 0),
+                              padding: EdgeInsets.zero,
                               child: const Text(
-                                'ชื่อ ',
+                                'ร.ต.ท.',
                                 style: TextStyle(
                                     fontSize: 10, color: Colors.blueGrey),
                               ),
                             ),
-                            const Text('ข้อความ'),
+                            Container(
+                              alignment: Alignment.topLeft,
+                              padding: EdgeInsets.zero,
+                              width: 310,
+                              child: const Text(
+                                'ข้อความ',
+                                style: TextStyle(
+                                    fontSize: 16, color: Colors.black),
+                              ),
+                            ),
                           ],
                         ),
                       ],
