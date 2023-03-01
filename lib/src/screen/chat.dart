@@ -198,6 +198,78 @@ class _ChatPage1State extends State<ChatPage1> {
         onPressed: () => callEmoji());
   }
 
+  //name
+  //message
+  //imageProfile
+  Widget containerMessageOwner(String name, message, imageProfile) {
+    return Container(
+      padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+      child: Row(
+        children: [
+          Spacer(),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Container(
+                alignment: Alignment.bottomRight,
+                padding: EdgeInsets.zero,
+                width: 310,
+                child: Text(
+                  name,
+                  style: const TextStyle(fontSize: 10, color: Colors.blueGrey),
+                ),
+              ),
+              Container(
+                alignment: Alignment.bottomRight,
+                padding: EdgeInsets.zero,
+                width: 310,
+                child: Text(
+                  message,
+                  style: const TextStyle(fontSize: 16, color: Colors.black),
+                ),
+              ),
+            ],
+          ),
+          Image_NavBer(imagebase64string: imageProfile),
+        ],
+      ),
+    );
+  }
+
+  Widget containerMessageOp(String name, message, imageProfile) {
+    return Container(
+      padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+      child: Row(
+        children: [
+          Image_NavBer(imagebase64string: imageProfile),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Container(
+                width: 310,
+                alignment: Alignment.topLeft,
+                padding: EdgeInsets.zero,
+                child: Text(
+                  name,
+                  style: const TextStyle(fontSize: 10, color: Colors.blueGrey),
+                ),
+              ),
+              Container(
+                alignment: Alignment.topLeft,
+                padding: EdgeInsets.zero,
+                width: 310,
+                child: Text(
+                  message,
+                  style: const TextStyle(fontSize: 16, color: Colors.black),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -261,73 +333,8 @@ class _ChatPage1State extends State<ChatPage1> {
               child: ListView(
                 reverse: true,
                 children: [
-                  Container(
-                    padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                    child: Row(
-                      children: [
-                        Spacer(),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Container(
-                              alignment: Alignment.bottomRight,
-                              padding: EdgeInsets.zero,
-                              width: 310,
-                              child: const Text(
-                                'Chirapon',
-                                style: TextStyle(
-                                    fontSize: 10, color: Colors.blueGrey),
-                              ),
-                            ),
-                            Container(
-                              alignment: Alignment.bottomRight,
-                              padding: EdgeInsets.zero,
-                              width: 310,
-                              child: const Text(
-                                'ข้อความ',
-                                style: TextStyle(
-                                    fontSize: 16, color: Colors.black),
-                              ),
-                            ),
-                          ],
-                        ),
-                        Image_NavBer(imagebase64string: ''),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                    child: Row(
-                      children: [
-                        Image_NavBer(imagebase64string: ''),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Container(
-                              width: 310,
-                              alignment: Alignment.topLeft,
-                              padding: EdgeInsets.zero,
-                              child: const Text(
-                                'ร.ต.ท.',
-                                style: TextStyle(
-                                    fontSize: 10, color: Colors.blueGrey),
-                              ),
-                            ),
-                            Container(
-                              alignment: Alignment.topLeft,
-                              padding: EdgeInsets.zero,
-                              width: 310,
-                              child: const Text(
-                                'ข้อความ',
-                                style: TextStyle(
-                                    fontSize: 16, color: Colors.black),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
+                  containerMessageOwner('Chirapon','ข้อความ',''),
+                  containerMessageOp('ร.ต.ท.','ข้อความ',''),
                 ],
               ),
             ),
@@ -337,6 +344,8 @@ class _ChatPage1State extends State<ChatPage1> {
                 child: Row(
                   children: [
                     moodIcon(),
+                    attachFile(),
+                    camera(),
                     const Expanded(
                       child: TextField(
                         decoration: InputDecoration(
@@ -347,8 +356,6 @@ class _ChatPage1State extends State<ChatPage1> {
                             border: InputBorder.none),
                       ),
                     ),
-                    attachFile(),
-                    camera(),
                     sendMessage(),
                   ],
                 ),
