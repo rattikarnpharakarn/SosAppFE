@@ -30,7 +30,7 @@ class _SosComponentState extends State<SosComponent> {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(360),
               child: Container(
-                foregroundDecoration: widget.call().isDisabledButton == true
+                foregroundDecoration: widget.isDisabledButton == true
                     ? null
                     : BoxDecoration(
                         color: Colors.grey,
@@ -38,7 +38,7 @@ class _SosComponentState extends State<SosComponent> {
                       ),
                 padding: EdgeInsets.zero,
                 child: Image.asset(
-                  widget.call().images,
+                  widget.images,
                   fit: BoxFit.cover,
                 ),
               ),
@@ -48,7 +48,7 @@ class _SosComponentState extends State<SosComponent> {
             padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
             child: Text(
               // '${widget.call().isDisabledButton}',
-              '${widget.call().title}',
+              '${widget.title}',
               style: const TextStyle(
                 color: Color.fromRGBO(0, 0, 0, 1),
                 fontSize: 16,
@@ -61,6 +61,6 @@ class _SosComponentState extends State<SosComponent> {
   }
 
   pirnt() {
-    print(widget.call().isDisabledButton);
+    print(widget.isDisabledButton);
   }
 }

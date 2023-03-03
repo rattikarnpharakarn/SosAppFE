@@ -140,3 +140,85 @@ class Verify {
     };
   }
 }
+
+class UpdateProfile {
+  String firstName = '';
+  String lastName = '';
+  String email;
+  String birthday = '';
+  String gender = '';
+  String imageProfile = '';
+  // IDCard
+  String textIDCard = '';
+  String pathImage = '';
+  // address
+  String address = '';
+  String subDistrict = '';
+  String district = '';
+  String province = '';
+  String postalCode = '';
+  String country = '';
+
+  UpdateProfile({
+    required this.firstName,
+    required this.lastName,
+    required this.email,
+    required this.birthday,
+    required this.gender,
+    required this.imageProfile,
+    // IDCard
+    required this.textIDCard,
+    required this.pathImage,
+    // address
+    required this.address,
+    required this.subDistrict,
+    required this.district,
+    required this.province,
+    required this.postalCode,
+    required this.country,
+  });
+
+  Map toJson() {
+    return {
+      'firstName': firstName,
+      'lastName': lastName,
+      'email': email,
+      'birthday': birthday,
+      'gender': gender,
+      'imageProfile': imageProfile,
+      'idCard': {
+        'textIDCard': textIDCard,
+        'pathImage': pathImage,
+      },
+      'address': {
+        'address': address,
+        'subDistrict': subDistrict,
+        'district': district,
+        'province': province,
+        'postalCode': postalCode,
+        'country': "ไทย"
+      },
+    };
+  }
+}
+
+class ChangePassword {
+  String oldPassword = '';
+  String newPassword = '';
+  String confirmPassword = '';
+
+  ChangePassword({
+    required this.oldPassword,
+    required this.newPassword,
+    required this.confirmPassword,
+  });
+
+  Map toJson() {
+    return {
+      'oldPassword': oldPassword,
+      'newPassword': newPassword,
+      'confirmPassword': confirmPassword,
+    };
+  }
+}
+

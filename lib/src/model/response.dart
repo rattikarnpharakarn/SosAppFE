@@ -12,7 +12,7 @@ class ReturnResponse {
 
   factory ReturnResponse.fromJson(Map<String, dynamic> json) {
     return ReturnResponse(
-      code: json['data'],
+      code: json['code'],
       message: json['message'],
       data: json['data'],
     );

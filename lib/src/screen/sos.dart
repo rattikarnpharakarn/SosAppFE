@@ -62,9 +62,7 @@ class NSosPageState extends State<SosPage> {
                     shape: const CircleBorder(),
                     backgroundColor: const Color.fromARGB(255, 255, 255, 255),
                   ),
-                  child: Image_NavBer(
-                    imagebase64string: '',
-                  ),
+                  child: Image_NavBer(),
                   onPressed: () {
                     _key.currentState!.openEndDrawer();
                   },
@@ -367,9 +365,7 @@ class _SosPage1State extends State<SosPage1> {
                     shape: const CircleBorder(),
                     backgroundColor: const Color.fromARGB(255, 255, 255, 255),
                   ),
-                  child: Image_NavBer(
-                    imagebase64string: '',
-                  ),
+                  child: Image_NavBer(),
                   onPressed: () {
                     _key.currentState!.openEndDrawer();
                   },
@@ -493,7 +489,8 @@ class _SosPage1State extends State<SosPage1> {
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Container( // todo ยังไม่ได้เพิ่มในส่วนของ Location ให้สามารถเลือกได้
+                      Container(
+                        // todo ยังไม่ได้เพิ่มในส่วนของ Location ให้สามารถเลือกได้
                         padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
                         child: PopupMenuButton<String>(
                           initialValue: selected_location,

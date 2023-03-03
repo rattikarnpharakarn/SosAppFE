@@ -1,8 +1,8 @@
+import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:image_picker/image_picker.dart';
-import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:sos/src/model/response.dart';
 import 'package:sos/src/model/signup.dart';
@@ -11,16 +11,15 @@ import 'package:http/http.dart' as http;
 
 import 'home.dart';
 
-class Signup extends StatefulWidget {
-  Signup({Key? key, required this.userInfo}) : super(key: key);
-  // const Signup({Key? key}) : super(key: key);
 
-  UserInfo userInfo;
+class UpDataProfilePage extends StatefulWidget {
+  const UpDataProfilePage({Key? key}) : super(key: key);
+
   @override
-  State<Signup> createState() => _SignupState();
+  State<UpDataProfilePage> createState() => _UpDataProfilePageState();
 }
 
-class _SignupState extends State<Signup> {
+class _UpDataProfilePageState extends State<UpDataProfilePage> {
   final _formKey = GlobalKey<FormState>();
 
   String _password = '';
@@ -36,8 +35,9 @@ class _SignupState extends State<Signup> {
   String _district = '';
   String _province = '';
   String _postalCode = '';
-  late UserInfo userInfoRes;
+  late UpdateProfile userInfoRes;
   bool isPasswordError = true;
+
   void setDataUserInfo() {
     if (_password != _confirmPassword) {
       setState(() {
@@ -47,15 +47,12 @@ class _SignupState extends State<Signup> {
       setState(() {
         isPasswordError = true;
       });
-      var user = widget.userInfo;
+
 
       setState(() {
-        userInfoRes = UserInfo(
-          phoneNumber: user.phoneNumber,
-          password: _password,
-          confirmPassword: _confirmPassword,
-          firstName: _firstName,
+        userInfoRes = UpdateProfile(
           lastName: _lastName,
+          firstName: _firstName,
           email: _email,
           birthday: _dateTime.toString(),
           gender: selectGroupSex.toString(),
@@ -68,16 +65,46 @@ class _SignupState extends State<Signup> {
           province: _province,
           postalCode: _postalCode,
           country: 'ไทย',
-          otp: user.otp,
-          verifyCode: user.verifyCode,
         );
       });
 
-      createUserInfo();
+      EditUserInfo();
+
+      // print('======> UserInfo  <======\n');
+      // print('phoneNumber : ' + userInfoRes!.phoneNumber);
+      // print('password :' + userInfoRes!.password);
+      // print('confirmPassword : ' + userInfoRes!.confirmPassword);
+      // print('firstName : ' + userInfoRes!.firstName);
+      // print('lastName : ' + userInfoRes!.lastName);
+      // print('email : ' + userInfoRes!.email);
+      // print('birthday : ' + userInfoRes!.birthday);
+      // print('gender : ' + userInfoRes!.gender);
+      // print('imageProfile : ' + userInfoRes!.imageProfile);
+      // print('======> UserInfo  <======\n');
+
+      // print('======> idCard  <======\n');
+      // print('pathImage : ' + userInfoRes!.idCard.pathImage);
+      // print('textIDCard : ' + userInfoRes!.idCard.textIDCard);
+      // print('======> idCard  <======\n');
+
+      // print('======> address  <======\n');
+      // print('address : ' + userInfoRes!.address.address);
+      // print('country : ' + userInfoRes!.address.country);
+      // print('district : ' + userInfoRes!.address.district);
+      // print('postalCode : ' + userInfoRes!.address.postalCode);
+      // print('province : ' + userInfoRes!.address.province);
+      // print('subDistrict : ' + userInfoRes!.address.subDistrict);
+      // print('======> address  <======\n');
+
+      // print('======> verify  <======\n');
+      // print('otp : ' + userInfoRes!.verify.otp);
+      // print('verifyCode : ' + userInfoRes!.verify.verifyCode);
+      // print('======> verify  <======\n');
+
     }
   }
 
-  Future<ReturnResponse> createUserInfo() async {
+  Future<ReturnResponse> EditUserInfo() async {
     final response = await http.post(
       Uri.parse('http://10.0.2.2:80/SosApp/accounts/createUser'),
       headers: <String, String>{
@@ -184,7 +211,7 @@ class _SignupState extends State<Signup> {
                     Container(
                       padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
                       child: const Text(
-                        'SignUp',
+                        'Edit Profile',
                         style: TextStyle(
                           color: Color.fromARGB(255, 255, 255, 255),
                           fontSize: 29.8,
@@ -238,17 +265,17 @@ class _SignupState extends State<Signup> {
                                 borderRadius: BorderRadius.circular(360),
                                 child: imageProfile == ''
                                     ? Image.asset(
-                                        'assets/images/profile.webp',
-                                        width: 200,
-                                        height: 200,
-                                        fit: BoxFit.cover,
-                                      )
+                                  'assets/images/profile.webp',
+                                  width: 200,
+                                  height: 200,
+                                  fit: BoxFit.cover,
+                                )
                                     : Image.memory(
-                                        base64Decode(imageProfile),
-                                        width: 200,
-                                        height: 200,
-                                        fit: BoxFit.cover,
-                                      ),
+                                  base64Decode(imageProfile),
+                                  width: 200,
+                                  height: 200,
+                                  fit: BoxFit.cover,
+                                ),
                                 // Image.memory( base64Decode(imageBase64), fit: BoxFit.cover )
                               ),
                               Container(
@@ -259,7 +286,7 @@ class _SignupState extends State<Signup> {
                                     openImage('Profile');
                                   },
                                   backgroundColor:
-                                      Color.fromARGB(255, 17, 17, 17),
+                                  Color.fromARGB(255, 17, 17, 17),
                                 ),
                               ),
                             ],
@@ -288,7 +315,7 @@ class _SignupState extends State<Signup> {
                             keyboardType: TextInputType.text,
                             style: const TextStyle(color: Colors.black),
                             onChanged: (value) => setState(
-                              () {
+                                  () {
                                 _firstName = value;
                               },
                             ),
@@ -317,7 +344,7 @@ class _SignupState extends State<Signup> {
                             keyboardType: TextInputType.text,
                             style: const TextStyle(color: Colors.black),
                             onChanged: (value) => setState(
-                              () {
+                                  () {
                                 _lastName = value;
                               },
                             ),
@@ -346,7 +373,7 @@ class _SignupState extends State<Signup> {
                             keyboardType: TextInputType.emailAddress,
                             style: const TextStyle(color: Colors.black),
                             onChanged: (value) => setState(
-                              () {
+                                  () {
                                 _email = value;
                               },
                             ),
@@ -375,7 +402,7 @@ class _SignupState extends State<Signup> {
                             keyboardType: TextInputType.number,
                             style: const TextStyle(color: Colors.black),
                             onChanged: (value) => setState(
-                              () {
+                                  () {
                                 _textIDCard = value;
                               },
                             ),
@@ -391,35 +418,35 @@ class _SignupState extends State<Signup> {
                       onTap: () => {openImage('iDCard')},
                       child: iDCard == ''
                           ? const Text(
-                              'กรุณา แนบรูปภาพบัตรประจำตัวประชาชน ***',
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.transparent, // Step 2 SEE HERE
-                                shadows: [
-                                  Shadow(
-                                      offset: Offset(0, -5),
-                                      color: Colors.black)
-                                ],
-                                decoration: TextDecoration.underline,
-                                decorationColor: Color.fromARGB(255, 177, 0, 0),
-                              ),
-                            )
+                        'กรุณา แนบรูปภาพบัตรประจำตัวประชาชน ***',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.transparent, // Step 2 SEE HERE
+                          shadows: [
+                            Shadow(
+                                offset: Offset(0, -5),
+                                color: Colors.black)
+                          ],
+                          decoration: TextDecoration.underline,
+                          decorationColor: Color.fromARGB(255, 177, 0, 0),
+                        ),
+                      )
                           : const Text(
-                              'แนบรูปภาพบัตรประจำตัวประชาชน สำเร็จ',
-                              style: TextStyle(
-                                fontSize: 16,
-                                // fontWeight: FontWeight.bold,
-                                color: Colors.transparent, // Step 2 SEE HERE
-                                shadows: [
-                                  Shadow(
-                                      offset: Offset(0, -5),
-                                      color: Colors.black)
-                                ],
-                                decoration: TextDecoration.underline,
-                                decorationColor:
-                                    Color.fromARGB(255, 34, 172, 0),
-                              ),
-                            ),
+                        'แนบรูปภาพบัตรประจำตัวประชาชน สำเร็จ',
+                        style: TextStyle(
+                          fontSize: 16,
+                          // fontWeight: FontWeight.bold,
+                          color: Colors.transparent, // Step 2 SEE HERE
+                          shadows: [
+                            Shadow(
+                                offset: Offset(0, -5),
+                                color: Colors.black)
+                          ],
+                          decoration: TextDecoration.underline,
+                          decorationColor:
+                          Color.fromARGB(255, 34, 172, 0),
+                        ),
+                      ),
                     ),
                   ),
                   Container(
@@ -451,51 +478,51 @@ class _SignupState extends State<Signup> {
                                 child: Container(
                                   child: showDate == ''
                                       ? SingleChildScrollView(
-                                          scrollDirection: Axis.vertical,
-                                          child: Container(
-                                            child: Row(
-                                              children: [
-                                                Container(
-                                                    padding: const EdgeInsets
-                                                        .fromLTRB(0, 0, 20, 0),
-                                                    child: const Icon(
-                                                        Icons.calendar_month)),
-                                                Container(
-                                                  padding:
-                                                      const EdgeInsets.fromLTRB(
-                                                          0, 0, 20, 0),
-                                                  child: Text(
-                                                    newFormat
-                                                        .format(_dateTime)
-                                                        .toString(),
-                                                  ),
-                                                ),
-                                              ],
+                                    scrollDirection: Axis.vertical,
+                                    child: Container(
+                                      child: Row(
+                                        children: [
+                                          Container(
+                                              padding: const EdgeInsets
+                                                  .fromLTRB(0, 0, 20, 0),
+                                              child: const Icon(
+                                                  Icons.calendar_month)),
+                                          Container(
+                                            padding:
+                                            const EdgeInsets.fromLTRB(
+                                                0, 0, 20, 0),
+                                            child: Text(
+                                              newFormat
+                                                  .format(_dateTime)
+                                                  .toString(),
                                             ),
                                           ),
-                                        )
+                                        ],
+                                      ),
+                                    ),
+                                  )
                                       : SingleChildScrollView(
-                                          scrollDirection: Axis.vertical,
-                                          child: Container(
-                                            child: Row(
-                                              children: [
-                                                Container(
-                                                    padding: const EdgeInsets
-                                                        .fromLTRB(0, 0, 20, 0),
-                                                    child: const Icon(
-                                                        Icons.calendar_month)),
-                                                Container(
-                                                  padding:
-                                                      const EdgeInsets.fromLTRB(
-                                                          0, 0, 20, 0),
-                                                  child: Text(
-                                                    showDate.toString(),
-                                                  ),
-                                                )
-                                              ],
+                                    scrollDirection: Axis.vertical,
+                                    child: Container(
+                                      child: Row(
+                                        children: [
+                                          Container(
+                                              padding: const EdgeInsets
+                                                  .fromLTRB(0, 0, 20, 0),
+                                              child: const Icon(
+                                                  Icons.calendar_month)),
+                                          Container(
+                                            padding:
+                                            const EdgeInsets.fromLTRB(
+                                                0, 0, 20, 0),
+                                            child: Text(
+                                              showDate.toString(),
                                             ),
-                                          ),
-                                        ),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ),
                                 ),
                               ),
                             ],
@@ -551,7 +578,7 @@ class _SignupState extends State<Signup> {
                       decoration: const InputDecoration(
                         labelText: 'House No.',
                         labelStyle:
-                            TextStyle(color: Color.fromARGB(255, 93, 93, 93)),
+                        TextStyle(color: Color.fromARGB(255, 93, 93, 93)),
                         // helperText: 'Ex. 0812345678',
                         // helperStyle: TextStyle(color: Colors.white),
                         enabledBorder: UnderlineInputBorder(
@@ -567,7 +594,7 @@ class _SignupState extends State<Signup> {
                       keyboardType: TextInputType.text,
                       style: const TextStyle(color: Colors.black),
                       onChanged: (value) => setState(
-                        () {
+                            () {
                           _address = value;
                         },
                       ),
@@ -579,7 +606,7 @@ class _SignupState extends State<Signup> {
                       decoration: const InputDecoration(
                         labelText: 'Sub-district',
                         labelStyle:
-                            TextStyle(color: Color.fromARGB(255, 93, 93, 93)),
+                        TextStyle(color: Color.fromARGB(255, 93, 93, 93)),
                         // helperText: 'Ex. 0812345678',
                         // helperStyle: TextStyle(color: Colors.white),
                         enabledBorder: UnderlineInputBorder(
@@ -595,7 +622,7 @@ class _SignupState extends State<Signup> {
                       keyboardType: TextInputType.text,
                       style: const TextStyle(color: Colors.black),
                       onChanged: (value) => setState(
-                        () {
+                            () {
                           _subDistrict = value;
                         },
                       ),
@@ -607,7 +634,7 @@ class _SignupState extends State<Signup> {
                       decoration: const InputDecoration(
                         labelText: 'District',
                         labelStyle:
-                            TextStyle(color: Color.fromARGB(255, 93, 93, 93)),
+                        TextStyle(color: Color.fromARGB(255, 93, 93, 93)),
                         // helperText: 'Ex. 0812345678',
                         // helperStyle: TextStyle(color: Colors.white),
                         enabledBorder: UnderlineInputBorder(
@@ -623,7 +650,7 @@ class _SignupState extends State<Signup> {
                       keyboardType: TextInputType.text,
                       style: const TextStyle(color: Colors.black),
                       onChanged: (value) => setState(
-                        () {
+                            () {
                           _district = value;
                         },
                       ),
@@ -635,7 +662,7 @@ class _SignupState extends State<Signup> {
                       decoration: const InputDecoration(
                         labelText: 'Province',
                         labelStyle:
-                            TextStyle(color: Color.fromARGB(255, 93, 93, 93)),
+                        TextStyle(color: Color.fromARGB(255, 93, 93, 93)),
                         // helperText: 'Ex. 0812345678',
                         // helperStyle: TextStyle(color: Colors.white),
                         enabledBorder: UnderlineInputBorder(
@@ -651,7 +678,7 @@ class _SignupState extends State<Signup> {
                       keyboardType: TextInputType.text,
                       style: const TextStyle(color: Colors.black),
                       onChanged: (value) => setState(
-                        () {
+                            () {
                           _province = value;
                         },
                       ),
@@ -663,7 +690,7 @@ class _SignupState extends State<Signup> {
                       decoration: const InputDecoration(
                         labelText: 'Postal Code',
                         labelStyle:
-                            TextStyle(color: Color.fromARGB(255, 93, 93, 93)),
+                        TextStyle(color: Color.fromARGB(255, 93, 93, 93)),
                         // helperText: 'Ex. 0812345678',
                         // helperStyle: TextStyle(color: Colors.white),
                         enabledBorder: UnderlineInputBorder(
@@ -679,90 +706,8 @@ class _SignupState extends State<Signup> {
                       keyboardType: TextInputType.number,
                       style: const TextStyle(color: Colors.black),
                       onChanged: (value) => setState(
-                        () {
+                            () {
                           _postalCode = value;
-                        },
-                      ),
-                    ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.fromLTRB(30, 15, 30, 0),
-                    child: isPasswordError == false
-                        ? const Text(
-                            "*** Password and Confirm Password do not match.",
-                            style: TextStyle(
-                              color: Color.fromARGB(255, 245, 18, 18),
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          )
-                        : const Text(
-                            "Set Password.",
-                            style: TextStyle(
-                              color: Color.fromARGB(255, 0, 0, 0),
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
-                    child: TextFormField(
-                      decoration: const InputDecoration(
-                        labelText: 'Password.',
-                        labelStyle:
-                            TextStyle(color: Color.fromARGB(255, 93, 93, 93)),
-                        // helperText: 'Ex. 0812345678',
-                        // helperStyle: TextStyle(color: Colors.white),
-                        enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(
-                              width: 1,
-                              color: Color.fromARGB(255, 114, 114, 114)),
-                        ),
-                        focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(
-                              width: 1, color: Color.fromARGB(255, 87, 87, 87)),
-                        ),
-                      ),
-                      keyboardType: TextInputType.visiblePassword,
-                      obscureText: true,
-                      enableSuggestions: false,
-                      autocorrect: false,
-                      style: const TextStyle(color: Colors.black),
-                      onChanged: (value) => setState(
-                        () {
-                          _password = value;
-                        },
-                      ),
-                    ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
-                    child: TextField(
-                      decoration: const InputDecoration(
-                        labelText: 'Confirm Password.',
-                        labelStyle:
-                            TextStyle(color: Color.fromARGB(255, 93, 93, 93)),
-                        // helperText: 'Ex. 0812345678',
-                        // helperStyle: TextStyle(color: Colors.white),
-                        enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(
-                              width: 1,
-                              color: Color.fromARGB(255, 114, 114, 114)),
-                        ),
-                        focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(
-                              width: 1, color: Color.fromARGB(255, 87, 87, 87)),
-                        ),
-                      ),
-                      keyboardType: TextInputType.visiblePassword,
-                      obscureText: true,
-                      enableSuggestions: false,
-                      autocorrect: false,
-                      style: const TextStyle(color: Colors.black),
-                      onChanged: (value) => setState(
-                        () {
-                          _confirmPassword = value;
                         },
                       ),
                     ),
@@ -776,7 +721,7 @@ class _SignupState extends State<Signup> {
                         child: ElevatedButton(
                           style: ButtonStyle(
                             backgroundColor:
-                                MaterialStateProperty.all(Colors.black),
+                            MaterialStateProperty.all(Colors.black),
                             shape: MaterialStateProperty.all(
                               RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(15.29),
@@ -789,7 +734,7 @@ class _SignupState extends State<Signup> {
                             setDataUserInfo();
                           },
                           child: const Text(
-                            "SingUp",
+                            "Save",
                             style: TextStyle(fontSize: 24),
                           ),
                         ),

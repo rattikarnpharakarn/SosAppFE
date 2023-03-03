@@ -1,27 +1,27 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import '../sharedInfo/user.dart';
 import 'dart:typed_data';
 
 class Image_NavBer extends StatefulWidget {
-  Image_NavBer({
+  const Image_NavBer({
     super.key,
-    required this.imagebase64string,
   });
-
-  String imagebase64string;
 
   @override
   // ignore: no_logic_in_create_state
-  State<Image_NavBer> createState() =>
-      _Image_NavBerState(imagebase64: imagebase64string);
+  State<Image_NavBer> createState() => _Image_NavBerState();
 }
 
 class _Image_NavBerState extends State<Image_NavBer> {
-  _Image_NavBerState({
-    required this.imagebase64,
-  });
+  @override
+  void initState() {
+    super.initState();
+  }
 
-  String imagebase64 = '';
+  final imagebase64 = getUserTokenSf();
+
+  // String imagebase64 = getUserImageProfileSF().toString();
 
   @override
   Widget build(BuildContext context) {
@@ -37,8 +37,8 @@ class _Image_NavBerState extends State<Image_NavBer> {
           child: imagebase64 != ''
               ? Image.memory(
                   base64Decode(imagebase64),
-                  width: 200,
-                  height: 200,
+                  width: 30,
+                  height: 30,
                   fit: BoxFit.cover,
                 )
               : Image.asset(

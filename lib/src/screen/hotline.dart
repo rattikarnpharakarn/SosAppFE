@@ -54,9 +54,7 @@ class HhotlinePageState extends State<HotlinePage> {
                     shape: const CircleBorder(),
                     backgroundColor: Color.fromARGB(255, 255, 255, 255),
                   ),
-                  child: Image_NavBer(
-                    imagebase64string: '',
-                  ),
+                  child: Image_NavBer(),
                   onPressed: () {
                     _key.currentState!.openEndDrawer();
                   },

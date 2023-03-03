@@ -52,9 +52,7 @@ class _ChatPageState extends State<ChatPage> {
                     shape: const CircleBorder(),
                     backgroundColor: Color.fromARGB(255, 255, 255, 255),
                   ),
-                  child: Image_NavBer(
-                    imagebase64string: '',
-                  ),
+                  child: Image_NavBer(),
                   onPressed: () {
                     _key.currentState!.openEndDrawer();
                   },
@@ -85,45 +83,35 @@ class _ChatPageState extends State<ChatPage> {
                 ),
               },
               title: const Text('Name 1'),
-              leading: Image_NavBer(
-                imagebase64string: '',
-              ),
+              leading: Image_NavBer(),
             ),
             ListTile(
               onTap: () => {
                 print('2'),
               },
               title: const Text('Name 2'),
-              leading: Image_NavBer(
-                imagebase64string: '',
-              ),
+              leading: Image_NavBer(),
             ),
             ListTile(
               onTap: () => {
                 print('3'),
               },
               title: const Text('Name 3'),
-              leading: Image_NavBer(
-                imagebase64string: '',
-              ),
+              leading: Image_NavBer(),
             ),
             ListTile(
               onTap: () => {
                 print('4'),
               },
               title: const Text('Name 4'),
-              leading: Image_NavBer(
-                imagebase64string: '',
-              ),
+              leading: Image_NavBer(),
             ),
             ListTile(
               onTap: () => {
                 print('5'),
               },
               title: const Text('Name 5'),
-              leading: Image_NavBer(
-                imagebase64string: '',
-              ),
+              leading: Image_NavBer(),
             ),
           ],
         ),
@@ -230,7 +218,7 @@ class _ChatPage1State extends State<ChatPage1> {
               ),
             ],
           ),
-          Image_NavBer(imagebase64string: imageProfile),
+          Image_NavBer(),
         ],
       ),
     );
@@ -241,7 +229,7 @@ class _ChatPage1State extends State<ChatPage1> {
       padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
       child: Row(
         children: [
-          Image_NavBer(imagebase64string: imageProfile),
+          Image_NavBer(),
           Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
@@ -306,9 +294,7 @@ class _ChatPage1State extends State<ChatPage1> {
                     shape: const CircleBorder(),
                     backgroundColor: const Color.fromARGB(255, 255, 255, 255),
                   ),
-                  child: Image_NavBer(
-                    imagebase64string: '',
-                  ),
+                  child: Image_NavBer(),
                   onPressed: () {
                     _key.currentState!.openEndDrawer();
                   },
@@ -333,8 +319,8 @@ class _ChatPage1State extends State<ChatPage1> {
               child: ListView(
                 reverse: true,
                 children: [
-                  containerMessageOwner('Chirapon','ข้อความ',''),
-                  containerMessageOp('ร.ต.ท.','ข้อความ',''),
+                  containerMessageOwner('Chirapon', 'ข้อความ', ''),
+                  containerMessageOp('ร.ต.ท.', 'ข้อความ', ''),
                 ],
               ),
             ),

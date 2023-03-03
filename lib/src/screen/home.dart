@@ -1,15 +1,9 @@
 import 'dart:ui';
-
-import 'package:bottom_bar_matu/bottom_bar/bottom_bar_bubble.dart';
-import 'package:bottom_bar_matu/bottom_bar_item.dart';
 import 'package:flutter/material.dart';
 import 'package:sos/src/component/endDrawer.dart';
 import 'package:sos/src/component/image_navBer.dart';
-import 'package:sos/src/component/navBar.dart';
-import 'package:sos/src/screen/signin.dart';
-
 import '../component/bottom_bar.dart';
-import '../component/form_data.dart';
+import '../provider/userService.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -25,6 +19,11 @@ class _HomeState extends State<Home> {
   @override
   void dispose() {
     super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
   }
 
   final int _pageNumber = 0;
@@ -68,9 +67,7 @@ class _HomeState extends State<Home> {
                     shape: const CircleBorder(),
                     backgroundColor: const Color.fromARGB(255, 255, 255, 255),
                   ),
-                  child: Image_NavBer(
-                    imagebase64string: '',
-                  ),
+                  child: Image_NavBer(),
                   onPressed: () {
                     _key.currentState!.openEndDrawer();
                   },

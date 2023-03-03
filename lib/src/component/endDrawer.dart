@@ -4,6 +4,10 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:sos/src/screen/home.dart';
 import 'package:sos/src/screen/signin.dart';
 
+import '../screen/changePassword.dart';
+import '../screen/updateProfile.dart';
+import '../sharedInfo/user.dart';
+
 class EndDrawer extends StatefulWidget {
   const EndDrawer({super.key});
 
@@ -72,7 +76,26 @@ class _EndDrawerState extends State<EndDrawer> {
             ListTile(
               leading: const Icon(Icons.edit),
               title: const Text("EditProfile"),
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const UpDataProfilePage(),
+                  ),
+                );
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.password_outlined),
+              title: const Text("ChangePassword"),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const ChangePasswordPage(),
+                  ),
+                );
+              },
             ),
             // ListTile(
             //   leading: const Icon(Icons.account_box),
@@ -99,6 +122,7 @@ class _EndDrawerState extends State<EndDrawer> {
               leading: const Icon(Icons.logout),
               title: const Text("Logout"),
               onTap: () {
+                removeValues();
                 Navigator.push(
                   context,
                   MaterialPageRoute(

@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:sos/src/sharedInfo/user.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 import 'package:sos/src/screen/chat.dart';
+import 'package:sos/src/screen/home.dart';
 import 'package:sos/src/screen/hotline.dart';
 import 'package:sos/src/screen/signin.dart';
 import 'package:sos/src/screen/signup.dart';
 import 'package:sos/src/screen/sos.dart';
+import 'package:sos/src/screen/updateProfile.dart';
 
 import 'src/screen/index.dart';
 import 'src/screen/signupPhoneNumber.dart';
@@ -25,26 +30,34 @@ Future<void> main() async {
 
   await ShowflutterLocalNoificationPlugin.initialize(initializationSettings);
 
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
-//
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+
+class MyApp extends StatefulWidget {
+  const MyApp({Key? key}) : super(key: key);
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  final token = getUserTokenSf();
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'SosApp',
       theme: ThemeData(primarySwatch: Colors.red),
-      // home: MyhomePage(),
+      // home: Home(),
       // home: const SosPage(),
       // home: HotlinePage(),
       // home: Signup(),
       // home: SignupPhoneNumber(),
       // home: SosPage1(),
-      home: ChatPage(),
-      // home: Signin(), // หน้าแรกของแอบ
+      // home: UpDataProfilePage(),
+      // home: ChatPage(),
+      home: token == '' ? Signin() : Home(), // หน้าแรกของแอบ
     );
   }
 }
