@@ -1,44 +1,55 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../sharedInfo/user.dart';
 import 'dart:typed_data';
 
 class Image_NavBer extends StatefulWidget {
-  const Image_NavBer({
-    super.key,
-  });
+  final double width ;
+  final double height ;
+
+  Image_NavBer({super.key, required this.width, required this.height});
 
   @override
-  // ignore: no_logic_in_create_state
   State<Image_NavBer> createState() => _Image_NavBerState();
 }
 
 class _Image_NavBerState extends State<Image_NavBer> {
+
   @override
   void initState() {
     super.initState();
+    _getImageProfile();
+
   }
 
-  final imagebase64 = getUserTokenSf();
 
-  // String imagebase64 = getUserImageProfileSF().toString();
+
+
+  String _imageProfile = '';
+  _getImageProfile() async {
+    var imageProfile = await getUserImageProfileSF();
+    setState(() {
+      _imageProfile = imageProfile;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 40,
-      height: 40,
+      width: widget.width,
+      height: widget.height,
       alignment: Alignment.center,
       decoration: const BoxDecoration(shape: BoxShape.circle),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(360),
         child: Container(
           padding: EdgeInsets.zero,
-          child: imagebase64 != ''
+          child: _imageProfile != ''
               ? Image.memory(
-                  base64Decode(imagebase64),
-                  width: 30,
-                  height: 30,
+                  base64Decode(_imageProfile),
+                  width: 200,
+                  height: 200,
                   fit: BoxFit.cover,
                 )
               : Image.asset(

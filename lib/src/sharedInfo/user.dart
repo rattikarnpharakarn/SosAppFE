@@ -2,105 +2,105 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 getUserIDSF() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  final id = prefs.getString('id');
+  String id = prefs.getString('id') ?? '';
   return id;
 }
 
 getUserPhoneNumberSF() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  final phoneNumber = prefs.getString('phoneNumber');
+  String phoneNumber = prefs.getString('phoneNumber') ?? '';
 
   return phoneNumber;
 }
 
 getUserFirstNameSF() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  final firstName = prefs.getString('firstName');
+  String firstName = prefs.getString('firstName') ?? '';
   return firstName;
 }
 
 getUserLastNameSF() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  final lastName = prefs.getString('lastName');
+  String lastName = prefs.getString('lastName') ?? '';
   return lastName;
 }
 
 getUserEmailSF() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  final email = prefs.getString('email');
+  String email = prefs.getString('email') ?? '';
   return email;
 }
 
 getUserBirthdaySF() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  final birthday = prefs.getString('birthday');
+  String birthday = prefs.getString('birthday') ?? '';
   return birthday;
 }
 
 getUserGenderSF() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  final gender = prefs.getString('gender');
+  String gender = prefs.getString('gender') ?? '';
   return gender;
 }
 
 getUserImageProfileSF() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  final imageProfile = prefs.getString('imageProfile');
+  String imageProfile = prefs.getString('imageProfile') ?? '';
   return imageProfile;
 }
 
 getUserTextIDCardSF() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   //
-  final textIDCard = prefs.getString('textIDCard');
+  String textIDCard = prefs.getString('textIDCard') ?? '';
   return textIDCard;
 }
 
 getUserPathImageSF() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  final pathImage = prefs.getString('pathImage');
+  String pathImage = prefs.getString('pathImage') ?? '';
   return pathImage;
 }
 
 getUserAddressSF() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  final address = prefs.getString('address');
+  String address = prefs.getString('address') ?? '';
   return address;
 }
 
 getUserSubDistrictSF() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  final subDistrict = prefs.getString('subDistrict');
+  String subDistrict = prefs.getString('subDistrict') ?? '';
   return subDistrict;
 }
 
 getUserDistrictSF() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  final district = prefs.getString('district');
+  String district = prefs.getString('district') ?? '';
   return district;
 }
 
 getUserProvinceSF() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  final province = prefs.getString('province');
+  String province = prefs.getString('province') ?? '';
   return province;
 }
 
 getUserPostalCodeSF() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  final postalCode = prefs.getString('postalCode');
+  String postalCode = prefs.getString('postalCode') ?? '';
   return postalCode;
 }
 
 getUserCountrySF() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  final country = prefs.getString('country');
+  String country = prefs.getString('country') ?? '';
   return country;
 }
 
-getUserTokenSf() async{
+getUserTokenSf() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  final stringValue = prefs.getString('token');
+  String stringValue = prefs.getString('token') ?? '';
   return stringValue;
 }
 

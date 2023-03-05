@@ -33,9 +33,9 @@ class _SosComponentState extends State<SosComponent> {
                 foregroundDecoration: widget.isDisabledButton == true
                     ? null
                     : BoxDecoration(
-                        color: Colors.grey,
-                        backgroundBlendMode: BlendMode.saturation,
-                      ),
+                  color: Colors.grey,
+                  backgroundBlendMode: BlendMode.saturation,
+                ),
                 padding: EdgeInsets.zero,
                 child: Image.asset(
                   widget.images,
@@ -58,9 +58,5 @@ class _SosComponentState extends State<SosComponent> {
         ],
       ),
     );
-  }
-
-  pirnt() {
-    print(widget.isDisabledButton);
   }
 }

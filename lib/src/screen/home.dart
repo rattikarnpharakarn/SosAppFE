@@ -67,7 +67,7 @@ class _HomeState extends State<Home> {
                     shape: const CircleBorder(),
                     backgroundColor: const Color.fromARGB(255, 255, 255, 255),
                   ),
-                  child: Image_NavBer(),
+                  child: Image_NavBer(height: 40,width: 40),
                   onPressed: () {
                     _key.currentState!.openEndDrawer();
                   },

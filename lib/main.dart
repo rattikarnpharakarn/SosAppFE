@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:sos/src/screen/test.dart';
 import 'package:sos/src/sharedInfo/user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -42,7 +43,26 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final token = getUserTokenSf();
+
+
+
+
+  String _token = '';
+
+  void initState() {
+    super.initState();
+    _getImageProfile();
+  }
+
+  _getImageProfile() async {
+    var token = await getUserTokenSf();
+
+    setState(() {
+      _token = token;
+    });
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +77,8 @@ class _MyAppState extends State<MyApp> {
       // home: SosPage1(),
       // home: UpDataProfilePage(),
       // home: ChatPage(),
-      home: token == '' ? Signin() : Home(), // หน้าแรกของแอบ
+      // home: TestPage(),
+      home: _token == '' ? Signin() : Home(), // หน้าแรกของแอบ
     );
   }
 }

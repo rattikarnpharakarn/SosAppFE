@@ -52,7 +52,7 @@ class _ChatPageState extends State<ChatPage> {
                     shape: const CircleBorder(),
                     backgroundColor: Color.fromARGB(255, 255, 255, 255),
                   ),
-                  child: Image_NavBer(),
+                  child: Image_NavBer(height: 40,width: 40),
                   onPressed: () {
                     _key.currentState!.openEndDrawer();
                   },
@@ -83,35 +83,35 @@ class _ChatPageState extends State<ChatPage> {
                 ),
               },
               title: const Text('Name 1'),
-              leading: Image_NavBer(),
+              leading: Image_NavBer(height: 40,width: 40),
             ),
             ListTile(
               onTap: () => {
                 print('2'),
               },
               title: const Text('Name 2'),
-              leading: Image_NavBer(),
+              leading: Image_NavBer(height: 40,width: 40),
             ),
             ListTile(
               onTap: () => {
                 print('3'),
               },
               title: const Text('Name 3'),
-              leading: Image_NavBer(),
+              leading: Image_NavBer(height: 40,width: 40),
             ),
             ListTile(
               onTap: () => {
                 print('4'),
               },
               title: const Text('Name 4'),
-              leading: Image_NavBer(),
+              leading: Image_NavBer(height: 40,width: 40),
             ),
             ListTile(
               onTap: () => {
                 print('5'),
               },
               title: const Text('Name 5'),
-              leading: Image_NavBer(),
+              leading: Image_NavBer(height: 40,width: 40),
             ),
           ],
         ),
@@ -200,7 +200,7 @@ class _ChatPage1State extends State<ChatPage1> {
             children: [
               Container(
                 alignment: Alignment.bottomRight,
-                padding: EdgeInsets.zero,
+                padding: const EdgeInsets.fromLTRB(0, 0, 5, 0),
                 width: 310,
                 child: Text(
                   name,
@@ -209,7 +209,7 @@ class _ChatPage1State extends State<ChatPage1> {
               ),
               Container(
                 alignment: Alignment.bottomRight,
-                padding: EdgeInsets.zero,
+                padding:const EdgeInsets.fromLTRB(0, 0, 5, 0),
                 width: 310,
                 child: Text(
                   message,
@@ -218,7 +218,7 @@ class _ChatPage1State extends State<ChatPage1> {
               ),
             ],
           ),
-          Image_NavBer(),
+          Image_NavBer(width: 40, height: 40),
         ],
       ),
     );
@@ -229,14 +229,14 @@ class _ChatPage1State extends State<ChatPage1> {
       padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
       child: Row(
         children: [
-          Image_NavBer(),
+          Image_NavBer(width: 40, height: 40),
           Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               Container(
                 width: 310,
                 alignment: Alignment.topLeft,
-                padding: EdgeInsets.zero,
+                padding:const EdgeInsets.fromLTRB(5, 0, 0, 0),
                 child: Text(
                   name,
                   style: const TextStyle(fontSize: 10, color: Colors.blueGrey),
@@ -244,7 +244,7 @@ class _ChatPage1State extends State<ChatPage1> {
               ),
               Container(
                 alignment: Alignment.topLeft,
-                padding: EdgeInsets.zero,
+                padding:const EdgeInsets.fromLTRB(5, 0, 0, 0),
                 width: 310,
                 child: Text(
                   message,
@@ -294,7 +294,7 @@ class _ChatPage1State extends State<ChatPage1> {
                     shape: const CircleBorder(),
                     backgroundColor: const Color.fromARGB(255, 255, 255, 255),
                   ),
-                  child: Image_NavBer(),
+                  child: Image_NavBer(height: 40,width: 40),
                   onPressed: () {
                     _key.currentState!.openEndDrawer();
                   },

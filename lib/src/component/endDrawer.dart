@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:sos/src/component/image_navBer.dart';
 import 'package:sos/src/screen/home.dart';
 import 'package:sos/src/screen/signin.dart';
 
@@ -36,10 +37,7 @@ class _EndDrawerState extends State<EndDrawer> {
                     borderRadius: BorderRadius.circular(360),
                     child: Container(
                       padding: EdgeInsets.zero,
-                      child: Image.asset(
-                        'assets/images/profile.webp',
-                        fit: BoxFit.cover,
-                      ),
+                      child: Image_NavBer(width: 150,height: 150),
                     ),
                   ),
                 ),
