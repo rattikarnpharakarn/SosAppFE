@@ -4,6 +4,7 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sos/src/model/response.dart';
 import 'package:sos/src/model/signup.dart';
 
@@ -26,7 +27,19 @@ class _UpDataProfilePageState extends State<UpDataProfilePage> {
   @override
   void initState() {
     super.initState();
-    _deforeGetUserInfoSF();
+    Future.delayed(Duration(milliseconds: 500), () {
+      _deforeGetUserInfoSF();
+      _getNameProfile();
+    });
+  }
+
+  _getNameProfile() async {
+    var id = await getUserIDSF();
+    var token = await getUserTokenSf();
+    setState(() {
+      _id = id;
+      _token = token;
+    });
   }
 
   String _id = '';
@@ -36,6 +49,7 @@ class _UpDataProfilePageState extends State<UpDataProfilePage> {
   String _deforelastName = '';
   String _deforeemail = '';
   String _deforebirthday = '';
+  String _deforebirthdayshow = '';
 
   String _deforeIDCard = '';
   String _deforetextIDCard = '';
@@ -46,7 +60,6 @@ class _UpDataProfilePageState extends State<UpDataProfilePage> {
   String _deforeprovince = '';
   String _deforepostalCode = '';
 
-  var newFormat = DateFormat("dd-MM-yyyy");
 
   String selectGroupSex = '';
 
@@ -58,7 +71,6 @@ class _UpDataProfilePageState extends State<UpDataProfilePage> {
 
   _deforeGetUserInfoSF() async {
     var data = await GetUserProfile();
-
     DateTime dt2 = DateTime.parse(data.birthday);
     final String birthday = newFormat.format(dt2);
 
@@ -66,12 +78,13 @@ class _UpDataProfilePageState extends State<UpDataProfilePage> {
       _deforefirstName = data.firstName;
       _deforelastName = data.lastName;
       _deforeemail = data.email;
-      _deforebirthday = birthday;
-      selectGroupSex = data.gender;
 
+      _deforebirthday = data.birthday;
+      _deforebirthdayshow = birthday;
+
+      selectGroupSex = data.gender;
       _deforetextIDCard = data.textIDCard;
       _deforeIDCard = data.pathImage;
-
       _deforeaddress = data.address;
       _deforesubDistrict = data.subDistrict;
       _deforedistrict = data.district;
@@ -99,11 +112,11 @@ class _UpDataProfilePageState extends State<UpDataProfilePage> {
         firstName: _firstName == '' ? _deforefirstName : _firstName,
         lastName: _lastName == '' ? _deforelastName : _lastName,
         email: _email == '' ? _deforeemail : _email,
-        birthday: _dateTime == DateTime.now()
+        birthday: _dateTime != _deforebirthday.toString()
             ? _deforebirthday
             : _dateTime.toString(),
         gender: selectGroupSex.toString(),
-        pathImage: iDCard == '' ? _deforetextIDCard : iDCard,
+        pathImage: iDCard,
         textIDCard: _textIDCard == '' ? _deforetextIDCard : _textIDCard,
         address: _address == '' ? _deforeaddress : _address,
         subDistrict: _subDistrict == '' ? _deforesubDistrict : _subDistrict,
@@ -115,37 +128,42 @@ class _UpDataProfilePageState extends State<UpDataProfilePage> {
     });
 
     EditUserInfo();
+  }
 
-    // print('======> UserInfo  <======\n');
-    // print('phoneNumber : ' + userInfoRes!.phoneNumber);
-    // print('password :' + userInfoRes!.password);
-    // print('confirmPassword : ' + userInfoRes!.confirmPassword);
-    // print('firstName : ' + userInfoRes!.firstName);
-    // print('lastName : ' + userInfoRes!.lastName);
-    // print('email : ' + userInfoRes!.email);
-    // print('birthday : ' + userInfoRes!.birthday);
-    // print('gender : ' + userInfoRes!.gender);
-    // print('imageProfile : ' + userInfoRes!.imageProfile);
-    // print('======> UserInfo  <======\n');
 
-    // print('======> idCard  <======\n');
-    // print('pathImage : ' + userInfoRes!.idCard.pathImage);
-    // print('textIDCard : ' + userInfoRes!.idCard.textIDCard);
-    // print('======> idCard  <======\n');
+  addStringToSF(String token) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('token', token);
+    addUserProfileToSF();
+  }
 
-    // print('======> address  <======\n');
-    // print('address : ' + userInfoRes!.address.address);
-    // print('country : ' + userInfoRes!.address.country);
-    // print('district : ' + userInfoRes!.address.district);
-    // print('postalCode : ' + userInfoRes!.address.postalCode);
-    // print('province : ' + userInfoRes!.address.province);
-    // print('subDistrict : ' + userInfoRes!.address.subDistrict);
-    // print('======> address  <======\n');
+  addUserProfileToSF() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var data = await GetUserProfile();
+    prefs.setString('id', data.id);
+    prefs.setString('phoneNumber', data.phoneNumber);
+    prefs.setString('firstName', data.firstName);
+    prefs.setString('lastName', data.lastName);
+    prefs.setString('email', data.email);
+    prefs.setString('birthday', data.birthday);
+    prefs.setString('gender', data.gender);
+    prefs.setString('imageProfile', data.imageProfile);
+
+    prefs.setString('textIDCard', data.textIDCard);
+    prefs.setString('pathImage', data.pathImage);
+
+    prefs.setString('address', data.address);
+    prefs.setString('subDistrict', data.subDistrict);
+    prefs.setString('district', data.district);
+    prefs.setString('province', data.province);
+    prefs.setString('postalCode', data.postalCode);
+    prefs.setString('country', data.country);
   }
 
   Future<ReturnResponse> EditUserInfo() async {
-    final response = await http.post(
-      Uri.parse('http://10.0.2.2:80/SosApp/accounts/user/' + _id),
+    String url = 'http://10.0.2.2:80/SosApp/accounts/user/${_id}';
+    final response = await http.put(
+      Uri.parse(url),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Bearer ${_token}'
@@ -154,7 +172,8 @@ class _UpDataProfilePageState extends State<UpDataProfilePage> {
     );
 
     if (response.statusCode == 200) {
-      print(response.body);
+      addStringToSF(_token);
+
       // ignore: use_build_context_synchronously
       Navigator.push(context, MaterialPageRoute(builder: (context) {
         return const Home();
@@ -204,6 +223,7 @@ class _UpDataProfilePageState extends State<UpDataProfilePage> {
       print("error while picking file.");
     }
   }
+  var newFormat = DateFormat("dd-MM-yyyy");
 
   DateTime _dateTime = DateTime.now();
   String showDate = '';
@@ -479,7 +499,7 @@ class _UpDataProfilePageState extends State<UpDataProfilePage> {
                                   ).then((date) => pickDate(date!));
                                 },
                                 child: Container(
-                                  child: _deforebirthday == ''
+                                  child: showDate == ''
                                       ? SingleChildScrollView(
                                           scrollDirection: Axis.vertical,
                                           child: Container(
@@ -519,7 +539,7 @@ class _UpDataProfilePageState extends State<UpDataProfilePage> {
                                                       const EdgeInsets.fromLTRB(
                                                           0, 0, 20, 0),
                                                   child: Text(
-                                                    _deforebirthday,
+                                                    showDate,
                                                   ),
                                                 )
                                               ],
