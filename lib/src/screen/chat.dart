@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sos/src/component/endDrawer.dart';
 import 'package:sos/src/component/bottom_bar.dart';
 import 'package:sos/src/component/image_navBer.dart';
+import 'package:sos/src/screen/LoadingPage.dart';
 
 class ChatPage extends StatefulWidget {
   const ChatPage({Key? key}) : super(key: key);
@@ -12,112 +13,124 @@ class ChatPage extends StatefulWidget {
 
 class _ChatPageState extends State<ChatPage> {
   final GlobalKey<ScaffoldState> _key = GlobalKey();
+  bool isLoading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration(milliseconds: 500), () {
+      setState(() {
+        isLoading = true;
+      });
+    });
+  }
+
   int _pageNumber = 4;
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      key: _key,
-      bottomNavigationBar: Bottombar(pageNumber: _pageNumber),
-      appBar: AppBar(
-        // toolbarHeight: 0,
-        backgroundColor: const Color.fromARGB(255, 248, 0, 0),
-        elevation: 0,
-        // centerTitle: false,
-        title: Container(
-          padding: const EdgeInsets.all(10),
-          child: Row(
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+  Widget build(BuildContext context) => isLoading == false
+      ? const LoadingPage()
+      : Scaffold(
+          key: _key,
+          bottomNavigationBar: Bottombar(pageNumber: _pageNumber),
+          appBar: AppBar(
+            // toolbarHeight: 0,
+            backgroundColor: const Color.fromARGB(255, 248, 0, 0),
+            elevation: 0,
+            // centerTitle: false,
+            title: Container(
+              padding: const EdgeInsets.all(10),
+              child: Row(
                 children: [
-                  Container(
-                    padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
-                    child: const Text(
-                      "ห้องสนทนา",
-                      style: TextStyle(
-                        color: Color.fromARGB(255, 255, 255, 255),
-                        fontSize: 20,
-                        decorationStyle: TextDecorationStyle.solid,
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+                        child: const Text(
+                          "ห้องสนทนา",
+                          style: TextStyle(
+                            color: Color.fromARGB(255, 255, 255, 255),
+                            fontSize: 20,
+                            decorationStyle: TextDecorationStyle.solid,
+                          ),
+                        ),
                       ),
-                    ),
+                    ],
                   ),
+                  const Spacer(),
+                  Container(
+                    padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        shape: const CircleBorder(),
+                        backgroundColor: Color.fromARGB(255, 255, 255, 255),
+                      ),
+                      child: Image_NavBer(height: 40, width: 40),
+                      onPressed: () {
+                        _key.currentState!.openEndDrawer();
+                      },
+                    ),
+                  )
                 ],
               ),
-              const Spacer(),
-              Container(
-                padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    shape: const CircleBorder(),
-                    backgroundColor: Color.fromARGB(255, 255, 255, 255),
-                  ),
-                  child: Image_NavBer(height: 40,width: 40),
-                  onPressed: () {
-                    _key.currentState!.openEndDrawer();
-                  },
-                ),
-              )
+            ),
+            automaticallyImplyLeading: false,
+            titleSpacing: 0,
+            actions: [
+              Container(),
             ],
           ),
-        ),
-        automaticallyImplyLeading: false,
-        titleSpacing: 0,
-        actions: [
-          Container(),
-        ],
-      ),
-      endDrawer: EndDrawer(),
-      endDrawerEnableOpenDragGesture: false,
-      body: Container(
-        padding: const EdgeInsets.all(10),
-        child: ListView(
-          children: [
-            ListTile(
-              onTap: () => {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const ChatPage1(),
-                  ),
+          endDrawer: EndDrawer(),
+          endDrawerEnableOpenDragGesture: false,
+          body: Container(
+            padding: const EdgeInsets.all(10),
+            child: ListView(
+              children: [
+                ListTile(
+                  onTap: () => {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const ChatPage1(),
+                      ),
+                    ),
+                  },
+                  title: const Text('Name 1'),
+                  leading: Image_NavBer(height: 40, width: 40),
                 ),
-              },
-              title: const Text('Name 1'),
-              leading: Image_NavBer(height: 40,width: 40),
+                ListTile(
+                  onTap: () => {
+                    print('2'),
+                  },
+                  title: const Text('Name 2'),
+                  leading: Image_NavBer(height: 40, width: 40),
+                ),
+                ListTile(
+                  onTap: () => {
+                    print('3'),
+                  },
+                  title: const Text('Name 3'),
+                  leading: Image_NavBer(height: 40, width: 40),
+                ),
+                ListTile(
+                  onTap: () => {
+                    print('4'),
+                  },
+                  title: const Text('Name 4'),
+                  leading: Image_NavBer(height: 40, width: 40),
+                ),
+                ListTile(
+                  onTap: () => {
+                    print('5'),
+                  },
+                  title: const Text('Name 5'),
+                  leading: Image_NavBer(height: 40, width: 40),
+                ),
+              ],
             ),
-            ListTile(
-              onTap: () => {
-                print('2'),
-              },
-              title: const Text('Name 2'),
-              leading: Image_NavBer(height: 40,width: 40),
-            ),
-            ListTile(
-              onTap: () => {
-                print('3'),
-              },
-              title: const Text('Name 3'),
-              leading: Image_NavBer(height: 40,width: 40),
-            ),
-            ListTile(
-              onTap: () => {
-                print('4'),
-              },
-              title: const Text('Name 4'),
-              leading: Image_NavBer(height: 40,width: 40),
-            ),
-            ListTile(
-              onTap: () => {
-                print('5'),
-              },
-              title: const Text('Name 5'),
-              leading: Image_NavBer(height: 40,width: 40),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+          ),
+        );
 }
 
 class ChatPage1 extends StatefulWidget {
@@ -128,6 +141,16 @@ class ChatPage1 extends StatefulWidget {
 }
 
 class _ChatPage1State extends State<ChatPage1> {
+  bool isLoading = false;
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration(milliseconds: 500), () {
+      setState(() {
+        isLoading = true;
+      });
+    });
+  }
   final GlobalKey<ScaffoldState> _key = GlobalKey();
   int _pageNumber = 4;
 
@@ -209,7 +232,7 @@ class _ChatPage1State extends State<ChatPage1> {
               ),
               Container(
                 alignment: Alignment.bottomRight,
-                padding:const EdgeInsets.fromLTRB(0, 0, 5, 0),
+                padding: const EdgeInsets.fromLTRB(0, 0, 5, 0),
                 width: 310,
                 child: Text(
                   message,
@@ -236,7 +259,7 @@ class _ChatPage1State extends State<ChatPage1> {
               Container(
                 width: 310,
                 alignment: Alignment.topLeft,
-                padding:const EdgeInsets.fromLTRB(5, 0, 0, 0),
+                padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
                 child: Text(
                   name,
                   style: const TextStyle(fontSize: 10, color: Colors.blueGrey),
@@ -244,7 +267,7 @@ class _ChatPage1State extends State<ChatPage1> {
               ),
               Container(
                 alignment: Alignment.topLeft,
-                padding:const EdgeInsets.fromLTRB(5, 0, 0, 0),
+                padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
                 width: 310,
                 child: Text(
                   message,
@@ -258,98 +281,100 @@ class _ChatPage1State extends State<ChatPage1> {
     );
   }
 
+
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      key: _key,
-      bottomNavigationBar: Bottombar(pageNumber: _pageNumber),
-      // appBar: NavbarPages(),
-      appBar: AppBar(
-        // toolbarHeight: 0,
-        backgroundColor: const Color.fromARGB(255, 248, 0, 0),
-        elevation: 0,
-        // centerTitle: true,
-        title: Container(
-          padding: const EdgeInsets.all(10),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                alignment: Alignment.center,
-                padding: const EdgeInsets.fromLTRB(0, 10, 20, 10),
-                child: const Text(
-                  "แชท 1",
-                  style: TextStyle(
-                    color: Color.fromARGB(255, 255, 255, 255),
-                    fontSize: 22,
-                    decorationStyle: TextDecorationStyle.solid,
-                  ),
-                ),
-              ),
-              const Spacer(),
-              Container(
-                padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    shape: const CircleBorder(),
-                    backgroundColor: const Color.fromARGB(255, 255, 255, 255),
-                  ),
-                  child: Image_NavBer(height: 40,width: 40),
-                  onPressed: () {
-                    _key.currentState!.openEndDrawer();
-                  },
-                ),
-              )
-            ],
-          ),
-        ),
-        automaticallyImplyLeading: true,
-        titleSpacing: 0,
-        actions: [
-          Container(),
-        ],
-      ),
-      endDrawer: EndDrawer(),
-      endDrawerEnableOpenDragGesture: false,
-      body: Container(
-        padding: EdgeInsets.all(10),
-        child: Column(
-          children: [
-            Expanded(
-              child: ListView(
-                reverse: true,
+  Widget build(BuildContext context) => isLoading == false
+      ? const LoadingPage()
+      : Scaffold(
+          key: _key,
+          bottomNavigationBar: Bottombar(pageNumber: _pageNumber),
+          // appBar: NavbarPages(),
+          appBar: AppBar(
+            // toolbarHeight: 0,
+            backgroundColor: const Color.fromARGB(255, 248, 0, 0),
+            elevation: 0,
+            // centerTitle: true,
+            title: Container(
+              padding: const EdgeInsets.all(10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  containerMessageOwner('Chirapon', 'ข้อความ', ''),
-                  containerMessageOp('ร.ต.ท.', 'ข้อความ', ''),
+                  Container(
+                    alignment: Alignment.center,
+                    padding: const EdgeInsets.fromLTRB(0, 10, 20, 10),
+                    child: const Text(
+                      "แชท 1",
+                      style: TextStyle(
+                        color: Color.fromARGB(255, 255, 255, 255),
+                        fontSize: 22,
+                        decorationStyle: TextDecorationStyle.solid,
+                      ),
+                    ),
+                  ),
+                  const Spacer(),
+                  Container(
+                    padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        shape: const CircleBorder(),
+                        backgroundColor:
+                            const Color.fromARGB(255, 255, 255, 255),
+                      ),
+                      child: Image_NavBer(height: 40, width: 40),
+                      onPressed: () {
+                        _key.currentState!.openEndDrawer();
+                      },
+                    ),
+                  )
                 ],
               ),
             ),
-            Container(
-              padding: const EdgeInsets.all(10),
-              child: SizedBox(
-                child: Row(
-                  children: [
-                    moodIcon(),
-                    attachFile(),
-                    camera(),
-                    const Expanded(
-                      child: TextField(
-                        decoration: InputDecoration(
-                            hintText: "Message",
-                            hintStyle: TextStyle(
-                              color: Color(0xD3FF4646),
-                            ),
-                            border: InputBorder.none),
-                      ),
-                    ),
-                    sendMessage(),
-                  ],
+            automaticallyImplyLeading: true,
+            titleSpacing: 0,
+            actions: [
+              Container(),
+            ],
+          ),
+          endDrawer: EndDrawer(),
+          endDrawerEnableOpenDragGesture: false,
+          body: Container(
+            padding: EdgeInsets.all(10),
+            child: Column(
+              children: [
+                Expanded(
+                  child: ListView(
+                    reverse: true,
+                    children: [
+                      containerMessageOwner('Chirapon', 'ข้อความ', ''),
+                      containerMessageOp('ร.ต.ท.', 'ข้อความ', ''),
+                    ],
+                  ),
                 ),
-              ),
+                Container(
+                  padding: const EdgeInsets.all(10),
+                  child: SizedBox(
+                    child: Row(
+                      children: [
+                        moodIcon(),
+                        attachFile(),
+                        camera(),
+                        const Expanded(
+                          child: TextField(
+                            decoration: InputDecoration(
+                                hintText: "Message",
+                                hintStyle: TextStyle(
+                                  color: Color(0xD3FF4646),
+                                ),
+                                border: InputBorder.none),
+                          ),
+                        ),
+                        sendMessage(),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
-      ),
-    );
-  }
+          ),
+        );
 }

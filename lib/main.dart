@@ -47,13 +47,13 @@ class _MyAppState extends State<MyApp> {
 
 
 
-  String _token = '';
 
   void initState() {
     super.initState();
     _getImageProfile();
   }
 
+  String _token = '';
   _getImageProfile() async {
     var token = await getUserTokenSf();
 

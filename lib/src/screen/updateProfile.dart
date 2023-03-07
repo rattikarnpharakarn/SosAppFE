@@ -8,9 +8,10 @@ import 'package:sos/src/model/response.dart';
 import 'package:sos/src/model/signup.dart';
 
 import 'package:http/http.dart' as http;
+import 'package:sos/src/provider/userService.dart';
+import 'package:sos/src/sharedInfo/user.dart';
 
 import 'home.dart';
-
 
 class UpDataProfilePage extends StatefulWidget {
   const UpDataProfilePage({Key? key}) : super(key: key);
@@ -22,8 +23,62 @@ class UpDataProfilePage extends StatefulWidget {
 class _UpDataProfilePageState extends State<UpDataProfilePage> {
   final _formKey = GlobalKey<FormState>();
 
-  String _password = '';
-  String _confirmPassword = '';
+  @override
+  void initState() {
+    super.initState();
+    _deforeGetUserInfoSF();
+  }
+
+  String _id = '';
+  String _token = '';
+
+  String _deforefirstName = '';
+  String _deforelastName = '';
+  String _deforeemail = '';
+  String _deforebirthday = '';
+
+  String _deforeIDCard = '';
+  String _deforetextIDCard = '';
+
+  String _deforeaddress = '';
+  String _deforesubDistrict = '';
+  String _deforedistrict = '';
+  String _deforeprovince = '';
+  String _deforepostalCode = '';
+
+  var newFormat = DateFormat("dd-MM-yyyy");
+
+  String selectGroupSex = '';
+
+  void _selectGroupSex(String value) {
+    setState(() {
+      selectGroupSex = value;
+    });
+  }
+
+  _deforeGetUserInfoSF() async {
+    var data = await GetUserProfile();
+
+    DateTime dt2 = DateTime.parse(data.birthday);
+    final String birthday = newFormat.format(dt2);
+
+    setState(() {
+      _deforefirstName = data.firstName;
+      _deforelastName = data.lastName;
+      _deforeemail = data.email;
+      _deforebirthday = birthday;
+      selectGroupSex = data.gender;
+
+      _deforetextIDCard = data.textIDCard;
+      _deforeIDCard = data.pathImage;
+
+      _deforeaddress = data.address;
+      _deforesubDistrict = data.subDistrict;
+      _deforedistrict = data.district;
+      _deforeprovince = data.province;
+      _deforepostalCode = data.postalCode;
+    });
+  }
 
   String _firstName = '';
   String _lastName = '';
@@ -35,80 +90,65 @@ class _UpDataProfilePageState extends State<UpDataProfilePage> {
   String _district = '';
   String _province = '';
   String _postalCode = '';
+
   late UpdateProfile userInfoRes;
-  bool isPasswordError = true;
 
   void setDataUserInfo() {
-    if (_password != _confirmPassword) {
-      setState(() {
-        isPasswordError = false;
-      });
-    } else {
-      setState(() {
-        isPasswordError = true;
-      });
+    setState(() {
+      userInfoRes = UpdateProfile(
+        firstName: _firstName == '' ? _deforefirstName : _firstName,
+        lastName: _lastName == '' ? _deforelastName : _lastName,
+        email: _email == '' ? _deforeemail : _email,
+        birthday: _dateTime == DateTime.now()
+            ? _deforebirthday
+            : _dateTime.toString(),
+        gender: selectGroupSex.toString(),
+        pathImage: iDCard == '' ? _deforetextIDCard : iDCard,
+        textIDCard: _textIDCard == '' ? _deforetextIDCard : _textIDCard,
+        address: _address == '' ? _deforeaddress : _address,
+        subDistrict: _subDistrict == '' ? _deforesubDistrict : _subDistrict,
+        district: _district == '' ? _deforedistrict : _district,
+        province: _province == '' ? _deforeprovince : _postalCode,
+        postalCode: _postalCode == '' ? _deforepostalCode : _postalCode,
+        country: 'ไทย',
+      );
+    });
 
+    EditUserInfo();
 
-      setState(() {
-        userInfoRes = UpdateProfile(
-          lastName: _lastName,
-          firstName: _firstName,
-          email: _email,
-          birthday: _dateTime.toString(),
-          gender: selectGroupSex.toString(),
-          imageProfile: imageProfile,
-          pathImage: iDCard,
-          textIDCard: _textIDCard,
-          address: _address,
-          subDistrict: _subDistrict,
-          district: _district,
-          province: _province,
-          postalCode: _postalCode,
-          country: 'ไทย',
-        );
-      });
+    // print('======> UserInfo  <======\n');
+    // print('phoneNumber : ' + userInfoRes!.phoneNumber);
+    // print('password :' + userInfoRes!.password);
+    // print('confirmPassword : ' + userInfoRes!.confirmPassword);
+    // print('firstName : ' + userInfoRes!.firstName);
+    // print('lastName : ' + userInfoRes!.lastName);
+    // print('email : ' + userInfoRes!.email);
+    // print('birthday : ' + userInfoRes!.birthday);
+    // print('gender : ' + userInfoRes!.gender);
+    // print('imageProfile : ' + userInfoRes!.imageProfile);
+    // print('======> UserInfo  <======\n');
 
-      EditUserInfo();
+    // print('======> idCard  <======\n');
+    // print('pathImage : ' + userInfoRes!.idCard.pathImage);
+    // print('textIDCard : ' + userInfoRes!.idCard.textIDCard);
+    // print('======> idCard  <======\n');
 
-      // print('======> UserInfo  <======\n');
-      // print('phoneNumber : ' + userInfoRes!.phoneNumber);
-      // print('password :' + userInfoRes!.password);
-      // print('confirmPassword : ' + userInfoRes!.confirmPassword);
-      // print('firstName : ' + userInfoRes!.firstName);
-      // print('lastName : ' + userInfoRes!.lastName);
-      // print('email : ' + userInfoRes!.email);
-      // print('birthday : ' + userInfoRes!.birthday);
-      // print('gender : ' + userInfoRes!.gender);
-      // print('imageProfile : ' + userInfoRes!.imageProfile);
-      // print('======> UserInfo  <======\n');
-
-      // print('======> idCard  <======\n');
-      // print('pathImage : ' + userInfoRes!.idCard.pathImage);
-      // print('textIDCard : ' + userInfoRes!.idCard.textIDCard);
-      // print('======> idCard  <======\n');
-
-      // print('======> address  <======\n');
-      // print('address : ' + userInfoRes!.address.address);
-      // print('country : ' + userInfoRes!.address.country);
-      // print('district : ' + userInfoRes!.address.district);
-      // print('postalCode : ' + userInfoRes!.address.postalCode);
-      // print('province : ' + userInfoRes!.address.province);
-      // print('subDistrict : ' + userInfoRes!.address.subDistrict);
-      // print('======> address  <======\n');
-
-      // print('======> verify  <======\n');
-      // print('otp : ' + userInfoRes!.verify.otp);
-      // print('verifyCode : ' + userInfoRes!.verify.verifyCode);
-      // print('======> verify  <======\n');
-
-    }
+    // print('======> address  <======\n');
+    // print('address : ' + userInfoRes!.address.address);
+    // print('country : ' + userInfoRes!.address.country);
+    // print('district : ' + userInfoRes!.address.district);
+    // print('postalCode : ' + userInfoRes!.address.postalCode);
+    // print('province : ' + userInfoRes!.address.province);
+    // print('subDistrict : ' + userInfoRes!.address.subDistrict);
+    // print('======> address  <======\n');
   }
 
   Future<ReturnResponse> EditUserInfo() async {
     final response = await http.post(
-      Uri.parse('http://10.0.2.2:80/SosApp/accounts/createUser'),
+      Uri.parse('http://10.0.2.2:80/SosApp/accounts/user/' + _id),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer ${_token}'
       },
       body: jsonEncode(userInfoRes),
     );
@@ -134,6 +174,7 @@ class _UpDataProfilePageState extends State<UpDataProfilePage> {
   String imagepath = "";
   String imageProfile = '';
   String iDCard = '';
+
   openImage(String type) async {
     try {
       var pickedFile = await imgpicker.pickImage(source: ImageSource.gallery);
@@ -164,7 +205,6 @@ class _UpDataProfilePageState extends State<UpDataProfilePage> {
     }
   }
 
-  var newFormat = DateFormat("dd-MM-yyyy");
   DateTime _dateTime = DateTime.now();
   String showDate = '';
 
@@ -174,13 +214,6 @@ class _UpDataProfilePageState extends State<UpDataProfilePage> {
     setState(() {
       _dateTime = date;
       showDate = formatted.toString();
-    });
-  }
-
-  String selectGroupSex = '';
-  void _selectGroupSex(String value) {
-    setState(() {
-      selectGroupSex = value;
     });
   }
 
@@ -257,56 +290,21 @@ class _UpDataProfilePageState extends State<UpDataProfilePage> {
                     child: Column(
                       children: [
                         Container(
-                          width: 200,
-                          height: 200,
-                          child: Stack(
-                            children: [
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(360),
-                                child: imageProfile == ''
-                                    ? Image.asset(
-                                  'assets/images/profile.webp',
-                                  width: 200,
-                                  height: 200,
-                                  fit: BoxFit.cover,
-                                )
-                                    : Image.memory(
-                                  base64Decode(imageProfile),
-                                  width: 200,
-                                  height: 200,
-                                  fit: BoxFit.cover,
-                                ),
-                                // Image.memory( base64Decode(imageBase64), fit: BoxFit.cover )
-                              ),
-                              Container(
-                                alignment: Alignment.bottomRight,
-                                child: FloatingActionButton(
-                                  child: Icon(Icons.add),
-                                  onPressed: () {
-                                    openImage('Profile');
-                                  },
-                                  backgroundColor:
-                                  Color.fromARGB(255, 17, 17, 17),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Container(
                           padding: const EdgeInsets.fromLTRB(15, 15, 15, 0),
                           child: TextFormField(
-                            decoration: const InputDecoration(
-                              labelText: 'First Name *',
-                              labelStyle: TextStyle(
+                            decoration: InputDecoration(
+                              hintText: 'First Name *',
+                              labelText: _deforefirstName,
+                              labelStyle: const TextStyle(
                                   color: Color.fromARGB(255, 93, 93, 93)),
                               // helperText: 'Ex. 0812345678',
                               // helperStyle: TextStyle(color: Colors.white),
-                              enabledBorder: UnderlineInputBorder(
+                              enabledBorder: const UnderlineInputBorder(
                                 borderSide: BorderSide(
                                     width: 1,
                                     color: Color.fromARGB(255, 114, 114, 114)),
                               ),
-                              focusedBorder: UnderlineInputBorder(
+                              focusedBorder: const UnderlineInputBorder(
                                 borderSide: BorderSide(
                                     width: 1,
                                     color: Color.fromARGB(255, 87, 87, 87)),
@@ -315,7 +313,7 @@ class _UpDataProfilePageState extends State<UpDataProfilePage> {
                             keyboardType: TextInputType.text,
                             style: const TextStyle(color: Colors.black),
                             onChanged: (value) => setState(
-                                  () {
+                              () {
                                 _firstName = value;
                               },
                             ),
@@ -324,18 +322,19 @@ class _UpDataProfilePageState extends State<UpDataProfilePage> {
                         Container(
                           padding: const EdgeInsets.fromLTRB(15, 15, 15, 0),
                           child: TextFormField(
-                            decoration: const InputDecoration(
-                              labelText: 'Last Name *',
-                              labelStyle: TextStyle(
+                            decoration: InputDecoration(
+                              labelText: _deforelastName,
+                              hintText: 'Last Name *',
+                              labelStyle: const TextStyle(
                                   color: Color.fromARGB(255, 93, 93, 93)),
                               // helperText: 'Ex. 0812345678',
                               // helperStyle: TextStyle(color: Colors.black),
-                              enabledBorder: UnderlineInputBorder(
+                              enabledBorder: const UnderlineInputBorder(
                                 borderSide: BorderSide(
                                     width: 1,
                                     color: Color.fromARGB(255, 114, 114, 114)),
                               ),
-                              focusedBorder: UnderlineInputBorder(
+                              focusedBorder: const UnderlineInputBorder(
                                 borderSide: BorderSide(
                                     width: 1,
                                     color: Color.fromARGB(255, 87, 87, 87)),
@@ -344,7 +343,7 @@ class _UpDataProfilePageState extends State<UpDataProfilePage> {
                             keyboardType: TextInputType.text,
                             style: const TextStyle(color: Colors.black),
                             onChanged: (value) => setState(
-                                  () {
+                              () {
                                 _lastName = value;
                               },
                             ),
@@ -353,18 +352,19 @@ class _UpDataProfilePageState extends State<UpDataProfilePage> {
                         Container(
                           padding: const EdgeInsets.fromLTRB(15, 15, 15, 0),
                           child: TextFormField(
-                            decoration: const InputDecoration(
-                              labelText: 'Email',
-                              labelStyle: TextStyle(
+                            decoration: InputDecoration(
+                              labelText: _deforeemail,
+                              hintText: 'Email',
+                              labelStyle: const TextStyle(
                                   color: Color.fromARGB(255, 93, 93, 93)),
                               // helperText: 'Ex. 0812345678',
                               // helperStyle: TextStyle(color: Colors.black),
-                              enabledBorder: UnderlineInputBorder(
+                              enabledBorder: const UnderlineInputBorder(
                                 borderSide: BorderSide(
                                     width: 1,
                                     color: Color.fromARGB(255, 114, 114, 114)),
                               ),
-                              focusedBorder: UnderlineInputBorder(
+                              focusedBorder: const UnderlineInputBorder(
                                 borderSide: BorderSide(
                                     width: 1,
                                     color: Color.fromARGB(255, 87, 87, 87)),
@@ -373,7 +373,7 @@ class _UpDataProfilePageState extends State<UpDataProfilePage> {
                             keyboardType: TextInputType.emailAddress,
                             style: const TextStyle(color: Colors.black),
                             onChanged: (value) => setState(
-                                  () {
+                              () {
                                 _email = value;
                               },
                             ),
@@ -382,18 +382,19 @@ class _UpDataProfilePageState extends State<UpDataProfilePage> {
                         Container(
                           padding: const EdgeInsets.fromLTRB(15, 15, 15, 0),
                           child: TextFormField(
-                            decoration: const InputDecoration(
-                              labelText: 'ID Card *',
-                              labelStyle: TextStyle(
+                            decoration: InputDecoration(
+                              labelText: _deforetextIDCard,
+                              hintText: 'ID Card *',
+                              labelStyle: const TextStyle(
                                   color: Color.fromARGB(255, 93, 93, 93)),
                               // helperText: 'Ex. 0812345678',
                               // helperStyle: TextStyle(color: Colors.black),
-                              enabledBorder: UnderlineInputBorder(
+                              enabledBorder: const UnderlineInputBorder(
                                 borderSide: BorderSide(
                                     width: 1,
                                     color: Color.fromARGB(255, 114, 114, 114)),
                               ),
-                              focusedBorder: UnderlineInputBorder(
+                              focusedBorder: const UnderlineInputBorder(
                                 borderSide: BorderSide(
                                     width: 1,
                                     color: Color.fromARGB(255, 87, 87, 87)),
@@ -402,7 +403,7 @@ class _UpDataProfilePageState extends State<UpDataProfilePage> {
                             keyboardType: TextInputType.number,
                             style: const TextStyle(color: Colors.black),
                             onChanged: (value) => setState(
-                                  () {
+                              () {
                                 _textIDCard = value;
                               },
                             ),
@@ -418,35 +419,37 @@ class _UpDataProfilePageState extends State<UpDataProfilePage> {
                       onTap: () => {openImage('iDCard')},
                       child: iDCard == ''
                           ? const Text(
-                        'กรุณา แนบรูปภาพบัตรประจำตัวประชาชน ***',
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.transparent, // Step 2 SEE HERE
-                          shadows: [
-                            Shadow(
-                                offset: Offset(0, -5),
-                                color: Colors.black)
-                          ],
-                          decoration: TextDecoration.underline,
-                          decorationColor: Color.fromARGB(255, 177, 0, 0),
-                        ),
-                      )
+                              'กรุณา แนบรูปภาพบัตรประจำตัวประชาชน ***',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.transparent,
+                                // Step 2 SEE HERE
+                                shadows: [
+                                  Shadow(
+                                      offset: Offset(0, -5),
+                                      color: Colors.black)
+                                ],
+                                decoration: TextDecoration.underline,
+                                decorationColor: Color.fromARGB(255, 177, 0, 0),
+                              ),
+                            )
                           : const Text(
-                        'แนบรูปภาพบัตรประจำตัวประชาชน สำเร็จ',
-                        style: TextStyle(
-                          fontSize: 16,
-                          // fontWeight: FontWeight.bold,
-                          color: Colors.transparent, // Step 2 SEE HERE
-                          shadows: [
-                            Shadow(
-                                offset: Offset(0, -5),
-                                color: Colors.black)
-                          ],
-                          decoration: TextDecoration.underline,
-                          decorationColor:
-                          Color.fromARGB(255, 34, 172, 0),
-                        ),
-                      ),
+                              'แนบรูปภาพบัตรประจำตัวประชาชน สำเร็จ',
+                              style: TextStyle(
+                                fontSize: 16,
+                                // fontWeight: FontWeight.bold,
+                                color: Colors.transparent,
+                                // Step 2 SEE HERE
+                                shadows: [
+                                  Shadow(
+                                      offset: Offset(0, -5),
+                                      color: Colors.black)
+                                ],
+                                decoration: TextDecoration.underline,
+                                decorationColor:
+                                    Color.fromARGB(255, 34, 172, 0),
+                              ),
+                            ),
                     ),
                   ),
                   Container(
@@ -476,53 +479,53 @@ class _UpDataProfilePageState extends State<UpDataProfilePage> {
                                   ).then((date) => pickDate(date!));
                                 },
                                 child: Container(
-                                  child: showDate == ''
+                                  child: _deforebirthday == ''
                                       ? SingleChildScrollView(
-                                    scrollDirection: Axis.vertical,
-                                    child: Container(
-                                      child: Row(
-                                        children: [
-                                          Container(
-                                              padding: const EdgeInsets
-                                                  .fromLTRB(0, 0, 20, 0),
-                                              child: const Icon(
-                                                  Icons.calendar_month)),
-                                          Container(
-                                            padding:
-                                            const EdgeInsets.fromLTRB(
-                                                0, 0, 20, 0),
-                                            child: Text(
-                                              newFormat
-                                                  .format(_dateTime)
-                                                  .toString(),
+                                          scrollDirection: Axis.vertical,
+                                          child: Container(
+                                            child: Row(
+                                              children: [
+                                                Container(
+                                                    padding: const EdgeInsets
+                                                        .fromLTRB(0, 0, 20, 0),
+                                                    child: const Icon(
+                                                        Icons.calendar_month)),
+                                                Container(
+                                                  padding:
+                                                      const EdgeInsets.fromLTRB(
+                                                          0, 0, 20, 0),
+                                                  child: Text(
+                                                    newFormat
+                                                        .format(_dateTime)
+                                                        .toString(),
+                                                  ),
+                                                ),
+                                              ],
                                             ),
                                           ),
-                                        ],
-                                      ),
-                                    ),
-                                  )
+                                        )
                                       : SingleChildScrollView(
-                                    scrollDirection: Axis.vertical,
-                                    child: Container(
-                                      child: Row(
-                                        children: [
-                                          Container(
-                                              padding: const EdgeInsets
-                                                  .fromLTRB(0, 0, 20, 0),
-                                              child: const Icon(
-                                                  Icons.calendar_month)),
-                                          Container(
-                                            padding:
-                                            const EdgeInsets.fromLTRB(
-                                                0, 0, 20, 0),
-                                            child: Text(
-                                              showDate.toString(),
+                                          scrollDirection: Axis.vertical,
+                                          child: Container(
+                                            child: Row(
+                                              children: [
+                                                Container(
+                                                    padding: const EdgeInsets
+                                                        .fromLTRB(0, 0, 20, 0),
+                                                    child: const Icon(
+                                                        Icons.calendar_month)),
+                                                Container(
+                                                  padding:
+                                                      const EdgeInsets.fromLTRB(
+                                                          0, 0, 20, 0),
+                                                  child: Text(
+                                                    _deforebirthday,
+                                                  ),
+                                                )
+                                              ],
                                             ),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                  ),
+                                          ),
+                                        ),
                                 ),
                               ),
                             ],
@@ -575,18 +578,19 @@ class _UpDataProfilePageState extends State<UpDataProfilePage> {
                   Container(
                     padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
                     child: TextFormField(
-                      decoration: const InputDecoration(
-                        labelText: 'House No.',
-                        labelStyle:
-                        TextStyle(color: Color.fromARGB(255, 93, 93, 93)),
+                      decoration: InputDecoration(
+                        hintText: 'House No.',
+                        labelText: _deforeaddress,
+                        labelStyle: const TextStyle(
+                            color: Color.fromARGB(255, 93, 93, 93)),
                         // helperText: 'Ex. 0812345678',
                         // helperStyle: TextStyle(color: Colors.white),
-                        enabledBorder: UnderlineInputBorder(
+                        enabledBorder: const UnderlineInputBorder(
                           borderSide: BorderSide(
                               width: 1,
                               color: Color.fromARGB(255, 114, 114, 114)),
                         ),
-                        focusedBorder: UnderlineInputBorder(
+                        focusedBorder: const UnderlineInputBorder(
                           borderSide: BorderSide(
                               width: 1, color: Color.fromARGB(255, 87, 87, 87)),
                         ),
@@ -594,7 +598,7 @@ class _UpDataProfilePageState extends State<UpDataProfilePage> {
                       keyboardType: TextInputType.text,
                       style: const TextStyle(color: Colors.black),
                       onChanged: (value) => setState(
-                            () {
+                        () {
                           _address = value;
                         },
                       ),
@@ -603,18 +607,19 @@ class _UpDataProfilePageState extends State<UpDataProfilePage> {
                   Container(
                     padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
                     child: TextFormField(
-                      decoration: const InputDecoration(
-                        labelText: 'Sub-district',
-                        labelStyle:
-                        TextStyle(color: Color.fromARGB(255, 93, 93, 93)),
+                      decoration: InputDecoration(
+                        labelText: _deforesubDistrict,
+                        hintText: 'Sub-district',
+                        labelStyle: const TextStyle(
+                            color: Color.fromARGB(255, 93, 93, 93)),
                         // helperText: 'Ex. 0812345678',
                         // helperStyle: TextStyle(color: Colors.white),
-                        enabledBorder: UnderlineInputBorder(
+                        enabledBorder: const UnderlineInputBorder(
                           borderSide: BorderSide(
                               width: 1,
                               color: Color.fromARGB(255, 114, 114, 114)),
                         ),
-                        focusedBorder: UnderlineInputBorder(
+                        focusedBorder: const UnderlineInputBorder(
                           borderSide: BorderSide(
                               width: 1, color: Color.fromARGB(255, 87, 87, 87)),
                         ),
@@ -622,7 +627,7 @@ class _UpDataProfilePageState extends State<UpDataProfilePage> {
                       keyboardType: TextInputType.text,
                       style: const TextStyle(color: Colors.black),
                       onChanged: (value) => setState(
-                            () {
+                        () {
                           _subDistrict = value;
                         },
                       ),
@@ -631,18 +636,19 @@ class _UpDataProfilePageState extends State<UpDataProfilePage> {
                   Container(
                     padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
                     child: TextFormField(
-                      decoration: const InputDecoration(
-                        labelText: 'District',
-                        labelStyle:
-                        TextStyle(color: Color.fromARGB(255, 93, 93, 93)),
+                      decoration: InputDecoration(
+                        labelText: _deforedistrict,
+                        hintText: 'District',
+                        labelStyle: const TextStyle(
+                            color: Color.fromARGB(255, 93, 93, 93)),
                         // helperText: 'Ex. 0812345678',
                         // helperStyle: TextStyle(color: Colors.white),
-                        enabledBorder: UnderlineInputBorder(
+                        enabledBorder: const UnderlineInputBorder(
                           borderSide: BorderSide(
                               width: 1,
                               color: Color.fromARGB(255, 114, 114, 114)),
                         ),
-                        focusedBorder: UnderlineInputBorder(
+                        focusedBorder: const UnderlineInputBorder(
                           borderSide: BorderSide(
                               width: 1, color: Color.fromARGB(255, 87, 87, 87)),
                         ),
@@ -650,7 +656,7 @@ class _UpDataProfilePageState extends State<UpDataProfilePage> {
                       keyboardType: TextInputType.text,
                       style: const TextStyle(color: Colors.black),
                       onChanged: (value) => setState(
-                            () {
+                        () {
                           _district = value;
                         },
                       ),
@@ -659,18 +665,19 @@ class _UpDataProfilePageState extends State<UpDataProfilePage> {
                   Container(
                     padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
                     child: TextFormField(
-                      decoration: const InputDecoration(
-                        labelText: 'Province',
-                        labelStyle:
-                        TextStyle(color: Color.fromARGB(255, 93, 93, 93)),
+                      decoration: InputDecoration(
+                        labelText: _deforeprovince,
+                        hintText: 'Province',
+                        labelStyle: const TextStyle(
+                            color: Color.fromARGB(255, 93, 93, 93)),
                         // helperText: 'Ex. 0812345678',
                         // helperStyle: TextStyle(color: Colors.white),
-                        enabledBorder: UnderlineInputBorder(
+                        enabledBorder: const UnderlineInputBorder(
                           borderSide: BorderSide(
                               width: 1,
                               color: Color.fromARGB(255, 114, 114, 114)),
                         ),
-                        focusedBorder: UnderlineInputBorder(
+                        focusedBorder: const UnderlineInputBorder(
                           borderSide: BorderSide(
                               width: 1, color: Color.fromARGB(255, 87, 87, 87)),
                         ),
@@ -678,7 +685,7 @@ class _UpDataProfilePageState extends State<UpDataProfilePage> {
                       keyboardType: TextInputType.text,
                       style: const TextStyle(color: Colors.black),
                       onChanged: (value) => setState(
-                            () {
+                        () {
                           _province = value;
                         },
                       ),
@@ -687,18 +694,19 @@ class _UpDataProfilePageState extends State<UpDataProfilePage> {
                   Container(
                     padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
                     child: TextFormField(
-                      decoration: const InputDecoration(
-                        labelText: 'Postal Code',
-                        labelStyle:
-                        TextStyle(color: Color.fromARGB(255, 93, 93, 93)),
+                      decoration: InputDecoration(
+                        labelText: _deforepostalCode,
+                        hintText: 'Postal Code',
+                        labelStyle: const TextStyle(
+                            color: Color.fromARGB(255, 93, 93, 93)),
                         // helperText: 'Ex. 0812345678',
                         // helperStyle: TextStyle(color: Colors.white),
-                        enabledBorder: UnderlineInputBorder(
+                        enabledBorder: const UnderlineInputBorder(
                           borderSide: BorderSide(
                               width: 1,
                               color: Color.fromARGB(255, 114, 114, 114)),
                         ),
-                        focusedBorder: UnderlineInputBorder(
+                        focusedBorder: const UnderlineInputBorder(
                           borderSide: BorderSide(
                               width: 1, color: Color.fromARGB(255, 87, 87, 87)),
                         ),
@@ -706,7 +714,7 @@ class _UpDataProfilePageState extends State<UpDataProfilePage> {
                       keyboardType: TextInputType.number,
                       style: const TextStyle(color: Colors.black),
                       onChanged: (value) => setState(
-                            () {
+                        () {
                           _postalCode = value;
                         },
                       ),
@@ -721,7 +729,7 @@ class _UpDataProfilePageState extends State<UpDataProfilePage> {
                         child: ElevatedButton(
                           style: ButtonStyle(
                             backgroundColor:
-                            MaterialStateProperty.all(Colors.black),
+                                MaterialStateProperty.all(Colors.black),
                             shape: MaterialStateProperty.all(
                               RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(15.29),

@@ -11,6 +11,8 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:sos/src/screen/LoadingPage.dart';
+
 class SosPage extends StatefulWidget {
   const SosPage({super.key});
 
@@ -26,256 +28,270 @@ class NSosPageState extends State<SosPage> {
 
   int onSelect = 0;
 
+  bool isLoading = false;
+
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      key: _key,
-      bottomNavigationBar: Bottombar(pageNumber: _pageNumber),
-      // appBar: NavbarPages(),
-      appBar: AppBar(
-        // toolbarHeight: 0,
-        backgroundColor: const Color.fromARGB(255, 248, 0, 0),
-        elevation: 0,
-        // centerTitle: false,
-        title: Container(
-          padding: const EdgeInsets.all(10),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                alignment: Alignment.center,
-                padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
-                child: const Text(
-                  "แจ้งเหตุ",
-                  style: TextStyle(
-                    color: Color.fromARGB(255, 255, 255, 255),
-                    fontSize: 22,
-                    decorationStyle: TextDecorationStyle.solid,
+  void initState() {
+    super.initState();
+    Future.delayed(Duration(milliseconds: 500), () {
+      setState(() {
+        isLoading = true;
+      });
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) => isLoading == false
+      ? const LoadingPage()
+      : Scaffold(
+          key: _key,
+          bottomNavigationBar: Bottombar(pageNumber: _pageNumber),
+          // appBar: NavbarPages(),
+          appBar: AppBar(
+            // toolbarHeight: 0,
+            backgroundColor: const Color.fromARGB(255, 248, 0, 0),
+            elevation: 0,
+            // centerTitle: false,
+            title: Container(
+              padding: const EdgeInsets.all(10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    alignment: Alignment.center,
+                    padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+                    child: const Text(
+                      "แจ้งเหตุ",
+                      style: TextStyle(
+                        color: Color.fromARGB(255, 255, 255, 255),
+                        fontSize: 22,
+                        decorationStyle: TextDecorationStyle.solid,
+                      ),
+                    ),
                   ),
-                ),
+                  const Spacer(),
+                  Container(
+                    padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        shape: const CircleBorder(),
+                        backgroundColor:
+                            const Color.fromARGB(255, 255, 255, 255),
+                      ),
+                      child: Image_NavBer(height: 40, width: 40),
+                      onPressed: () {
+                        _key.currentState!.openEndDrawer();
+                      },
+                    ),
+                  )
+                ],
               ),
-              const Spacer(),
-              Container(
-                padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    shape: const CircleBorder(),
-                    backgroundColor: const Color.fromARGB(255, 255, 255, 255),
-                  ),
-                 child: Image_NavBer(height: 40,width: 40),
-                  onPressed: () {
-                    _key.currentState!.openEndDrawer();
-                  },
-                ),
-              )
+            ),
+            automaticallyImplyLeading: false,
+            titleSpacing: 0,
+            actions: [
+              Container(),
             ],
           ),
-        ),
-        automaticallyImplyLeading: false,
-        titleSpacing: 0,
-        actions: [
-          Container(),
-        ],
-      ),
-      endDrawer: const EndDrawer(),
-      endDrawerEnableOpenDragGesture: false,
-      body: SingleChildScrollView(
-        child: Form(
-          child: Container(
-            alignment: Alignment.center,
-            padding: const EdgeInsets.all(10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              textDirection: TextDirection.ltr,
-              children: <Widget>[
-                Container(
-                  padding: EdgeInsets.zero,
-                  height: 380,
-                  width: 400,
-                  child: GridView.count(
-                    primary: true,
-                    padding: const EdgeInsets.all(20),
-                    crossAxisSpacing: 10,
-                    mainAxisSpacing: 10,
-                    crossAxisCount: 2,
-                    children: [
-                      TextButton(
-                        autofocus: false,
-                        style: TextButton.styleFrom(
-                          foregroundColor: Colors.white,
-                          shape: const CircleBorder(),
-                        ),
-                        child: onSelect == 1 || onSelect == 0
-                            ? SosComponent(
-                                images: 'assets/images/sick.png',
-                                title: 'เจ็บป่วย',
-                                isDisabledButton: true,
-                              )
-                            : SosComponent(
-                                images: 'assets/images/sick.png',
-                                title: 'เจ็บป่วย',
-                              ),
-                        onPressed: () {
-                          print('เจ็บป่วย');
-                          setState(() {
-                            if (onSelect == 1) {
-                              onSelect = 0;
-                            } else {
-                              onSelect = 1;
-                            }
-                          });
-                        },
-                      ),
-                      TextButton(
-                        autofocus: false,
-                        style: TextButton.styleFrom(
-                          foregroundColor: Colors.white,
-                          shape: const CircleBorder(),
-                        ),
-                        child: onSelect == 2 || onSelect == 0
-                            ? SosComponent(
-                                images: 'assets/images/accident.png',
-                                title: 'อุบัติเหตุ',
-                                isDisabledButton: true,
-                              )
-                            : SosComponent(
-                                images: 'assets/images/accident.png',
-                                title: 'อุบัติเหตุ',
-                              ),
-                        onPressed: () {
-                          print('อุบัติเหตุ');
-                          setState(() {
-                            if (onSelect == 2) {
-                              onSelect = 0;
-                            } else {
-                              onSelect = 2;
-                            }
-                          });
-                        },
-                      ),
-                      TextButton(
-                        autofocus: false,
-                        style: TextButton.styleFrom(
-                          foregroundColor: Colors.white,
-                          shape: const CircleBorder(),
-                        ),
-                        child: onSelect == 3 || onSelect == 0
-                            ? SosComponent(
-                                images: 'assets/images/building.png',
-                                title: 'อาคาร/สถานที่',
-                                isDisabledButton: true,
-                              )
-                            : SosComponent(
-                                images: 'assets/images/building.png',
-                                title: 'อาคาร/สถานที่',
-                              ),
-                        onPressed: () {
-                          print('อาคาร/สถานที่');
-                          setState(() {
-                            if (onSelect == 3) {
-                              onSelect = 0;
-                            } else {
-                              onSelect = 3;
-                            }
-                          });
-                        },
-                      ),
-                      TextButton(
-                        autofocus: false,
-                        style: TextButton.styleFrom(
-                          foregroundColor: Colors.white,
-                          shape: const CircleBorder(),
-                        ),
-                        child: onSelect == 4 || onSelect == 0
-                            ? SosComponent(
-                                images: 'assets/images/others.png',
-                                title: 'อื่นๆ',
-                                isDisabledButton: true,
-                              )
-                            : SosComponent(
-                                images: 'assets/images/others.png',
-                                title: 'อื่นๆ',
-                              ),
-                        onPressed: () {
-                          print('อื่นๆ');
-                          setState(() {
-                            if (onSelect == 4) {
-                              onSelect = 0;
-                            } else {
-                              onSelect = 4;
-                            }
-                          });
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                  child: Card(
-                    shape: RoundedRectangleBorder(
-                      side: const BorderSide(
-                        color: Color.fromARGB(255, 51, 51, 51),
-                      ),
-                      borderRadius: BorderRadius.circular(20), //<-- SEE HERE
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8),
-                      child: TextFormField(
-                        onChanged: (value) => setState(() {
-                          _textArea = value;
-                          print(_textArea);
-                        }),
-                        maxLines: 6,
-                        maxLength: 1000, //or null
-                        decoration: const InputDecoration.collapsed(
-                          hintText: "คำอธิบายเพิ่มเติม",
-                        ),
+          endDrawer: const EndDrawer(),
+          endDrawerEnableOpenDragGesture: false,
+          body: SingleChildScrollView(
+            child: Form(
+              child: Container(
+                alignment: Alignment.center,
+                padding: const EdgeInsets.all(10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  textDirection: TextDirection.ltr,
+                  children: <Widget>[
+                    Container(
+                      padding: EdgeInsets.zero,
+                      height: 380,
+                      width: 400,
+                      child: GridView.count(
+                        primary: true,
+                        padding: const EdgeInsets.all(20),
+                        crossAxisSpacing: 10,
+                        mainAxisSpacing: 10,
+                        crossAxisCount: 2,
+                        children: [
+                          TextButton(
+                            autofocus: false,
+                            style: TextButton.styleFrom(
+                              foregroundColor: Colors.white,
+                              shape: const CircleBorder(),
+                            ),
+                            child: onSelect == 1 || onSelect == 0
+                                ? SosComponent(
+                                    images: 'assets/images/sick.png',
+                                    title: 'เจ็บป่วย',
+                                    isDisabledButton: true,
+                                  )
+                                : SosComponent(
+                                    images: 'assets/images/sick.png',
+                                    title: 'เจ็บป่วย',
+                                  ),
+                            onPressed: () {
+                              print('เจ็บป่วย');
+                              setState(() {
+                                if (onSelect == 1) {
+                                  onSelect = 0;
+                                } else {
+                                  onSelect = 1;
+                                }
+                              });
+                            },
+                          ),
+                          TextButton(
+                            autofocus: false,
+                            style: TextButton.styleFrom(
+                              foregroundColor: Colors.white,
+                              shape: const CircleBorder(),
+                            ),
+                            child: onSelect == 2 || onSelect == 0
+                                ? SosComponent(
+                                    images: 'assets/images/accident.png',
+                                    title: 'อุบัติเหตุ',
+                                    isDisabledButton: true,
+                                  )
+                                : SosComponent(
+                                    images: 'assets/images/accident.png',
+                                    title: 'อุบัติเหตุ',
+                                  ),
+                            onPressed: () {
+                              print('อุบัติเหตุ');
+                              setState(() {
+                                if (onSelect == 2) {
+                                  onSelect = 0;
+                                } else {
+                                  onSelect = 2;
+                                }
+                              });
+                            },
+                          ),
+                          TextButton(
+                            autofocus: false,
+                            style: TextButton.styleFrom(
+                              foregroundColor: Colors.white,
+                              shape: const CircleBorder(),
+                            ),
+                            child: onSelect == 3 || onSelect == 0
+                                ? SosComponent(
+                                    images: 'assets/images/building.png',
+                                    title: 'อาคาร/สถานที่',
+                                    isDisabledButton: true,
+                                  )
+                                : SosComponent(
+                                    images: 'assets/images/building.png',
+                                    title: 'อาคาร/สถานที่',
+                                  ),
+                            onPressed: () {
+                              print('อาคาร/สถานที่');
+                              setState(() {
+                                if (onSelect == 3) {
+                                  onSelect = 0;
+                                } else {
+                                  onSelect = 3;
+                                }
+                              });
+                            },
+                          ),
+                          TextButton(
+                            autofocus: false,
+                            style: TextButton.styleFrom(
+                              foregroundColor: Colors.white,
+                              shape: const CircleBorder(),
+                            ),
+                            child: onSelect == 4 || onSelect == 0
+                                ? SosComponent(
+                                    images: 'assets/images/others.png',
+                                    title: 'อื่นๆ',
+                                    isDisabledButton: true,
+                                  )
+                                : SosComponent(
+                                    images: 'assets/images/others.png',
+                                    title: 'อื่นๆ',
+                                  ),
+                            onPressed: () {
+                              print('อื่นๆ');
+                              setState(() {
+                                if (onSelect == 4) {
+                                  onSelect = 0;
+                                } else {
+                                  onSelect = 4;
+                                }
+                              });
+                            },
+                          ),
+                        ],
                       ),
                     ),
-                  ),
-                ),
-                Center(
-                  child: Container(
-                    padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
-                    child: SizedBox(
-                      width: 312.48,
-                      height: 63.4,
-                      child: ElevatedButton(
-                        style: ButtonStyle(
-                          backgroundColor:
-                              MaterialStateProperty.all(Colors.black),
-                          shape: MaterialStateProperty.all(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15.29),
-                              side: const BorderSide(
-                                  width: 3, color: Colors.black),
+                    Container(
+                      padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                      child: Card(
+                        shape: RoundedRectangleBorder(
+                          side: const BorderSide(
+                            color: Color.fromARGB(255, 51, 51, 51),
+                          ),
+                          borderRadius:
+                              BorderRadius.circular(20), //<-- SEE HERE
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8),
+                          child: TextFormField(
+                            onChanged: (value) => setState(() {
+                              _textArea = value;
+                              print(_textArea);
+                            }),
+                            maxLines: 6,
+                            maxLength: 1000, //or null
+                            decoration: const InputDecoration.collapsed(
+                              hintText: "คำอธิบายเพิ่มเติม",
                             ),
                           ),
                         ),
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const SosPage1(),
+                      ),
+                    ),
+                    Center(
+                      child: Container(
+                        padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
+                        child: SizedBox(
+                          width: 312.48,
+                          height: 63.4,
+                          child: ElevatedButton(
+                            style: ButtonStyle(
+                              backgroundColor:
+                                  MaterialStateProperty.all(Colors.black),
+                              shape: MaterialStateProperty.all(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15.29),
+                                  side: const BorderSide(
+                                      width: 3, color: Colors.black),
+                                ),
+                              ),
                             ),
-                          );
-                        },
-                        child: const Text(
-                          "ถัดไป",
-                          style: TextStyle(fontSize: 24),
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const SosPage1(),
+                                ),
+                              );
+                            },
+                            child: const Text(
+                              "ถัดไป",
+                              style: TextStyle(fontSize: 24),
+                            ),
+                          ),
                         ),
                       ),
                     ),
-                  ),
+                  ],
                 ),
-              ],
+              ),
             ),
           ),
-        ),
-      ),
-    );
-  }
+        );
 }
 
 class SosPage1 extends StatefulWidget {
@@ -286,6 +302,17 @@ class SosPage1 extends StatefulWidget {
 }
 
 class _SosPage1State extends State<SosPage1> {
+  bool isLoading = false;
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration(milliseconds: 500), () {
+      setState(() {
+        isLoading = true;
+      });
+    });
+  }
+
   final GlobalKey<ScaffoldState> _key = GlobalKey();
 
   final int _pageNumber = 2;
@@ -330,8 +357,9 @@ class _SosPage1State extends State<SosPage1> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
+  Widget build(BuildContext context) => isLoading == false
+      ? const LoadingPage()
+      : Scaffold(
       key: _key,
       bottomNavigationBar: Bottombar(pageNumber: _pageNumber),
       // appBar: NavbarPages(),
@@ -365,7 +393,7 @@ class _SosPage1State extends State<SosPage1> {
                     shape: const CircleBorder(),
                     backgroundColor: const Color.fromARGB(255, 255, 255, 255),
                   ),
-                 child: Image_NavBer(height: 40,width: 40),
+                  child: Image_NavBer(height: 40, width: 40),
                   onPressed: () {
                     _key.currentState!.openEndDrawer();
                   },
@@ -601,4 +629,3 @@ class _SosPage1State extends State<SosPage1> {
       ),
     );
   }
-}

@@ -18,6 +18,27 @@ class EndDrawer extends StatefulWidget {
 
 class _EndDrawerState extends State<EndDrawer> {
   @override
+  void initState() {
+    super.initState();
+    _getNameProfile();
+  }
+
+  String _fullName = '';
+  String _email = '';
+
+  _getNameProfile() async {
+    {
+      String email = await getUserEmailSF();
+      String firstName = await getUserFirstNameSF();
+      String lastName = await getUserLastNameSF();
+      setState(() {
+        _fullName = firstName + ' ' + lastName;
+        _email = email;
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.zero,
@@ -37,19 +58,19 @@ class _EndDrawerState extends State<EndDrawer> {
                     borderRadius: BorderRadius.circular(360),
                     child: Container(
                       padding: EdgeInsets.zero,
-                      child: Image_NavBer(width: 150,height: 150),
+                      child: Image_NavBer(width: 150, height: 150),
                     ),
                   ),
                 ),
                 decoration: const BoxDecoration(
                   color: Color.fromARGB(255, 255, 255, 255),
                 ),
-                accountName: const Text(
-                  "Chirapon Hemrkan",
+                accountName: Text(
+                  _fullName,
                   style: TextStyle(color: Colors.black),
                 ),
-                accountEmail: const Text(
-                  "Chirapon.job@gmail.com",
+                accountEmail: Text(
+                  _email,
                   style: TextStyle(color: Colors.black),
                 ),
                 // otherAccountsPictures: [

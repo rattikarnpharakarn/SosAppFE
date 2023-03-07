@@ -9,7 +9,6 @@ getUserIDSF() async {
 getUserPhoneNumberSF() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String phoneNumber = prefs.getString('phoneNumber') ?? '';
-
   return phoneNumber;
 }
 

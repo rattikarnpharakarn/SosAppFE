@@ -147,7 +147,7 @@ class UpdateProfile {
   String email;
   String birthday = '';
   String gender = '';
-  String imageProfile = '';
+  var imageProfile;
   // IDCard
   String textIDCard = '';
   String pathImage = '';
@@ -165,7 +165,7 @@ class UpdateProfile {
     required this.email,
     required this.birthday,
     required this.gender,
-    required this.imageProfile,
+    this.imageProfile,
     // IDCard
     required this.textIDCard,
     required this.pathImage,
