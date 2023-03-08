@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:sos/src/screen/test.dart';
+import 'package:sos/src/testPage/test.dart';
 import 'package:sos/src/sharedInfo/user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -74,11 +74,11 @@ class _MyAppState extends State<MyApp> {
       // home: HotlinePage(),
       // home: Signup(),
       // home: SignupPhoneNumber(),
-      // home: SosPage1(),
+      home: SosPage1(),
       // home: UpDataProfilePage(),
       // home: ChatPage(),
       // home: TestPage(),
-      home: _token == '' ? Signin() : Home(), // หน้าแรกของแอบ
+      // home: _token == '' ? Signin() : Home(), // หน้าแรกของแอบ
     );
   }
 }
