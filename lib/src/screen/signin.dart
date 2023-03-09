@@ -65,7 +65,7 @@ class _SigninState extends State<Signin> {
   addStringToSF(String token) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('token', token);
-    addUserProfileToSF();
+    await addUserProfileToSF();
   }
 
   // static const String _baseUrl = "http://sos-app.thddns.net:7330/SosApp/signIn";
@@ -83,7 +83,7 @@ class _SigninState extends State<Signin> {
 
     if (response.statusCode == 200) {
       final m1 = jsonDecode(response.body);
-      addStringToSF(m1['token']);
+      await addStringToSF(m1['token']);
 
       // ignore: use_build_context_synchronously
       Navigator.push(
@@ -100,6 +100,8 @@ class _SigninState extends State<Signin> {
       throw Exception('Failed to create album.');
     }
   }
+
+  String Icons_remove_red_eye = 'Close';
 
   @override
   Widget build(BuildContext context) {
@@ -149,22 +151,42 @@ class _SigninState extends State<Signin> {
                 margin: const EdgeInsets.all(15),
                 child: TextField(
                   controller: _controllerPass,
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
                     suffixIcon: IconButton(
-                        icon: Icon(Icons.remove_red_eye), onPressed: null),
+                        icon: Icons_remove_red_eye != "Close"
+                            ? const Icon(
+                                Icons. visibility_off,
+                                color: Colors.white,
+                              )
+                            : const Icon(
+                                Icons.visibility,
+                                color: Colors.white,
+                              ),
+                        onPressed: () {
+                          setState(() {
+                            if (Icons_remove_red_eye == "Open") {
+                              Icons_remove_red_eye = 'Close';
+                            } else {
+                              Icons_remove_red_eye = 'Open';
+                            }
+                          });
+                        }),
                     labelText: 'Password',
-                    labelStyle: TextStyle(color: Colors.white),
-                    enabledBorder: UnderlineInputBorder(
+                    labelStyle: const TextStyle(color: Colors.white),
+                    enabledBorder: const UnderlineInputBorder(
                       borderSide: BorderSide(width: 1, color: Colors.white),
                     ),
-                    focusedBorder: UnderlineInputBorder(
+                    focusedBorder: const UnderlineInputBorder(
                       borderSide: BorderSide(width: 3, color: Colors.white),
                     ),
                   ),
-                  keyboardType: TextInputType.visiblePassword,
-                  obscureText: true,
-                  enableSuggestions: false,
-                  autocorrect: false,
+                  keyboardType: Icons_remove_red_eye == "Close"
+                      ? TextInputType.visiblePassword
+                      : TextInputType.text,
+                  obscureText: Icons_remove_red_eye == "Close" ? true : false,
+                  enableSuggestions:
+                      Icons_remove_red_eye == "Close" ? false : true,
+                  autocorrect: Icons_remove_red_eye == "Close" ? false : true,
                   style: const TextStyle(color: Colors.white),
                 ),
               ),
