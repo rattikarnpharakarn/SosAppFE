@@ -5,8 +5,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sos/src/model/response.dart';
-import 'package:sos/src/model/signup.dart';
+import 'package:sos/src/model/accounts/response.dart';
+import 'package:sos/src/model/accounts/signup.dart';
 import 'package:sos/src/sharedInfo/user.dart';
 
 import 'package:http/http.dart' as http;

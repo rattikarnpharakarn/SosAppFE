@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:sos/src/component/bottom_bar.dart';
 import 'package:sos/src/component/endDrawer.dart';
 import 'package:sos/src/component/image_navBer.dart';
+import 'package:sos/src/model/hotlines/response.dart';
+import 'package:sos/src/provider/hotlines/hotlineService.dart';
 import 'package:sos/src/screen/LoadingPage.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class HotlinePage extends StatefulWidget {
   const HotlinePage({super.key});
@@ -13,12 +16,25 @@ class HotlinePage extends StatefulWidget {
 
 class HhotlinePageState extends State<HotlinePage> {
   final GlobalKey<ScaffoldState> _key = GlobalKey();
-
+  List<GetHotline> getHotlineList = [];
   bool isLoading = false;
+
   @override
   void initState() {
     super.initState();
     Future.delayed(Duration(milliseconds: 500), () {
+      GetHotlineList().then((value) {
+        setState(() {
+          for (var data in value.list) {
+            GetHotline getHotline = GetHotline(
+                id: data.id,
+                number: data.number,
+                description: data.description);
+            getHotlineList.add(getHotline);
+          }
+        });
+      });
+
       setState(() {
         isLoading = true;
       });
@@ -84,309 +100,81 @@ class HhotlinePageState extends State<HotlinePage> {
           ),
           endDrawer: EndDrawer(),
           endDrawerEnableOpenDragGesture: false,
-          body: Container(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.all(10),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                textDirection: TextDirection.ltr,
-                children: <Widget>[
-                  Container(
-                    padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
-                    child: const Text(
-                      'เบอร์โทรสายด่วน',
-                      style: TextStyle(
-                        fontSize: 18,
-                        color: Colors.red,
-                      ),
+          body: SingleChildScrollView(
+            padding: const EdgeInsets.all(10),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              textDirection: TextDirection.ltr,
+              children: <Widget>[
+                Container(
+                  padding: const EdgeInsets.fromLTRB(10, 10, 10, 20),
+                  child: const Text(
+                    'เบอร์โทรสายด่วน',
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.red,
                     ),
                   ),
-                  ListView(
-                    shrinkWrap: true,
-                    padding: const EdgeInsets.all(10),
-                    children: [
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
+                ),
+                for (GetHotline m1 in getHotlineList) ...[
+                  Container(
+                    padding: EdgeInsets.fromLTRB(0, 2, 0, 2),
+                    child: Card(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15.0),
+                      ),
+                      elevation: 10,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.max,
+                        children: <Widget>[
                           Container(
-                            padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-                            child: Card(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(15.0),
-                              ),
-                              elevation: 10,
-                              child: Column(
-                                mainAxisSize: MainAxisSize.max,
-                                children: <Widget>[
-                                  Container(
-                                    padding: const EdgeInsets.all(15.0),
-                                    child: Row(
-                                      children: <Widget>[
-                                        Container(
-                                          padding: const EdgeInsets.all(5.0),
-                                          child: const Text('เหตุด่วนเหตุร้าย',
-                                              style: TextStyle(fontSize: 22.0)),
-                                        ),
-                                        const Spacer(),
-                                        Container(
-                                          padding: const EdgeInsets.all(5.0),
-                                          child: const Text('191',
-                                              style: TextStyle(
-                                                  fontSize: 23.0,
-                                                  color: Colors.red)),
-                                        ),
-                                        const Spacer(),
-                                        Container(
-                                          padding: const EdgeInsets.all(5.0),
-                                          child: const Icon(Icons.copy),
-                                        ),
-                                      ],
+                            padding: const EdgeInsets.all(15.0),
+                            child: Row(
+                              children: <Widget>[
+                                Container(
+                                  padding: const EdgeInsets.all(5.0),
+                                  child: Text('${m1.description}',
+                                      style: const TextStyle(fontSize: 22.0)),
+                                ),
+                                const Spacer(),
+                                Container(
+                                  alignment: Alignment.centerRight,
+                                  padding: const EdgeInsets.all(5.0),
+                                  child: Text('${m1.number}',
+                                      style: const TextStyle(
+                                          fontSize: 23.0, color: Colors.red)),
+                                ),
+                                Container(
+                                  padding: const EdgeInsets.all(5.0),
+                                ),
+                                Container(
+                                  padding: const EdgeInsets.all(5.0),
+                                  child: SizedBox(
+                                    height: 18.0,
+                                    width: 18.0,
+                                    child: IconButton(
+                                      padding: const EdgeInsets.all(0.0),
+                                      icon: const Icon(Icons.phone,
+                                          size: 22.0, color: Colors.black),
+                                      onPressed: () async {
+                                        String telephoneNumber = m1.number;
+                                        String telephoneUrl =
+                                            "tel:$telephoneNumber";
+                                        await launchUrlString(telephoneUrl);
+                                        // todo เหลือเก็บ log ในการโทร
+                                      },
                                     ),
                                   ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          Container(
-                            padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-                            child: Card(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(15.0),
-                              ),
-                              elevation: 10,
-                              child: Column(
-                                mainAxisSize: MainAxisSize.max,
-                                children: <Widget>[
-                                  Container(
-                                    padding: const EdgeInsets.all(15.0),
-                                    child: Row(
-                                      children: <Widget>[
-                                        Container(
-                                          padding: const EdgeInsets.all(5.0),
-                                          child: const Text('ตำรวจทางหลวง',
-                                              style: TextStyle(fontSize: 22.0)),
-                                        ),
-                                        const Spacer(),
-                                        Container(
-                                          padding: const EdgeInsets.all(5.0),
-                                          child: const Text('1193',
-                                              style: TextStyle(
-                                                  fontSize: 23.0,
-                                                  color: Colors.red)),
-                                        ),
-                                        const Spacer(),
-                                        Container(
-                                          padding: const EdgeInsets.all(5.0),
-                                          child: const Icon(Icons.copy),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          Container(
-                            padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-                            child: Card(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(15.0),
-                              ),
-                              elevation: 10,
-                              child: Column(
-                                mainAxisSize: MainAxisSize.max,
-                                children: <Widget>[
-                                  Container(
-                                    padding: const EdgeInsets.all(15.0),
-                                    child: Row(
-                                      children: <Widget>[
-                                        Container(
-                                          padding: const EdgeInsets.all(5.0),
-                                          child: const Text('ศูนย์รับแจ้งรถหาย',
-                                              style: TextStyle(fontSize: 22.0)),
-                                        ),
-                                        const Spacer(),
-                                        Container(
-                                          padding: const EdgeInsets.all(5.0),
-                                          child: const Text('1192',
-                                              style: TextStyle(
-                                                  fontSize: 23.0,
-                                                  color: Colors.red)),
-                                        ),
-                                        const Spacer(),
-                                        Container(
-                                          padding: const EdgeInsets.all(5.0),
-                                          child: const Icon(Icons.copy),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          Container(
-                            padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-                            child: Card(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(15.0),
-                              ),
-                              elevation: 10,
-                              child: Column(
-                                mainAxisSize: MainAxisSize.max,
-                                children: <Widget>[
-                                  Container(
-                                    padding: const EdgeInsets.all(15.0),
-                                    child: Row(
-                                      children: <Widget>[
-                                        Container(
-                                          padding: const EdgeInsets.all(5.0),
-                                          child: const Text('โรงพยาบาลตำรวจ',
-                                              style: TextStyle(fontSize: 22.0)),
-                                        ),
-                                        const Spacer(),
-                                        Container(
-                                          padding: const EdgeInsets.all(5.0),
-                                          child: const Text('1691',
-                                              style: TextStyle(
-                                                  fontSize: 23.0,
-                                                  color: Colors.red)),
-                                        ),
-                                        const Spacer(),
-                                        Container(
-                                          padding: const EdgeInsets.all(5.0),
-                                          child: const Icon(Icons.copy),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          Container(
-                            padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-                            child: Card(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(15.0),
-                              ),
-                              elevation: 10,
-                              child: Column(
-                                mainAxisSize: MainAxisSize.max,
-                                children: <Widget>[
-                                  Container(
-                                    padding: const EdgeInsets.all(15.0),
-                                    child: Row(
-                                      children: <Widget>[
-                                        Container(
-                                          padding: const EdgeInsets.all(5.0),
-                                          child: const Text('ตำรวจท่องเที่ยว',
-                                              style: TextStyle(fontSize: 22.0)),
-                                        ),
-                                        const Spacer(),
-                                        Container(
-                                          padding: const EdgeInsets.all(5.0),
-                                          child: const Text('1155',
-                                              style: TextStyle(
-                                                  fontSize: 23.0,
-                                                  color: Colors.red)),
-                                        ),
-                                        const Spacer(),
-                                        Container(
-                                          padding: const EdgeInsets.all(5.0),
-                                          child: const Icon(Icons.copy),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          Container(
-                            padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-                            child: Card(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(15.0),
-                              ),
-                              elevation: 10,
-                              child: Column(
-                                mainAxisSize: MainAxisSize.max,
-                                children: <Widget>[
-                                  Container(
-                                    padding: const EdgeInsets.all(15.0),
-                                    child: Row(
-                                      children: <Widget>[
-                                        Container(
-                                          padding: const EdgeInsets.all(5.0),
-                                          child: const Text('ตำรวจจราจร',
-                                              style: TextStyle(fontSize: 22.0)),
-                                        ),
-                                        const Spacer(),
-                                        Container(
-                                          padding: const EdgeInsets.all(5.0),
-                                          child: const Text('1197',
-                                              style: TextStyle(
-                                                  fontSize: 23.0,
-                                                  color: Colors.red)),
-                                        ),
-                                        const Spacer(),
-                                        Container(
-                                          padding: const EdgeInsets.all(5.0),
-                                          child: const Icon(Icons.copy),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          Container(
-                            padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-                            child: Card(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(15.0),
-                              ),
-                              elevation: 10,
-                              child: Column(
-                                mainAxisSize: MainAxisSize.max,
-                                children: <Widget>[
-                                  Container(
-                                    padding: const EdgeInsets.all(15.0),
-                                    child: Row(
-                                      children: <Widget>[
-                                        Container(
-                                          padding: const EdgeInsets.all(5.0),
-                                          child: const Text('เหตุฉุกเฉิน',
-                                              style: TextStyle(fontSize: 22.0)),
-                                        ),
-                                        const Spacer(),
-                                        Container(
-                                          padding: const EdgeInsets.all(5.0),
-                                          child: const Text('1669',
-                                              style: TextStyle(
-                                                  fontSize: 23.0,
-                                                  color: Colors.red)),
-                                        ),
-                                        const Spacer(),
-                                        Container(
-                                          padding: const EdgeInsets.all(5.0),
-                                          child: const Icon(Icons.copy),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
                           ),
                         ],
                       ),
-                    ],
+                    ),
                   ),
-                ],
-              ),
+                ]
+              ],
             ),
           ),
         );

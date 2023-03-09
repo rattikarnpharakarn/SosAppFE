@@ -1,5 +1,5 @@
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sos/src/provider/userService.dart';
+import 'package:sos/src/provider/accounts/userService.dart';
 
 getUserIDSF() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();

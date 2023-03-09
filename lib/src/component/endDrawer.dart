@@ -9,13 +9,13 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sos/src/component/image_navBer.dart';
-import 'package:sos/src/provider/userService.dart';
+import 'package:sos/src/provider/accounts/userService.dart';
 import 'package:sos/src/screen/home.dart';
 import 'package:sos/src/screen/signin.dart';
 import 'package:http/http.dart' as http;
 
-import '../model/response.dart';
-import '../model/signup.dart';
+import '../model/accounts/response.dart';
+import '../model/accounts/signup.dart';
 import '../screen/changePassword.dart';
 import '../screen/updateProfile.dart';
 import '../sharedInfo/user.dart';

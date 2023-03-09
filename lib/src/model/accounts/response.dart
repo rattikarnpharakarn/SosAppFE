@@ -17,12 +17,4 @@ class ReturnResponse {
       data: json['data'],
     );
   }
-
-  // Map toJson() {
-  //   return {
-  //     'code': code,
-  //     'message': message,
-  //     'data': data,
-  //   };
-  // }
 }

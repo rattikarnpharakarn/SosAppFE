@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-import '../model/user.dart';
+import '../../model/accounts/user.dart';
 
 Future<UserInfo> GetUserProfile() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -20,29 +20,6 @@ Future<UserInfo> GetUserProfile() async {
     final data = dataUser['data'];
     final idCard = data['idCard'];
     final address = data['address'];
-
-    //
-    // print('========================');
-    // print(data['id']);
-    // print(data['phoneNumber']);
-    // print(data['firstName']);
-    // print(data['lastName']);
-    // print(data['email']);
-    // print(data['birthday']);
-    // print(data['gender']);
-    // print(data['imageProfile']);
-    //
-    // print(idCard['textIDCard']);
-    // print(idCard['pathImage']);
-    //
-    // print(address['address']);
-    // print(address['subDistrict']);
-    // print(address['district']);
-    // print(address['province']);
-    // print(address['postalCode']);
-    // print(address['country']);
-    // print('========================');
-
 
     UserInfo userInfoRes = UserInfo(
       id: data['id'],

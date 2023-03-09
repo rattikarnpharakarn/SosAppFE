@@ -13,7 +13,6 @@ import 'package:sos/src/screen/sos.dart';
 import 'package:sos/src/screen/updateProfile.dart';
 
 import 'src/screen/LoadingPage.dart';
-import 'src/screen/index.dart';
 import 'src/screen/signupPhoneNumber.dart';
 
 final FlutterLocalNotificationsPlugin ShowflutterLocalNoificationPlugin =

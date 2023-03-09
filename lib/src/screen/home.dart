@@ -177,28 +177,33 @@ class _HomeState extends State<Home> {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(15.0),
                           ),
-                          child: Column(
-                            children: [
-                              Container(
-                                  alignment: Alignment.topLeft,
-                                  padding:
-                                      const EdgeInsets.fromLTRB(0, 10, 0, 15),
-                                  child: Image.asset(
-                                    'assets/images/hospital.png',
-                                    height: 100,
-                                  )),
-                              Container(
-                                  alignment: Alignment.topLeft,
-                                  padding:
-                                      const EdgeInsets.fromLTRB(10, 0, 0, 0),
-                                  child: const Text(
-                                    'โรงพยาบาล',
-                                    style: TextStyle(
-                                      color: Color.fromRGBO(12, 75, 142, 1),
-                                      fontSize: 25,
-                                    ),
-                                  )),
-                            ],
+                          child: TextButton(
+                            onPressed: () {
+
+                            },
+                            child: Column(
+                              children: [
+                                Container(
+                                    alignment: Alignment.topLeft,
+                                    padding:
+                                        const EdgeInsets.fromLTRB(0, 0, 0, 15),
+                                    child: Image.asset(
+                                      'assets/images/hospital.png',
+                                      height: 100,
+                                    )),
+                                Container(
+                                    alignment: Alignment.topLeft,
+                                    padding:
+                                        const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                    child: const Text(
+                                      'โรงพยาบาล',
+                                      style: TextStyle(
+                                        color: Color.fromRGBO(12, 75, 142, 1),
+                                        fontSize: 25,
+                                      ),
+                                    )),
+                              ],
+                            ),
                           ),
                         ),
                       ),
@@ -209,26 +214,31 @@ class _HomeState extends State<Home> {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(15.0),
                           ),
-                          child: Column(
-                            children: [
-                              Container(
-                                  alignment: Alignment.topLeft,
-                                  padding: EdgeInsets.fromLTRB(0, 10, 0, 15),
-                                  child: Image.asset(
-                                    'assets/images/emg.png',
-                                    height: 100,
-                                  )),
-                              Container(
-                                  alignment: Alignment.topLeft,
-                                  padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                                  child: const Text(
-                                    'ปอเต็กตึ๊ง',
-                                    style: TextStyle(
-                                      color: Color.fromRGBO(12, 75, 142, 1),
-                                      fontSize: 25,
-                                    ),
-                                  )),
-                            ],
+                          child: TextButton(
+                            onPressed: () {
+
+                            },
+                            child: Column(
+                              children: [
+                                Container(
+                                    alignment: Alignment.topLeft,
+                                    padding: EdgeInsets.fromLTRB(0, 0, 0, 15),
+                                    child: Image.asset(
+                                      'assets/images/emg.png',
+                                      height: 100,
+                                    )),
+                                Container(
+                                    alignment: Alignment.topLeft,
+                                    padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                    child: const Text(
+                                      'ปอเต็กตึ๊ง',
+                                      style: TextStyle(
+                                        color: Color.fromRGBO(12, 75, 142, 1),
+                                        fontSize: 25,
+                                      ),
+                                    )),
+                              ],
+                            ),
                           ),
                         ),
                       ),
@@ -239,28 +249,33 @@ class _HomeState extends State<Home> {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(15.0),
                           ),
-                          child: Column(
-                            children: [
-                              Container(
-                                  alignment: Alignment.topLeft,
-                                  padding:
-                                      const EdgeInsets.fromLTRB(0, 10, 0, 15),
-                                  child: Image.asset(
-                                    'assets/images/fire.png',
-                                    height: 100,
-                                  )),
-                              Container(
-                                  alignment: Alignment.topLeft,
-                                  padding:
-                                      const EdgeInsets.fromLTRB(10, 0, 0, 0),
-                                  child: const Text(
-                                    'สถานีดับเพลิง',
-                                    style: TextStyle(
-                                      color: Color.fromRGBO(12, 75, 142, 1),
-                                      fontSize: 25,
-                                    ),
-                                  )),
-                            ],
+                          child: TextButton(
+                            onPressed: () {
+
+                            },
+                            child: Column(
+                              children: [
+                                Container(
+                                    alignment: Alignment.topLeft,
+                                    padding:
+                                        const EdgeInsets.fromLTRB(0, 0, 0, 15),
+                                    child: Image.asset(
+                                      'assets/images/fire.png',
+                                      height: 100,
+                                    )),
+                                Container(
+                                    alignment: Alignment.topLeft,
+                                    padding:
+                                        const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                    child: const Text(
+                                      'สถานีดับเพลิง',
+                                      style: TextStyle(
+                                        color: Color.fromRGBO(12, 75, 142, 1),
+                                        fontSize: 25,
+                                      ),
+                                    )),
+                              ],
+                            ),
                           ),
                         ),
                       ),
@@ -271,28 +286,33 @@ class _HomeState extends State<Home> {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(15.0),
                           ),
-                          child: Column(
-                            children: [
-                              Container(
+                          child: TextButton(
+                            onPressed: () {
+
+                            },
+                            child: Column(
+                              children: [
+                                Container(
+                                    alignment: Alignment.topLeft,
+                                    padding:
+                                        const EdgeInsets.fromLTRB(0, 0, 0, 15),
+                                    child: Image.asset(
+                                      'assets/images/other.png',
+                                      height: 100,
+                                    )),
+                                Container(
                                   alignment: Alignment.topLeft,
-                                  padding:
-                                      const EdgeInsets.fromLTRB(0, 10, 0, 15),
-                                  child: Image.asset(
-                                    'assets/images/other.png',
-                                    height: 100,
-                                  )),
-                              Container(
-                                alignment: Alignment.topLeft,
-                                padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
-                                child: const Text(
-                                  'สถานีตำรวจ',
-                                  style: TextStyle(
-                                    color: Color.fromRGBO(12, 75, 142, 1),
-                                    fontSize: 25,
+                                  padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                  child: const Text(
+                                    'สถานีตำรวจ',
+                                    style: TextStyle(
+                                      color: Color.fromRGBO(12, 75, 142, 1),
+                                      fontSize: 25,
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
                       ),

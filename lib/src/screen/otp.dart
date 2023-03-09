@@ -9,7 +9,7 @@ import 'package:http/http.dart' as http;
 import 'package:sos/src/screen/signupPhoneNumber.dart';
 import 'dart:developer' as developer;
 
-import '../model/signup.dart';
+import '../model/accounts/signup.dart';
 
 class OTP extends StatefulWidget {
   const OTP({Key? key, required this.data}) : super(key: key);
