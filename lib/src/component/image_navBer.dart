@@ -20,11 +20,7 @@ class _Image_NavBerState extends State<Image_NavBer> {
   void initState() {
     super.initState();
     _getImageProfile();
-
   }
-
-
-
 
   String _imageProfile = '';
   _getImageProfile() async {

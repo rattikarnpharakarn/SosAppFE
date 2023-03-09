@@ -640,19 +640,6 @@ class _SosPage1State extends State<SosPage1> {
                           ],
                         ),
                       ),
-                      // Container(
-                      //   padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
-                      //   child: IconButton(
-                      //     icon: Icon(
-                      //       color: images == '' ? Colors.red : Colors.green,
-                      //       Icons.camera_alt,
-                      //       size: 40.0,
-                      //     ),
-                      //     onPressed: () {
-                      //       openImage();
-                      //     },
-                      //   ),
-                      // ),
                     ],
                   ),
                 ),

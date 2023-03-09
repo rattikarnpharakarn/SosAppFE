@@ -44,9 +44,7 @@ class _HomeState extends State<Home> {
       _name = name;
     });
   }
-
-
-
+  
   @override
   Widget build(BuildContext context) => isLoading == false
       ? const LoadingPage()

@@ -82,7 +82,7 @@ class _SignupState extends State<Signup> {
   addStringToSF(String token) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('token', token);
-    addUserProfileToSF();
+    await addUserProfileToSF();
   }
 
   Future<ReturnResponse> createUserInfo() async {
@@ -99,7 +99,7 @@ class _SignupState extends State<Signup> {
     if (response.statusCode == 200) {
       final m1 = jsonDecode(response.body);
       var token = m1['data']['token'];
-      addStringToSF(token);
+      await addStringToSF(token);
 
       // ignore: use_build_context_synchronously
       Navigator.push(context, MaterialPageRoute(builder: (context) {

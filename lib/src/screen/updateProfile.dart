@@ -10,6 +10,7 @@ import 'package:sos/src/model/signup.dart';
 
 import 'package:http/http.dart' as http;
 import 'package:sos/src/provider/userService.dart';
+import 'package:sos/src/screen/LoadingPage.dart';
 import 'package:sos/src/sharedInfo/user.dart';
 
 import 'home.dart';
@@ -24,19 +25,22 @@ class UpDataProfilePage extends StatefulWidget {
 class _UpDataProfilePageState extends State<UpDataProfilePage> {
   final _formKey = GlobalKey<FormState>();
 
+  bool isLoading = false;
+
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration(milliseconds: 500), () {
-      _deforeGetUserInfoSF();
-      _getNameProfile();
+    Future.delayed(Duration(milliseconds: 500), () async {
+      await _deforeGetUserInfoSF();
+      await _getNameProfile();
     });
   }
 
   _getNameProfile() async {
     var token = await getUserTokenSf();
-    setState(() {
+    setState(()  {
       _token = token;
+      isLoading = true;
     });
   }
 
@@ -88,7 +92,6 @@ class _UpDataProfilePageState extends State<UpDataProfilePage> {
       _deforetextIDCard = data.textIDCard;
       _deforeIDCard = data.pathImage;
 
-
       _deforeaddress = data.address;
       _deforesubDistrict = data.subDistrict;
       _deforedistrict = data.district;
@@ -116,9 +119,7 @@ class _UpDataProfilePageState extends State<UpDataProfilePage> {
         firstName: _firstName == '' ? _deforefirstName : _firstName,
         lastName: _lastName == '' ? _deforelastName : _lastName,
         email: _email == '' ? _deforeemail : _email,
-        birthday: _dateTime.toString() != _deforebirthday
-            ? _deforebirthday
-            : _dateTime.toString(),
+        birthday: _dateTime.toString(),
         gender: selectGroupSex.toString(),
         imageProfile: _deforeImage,
         pathImage: iDCard,
@@ -142,9 +143,7 @@ class _UpDataProfilePageState extends State<UpDataProfilePage> {
   }
 
   Future<ReturnResponse> EditUserInfo() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String id = prefs.getString('id') ?? '';
-    String url = 'http://10.0.2.2:80/SosApp/accounts/user/${id}';
+    String url = 'http://10.0.2.2:80/SosApp/accounts/user/${_id}';
     final response = await http.put(
       Uri.parse(url),
       headers: <String, String>{
@@ -218,544 +217,560 @@ class _UpDataProfilePageState extends State<UpDataProfilePage> {
     setState(() {
       _dateTime = date;
       showDate = formatted.toString();
+      _deforebirthday = _dateTime.toString();
     });
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
-      resizeToAvoidBottomInset: true,
-      appBar: AppBar(
-        toolbarHeight: 70,
-        automaticallyImplyLeading: false,
-        iconTheme: const IconThemeData(
-          color: Colors.black, // <-- SEE HERE
-        ),
-        leading: const BackButton(color: Color.fromARGB(255, 255, 255, 255)),
-        titleSpacing: 0,
-        backgroundColor: const Color.fromARGB(255, 248, 0, 0),
-        elevation: 0,
-        title: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Container(
-                      padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
-                      child: const Text(
-                        'Edit Profile',
-                        style: TextStyle(
-                          color: Color.fromARGB(255, 255, 255, 255),
-                          fontSize: 29.8,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        textAlign: TextAlign.left,
-                      ),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
-                      child: const Text(
-                        'Please enter your Info',
-                        style: TextStyle(
-                          color: Color.fromARGB(255, 255, 255, 255),
-                          fontSize: 17,
-                        ),
-                        textAlign: TextAlign.left,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(
-            bottom: Radius.circular(0),
-          ),
-        ),
-      ),
-      body: SingleChildScrollView(
-        child: Container(
-          padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-          child: SingleChildScrollView(
-            child: Form(
-              key: _formKey,
+  Widget build(BuildContext context) => isLoading == false
+      ? const LoadingPage()
+      : Scaffold(
+          backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+          resizeToAvoidBottomInset: true,
+          appBar: AppBar(
+            toolbarHeight: 70,
+            automaticallyImplyLeading: false,
+            iconTheme: const IconThemeData(
+              color: Colors.black, // <-- SEE HERE
+            ),
+            leading:
+                const BackButton(color: Color.fromARGB(255, 255, 255, 255)),
+            titleSpacing: 0,
+            backgroundColor: const Color.fromARGB(255, 248, 0, 0),
+            elevation: 0,
+            title: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Container(
-                    padding: const EdgeInsets.fromLTRB(15, 15, 15, 0),
+                  Align(
+                    alignment: Alignment.centerLeft,
                     child: Column(
-                      children: [
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
                         Container(
-                          padding: const EdgeInsets.fromLTRB(15, 15, 15, 0),
-                          child: TextFormField(
-                            decoration: InputDecoration(
-                              hintText: 'First Name *',
-                              labelText: _deforefirstName,
-                              labelStyle: const TextStyle(
-                                  color: Color.fromARGB(255, 93, 93, 93)),
-                              // helperText: 'Ex. 0812345678',
-                              // helperStyle: TextStyle(color: Colors.white),
-                              enabledBorder: const UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                    width: 1,
-                                    color: Color.fromARGB(255, 114, 114, 114)),
-                              ),
-                              focusedBorder: const UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                    width: 1,
-                                    color: Color.fromARGB(255, 87, 87, 87)),
-                              ),
-                            ),
-                            keyboardType: TextInputType.text,
-                            style: const TextStyle(color: Colors.black),
-                            onChanged: (value) => setState(
-                              () {
-                                _firstName = value;
-                              },
-                            ),
-                          ),
-                        ),
-                        Container(
-                          padding: const EdgeInsets.fromLTRB(15, 15, 15, 0),
-                          child: TextFormField(
-                            decoration: InputDecoration(
-                              labelText: _deforelastName,
-                              hintText: 'Last Name *',
-                              labelStyle: const TextStyle(
-                                  color: Color.fromARGB(255, 93, 93, 93)),
-                              // helperText: 'Ex. 0812345678',
-                              // helperStyle: TextStyle(color: Colors.black),
-                              enabledBorder: const UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                    width: 1,
-                                    color: Color.fromARGB(255, 114, 114, 114)),
-                              ),
-                              focusedBorder: const UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                    width: 1,
-                                    color: Color.fromARGB(255, 87, 87, 87)),
-                              ),
-                            ),
-                            keyboardType: TextInputType.text,
-                            style: const TextStyle(color: Colors.black),
-                            onChanged: (value) => setState(
-                              () {
-                                _lastName = value;
-                              },
-                            ),
-                          ),
-                        ),
-                        Container(
-                          padding: const EdgeInsets.fromLTRB(15, 15, 15, 0),
-                          child: TextFormField(
-                            decoration: InputDecoration(
-                              labelText: _deforeemail,
-                              hintText: 'Email',
-                              labelStyle: const TextStyle(
-                                  color: Color.fromARGB(255, 93, 93, 93)),
-                              // helperText: 'Ex. 0812345678',
-                              // helperStyle: TextStyle(color: Colors.black),
-                              enabledBorder: const UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                    width: 1,
-                                    color: Color.fromARGB(255, 114, 114, 114)),
-                              ),
-                              focusedBorder: const UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                    width: 1,
-                                    color: Color.fromARGB(255, 87, 87, 87)),
-                              ),
-                            ),
-                            keyboardType: TextInputType.emailAddress,
-                            style: const TextStyle(color: Colors.black),
-                            onChanged: (value) => setState(
-                              () {
-                                _email = value;
-                              },
-                            ),
-                          ),
-                        ),
-                        Container(
-                          padding: const EdgeInsets.fromLTRB(15, 15, 15, 0),
-                          child: TextFormField(
-                            decoration: InputDecoration(
-                              labelText: _deforetextIDCard,
-                              hintText: 'ID Card *',
-                              labelStyle: const TextStyle(
-                                  color: Color.fromARGB(255, 93, 93, 93)),
-                              // helperText: 'Ex. 0812345678',
-                              // helperStyle: TextStyle(color: Colors.black),
-                              enabledBorder: const UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                    width: 1,
-                                    color: Color.fromARGB(255, 114, 114, 114)),
-                              ),
-                              focusedBorder: const UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                    width: 1,
-                                    color: Color.fromARGB(255, 87, 87, 87)),
-                              ),
-                            ),
-                            keyboardType: TextInputType.number,
-                            style: const TextStyle(color: Colors.black),
-                            onChanged: (value) => setState(
-                              () {
-                                _textIDCard = value;
-                              },
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.fromLTRB(15, 10, 0, 0),
-                    margin: const EdgeInsets.fromLTRB(15, 0, 0, 0),
-                    child: InkWell(
-                      onTap: () => {openImage('iDCard')},
-                      child: iDCard == ''
-                          ? const Text(
-                              'กรุณา แนบรูปภาพบัตรประจำตัวประชาชน ***',
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.transparent,
-                                // Step 2 SEE HERE
-                                shadows: [
-                                  Shadow(
-                                      offset: Offset(0, -5),
-                                      color: Colors.black)
-                                ],
-                                decoration: TextDecoration.underline,
-                                decorationColor: Color.fromARGB(255, 177, 0, 0),
-                              ),
-                            )
-                          : const Text(
-                              'แนบรูปภาพบัตรประจำตัวประชาชน สำเร็จ',
-                              style: TextStyle(
-                                fontSize: 16,
-                                // fontWeight: FontWeight.bold,
-                                color: Colors.transparent,
-                                // Step 2 SEE HERE
-                                shadows: [
-                                  Shadow(
-                                      offset: Offset(0, -5),
-                                      color: Colors.black)
-                                ],
-                                decoration: TextDecoration.underline,
-                                decorationColor:
-                                    Color.fromARGB(255, 34, 172, 0),
-                              ),
-                            ),
-                    ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.fromLTRB(20, 0, 20, 5),
-                    child: Row(
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.fromLTRB(17, 10, 20, 0),
+                          padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
                           child: const Text(
-                            'Birthday * :',
+                            'Edit Profile',
                             style: TextStyle(
-                              fontSize: 16,
+                              color: Color.fromARGB(255, 255, 255, 255),
+                              fontSize: 29.8,
+                              fontWeight: FontWeight.bold,
                             ),
+                            textAlign: TextAlign.left,
                           ),
                         ),
                         Container(
-                          padding: const EdgeInsets.fromLTRB(17, 10, 20, 0),
-                          child: Column(
-                            children: [
-                              ElevatedButton(
-                                onPressed: () {
-                                  showDatePicker(
-                                    context: context,
-                                    initialDate: DateTime.now(),
-                                    firstDate: DateTime(1960),
-                                    lastDate: DateTime(3000),
-                                  ).then((date) => pickDate(date!));
-                                },
-                                child: Container(
-                                  child: showDate == ''
-                                      ? SingleChildScrollView(
-                                          scrollDirection: Axis.vertical,
-                                          child: Container(
-                                            child: Row(
-                                              children: [
-                                                Container(
-                                                    padding: const EdgeInsets
-                                                        .fromLTRB(0, 0, 20, 0),
-                                                    child: const Icon(
-                                                        Icons.calendar_month)),
-                                                Container(
-                                                  padding:
-                                                      const EdgeInsets.fromLTRB(
-                                                          0, 0, 20, 0),
-                                                  child:
-                                                      Text(_deforebirthdayshow),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        )
-                                      : SingleChildScrollView(
-                                          scrollDirection: Axis.vertical,
-                                          child: Container(
-                                            child: Row(
-                                              children: [
-                                                Container(
-                                                    padding: const EdgeInsets
-                                                        .fromLTRB(0, 0, 20, 0),
-                                                    child: const Icon(
-                                                        Icons.calendar_month)),
-                                                Container(
-                                                  padding:
-                                                      const EdgeInsets.fromLTRB(
-                                                          0, 0, 20, 0),
-                                                  child: Text(
-                                                    showDate.toString(),
-                                                  ),
-                                                )
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-                    child: Row(
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.fromLTRB(17, 0, 60, 0),
-                          child: const Text('Sex *  : '),
-                        ),
-                        Container(
-                          padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                          child: Radio(
-                            value: 'M',
-                            groupValue: selectGroupSex,
-                            onChanged: (value) => _selectGroupSex(value!),
-                          ),
-                        ),
-                        const Text('Male'),
-                        Container(
-                          padding: const EdgeInsets.fromLTRB(30, 0, 0, 0),
-                          child: Radio(
-                            value: 'F',
-                            groupValue: selectGroupSex,
-                            onChanged: (value) => _selectGroupSex(value!),
-                          ),
-                        ),
-                        const Text('Female'),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.fromLTRB(30, 15, 30, 0),
-                    child: const Text(
-                      // widget.data.verifyCode['verifyCode'].toString(),
-                      "Address.",
-                      style: TextStyle(
-                        color: Color.fromARGB(255, 0, 0, 0),
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
-                    child: TextFormField(
-                      decoration: InputDecoration(
-                        hintText: 'House No.',
-                        labelText: _deforeaddress,
-                        labelStyle: const TextStyle(
-                            color: Color.fromARGB(255, 93, 93, 93)),
-                        // helperText: 'Ex. 0812345678',
-                        // helperStyle: TextStyle(color: Colors.white),
-                        enabledBorder: const UnderlineInputBorder(
-                          borderSide: BorderSide(
-                              width: 1,
-                              color: Color.fromARGB(255, 114, 114, 114)),
-                        ),
-                        focusedBorder: const UnderlineInputBorder(
-                          borderSide: BorderSide(
-                              width: 1, color: Color.fromARGB(255, 87, 87, 87)),
-                        ),
-                      ),
-                      keyboardType: TextInputType.text,
-                      style: const TextStyle(color: Colors.black),
-                      onChanged: (value) => setState(
-                        () {
-                          _address = value;
-                        },
-                      ),
-                    ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
-                    child: TextFormField(
-                      decoration: InputDecoration(
-                        labelText: _deforesubDistrict,
-                        hintText: 'Sub-district',
-                        labelStyle: const TextStyle(
-                            color: Color.fromARGB(255, 93, 93, 93)),
-                        // helperText: 'Ex. 0812345678',
-                        // helperStyle: TextStyle(color: Colors.white),
-                        enabledBorder: const UnderlineInputBorder(
-                          borderSide: BorderSide(
-                              width: 1,
-                              color: Color.fromARGB(255, 114, 114, 114)),
-                        ),
-                        focusedBorder: const UnderlineInputBorder(
-                          borderSide: BorderSide(
-                              width: 1, color: Color.fromARGB(255, 87, 87, 87)),
-                        ),
-                      ),
-                      keyboardType: TextInputType.text,
-                      style: const TextStyle(color: Colors.black),
-                      onChanged: (value) => setState(
-                        () {
-                          _subDistrict = value;
-                        },
-                      ),
-                    ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
-                    child: TextFormField(
-                      decoration: InputDecoration(
-                        labelText: _deforedistrict,
-                        hintText: 'District',
-                        labelStyle: const TextStyle(
-                            color: Color.fromARGB(255, 93, 93, 93)),
-                        // helperText: 'Ex. 0812345678',
-                        // helperStyle: TextStyle(color: Colors.white),
-                        enabledBorder: const UnderlineInputBorder(
-                          borderSide: BorderSide(
-                              width: 1,
-                              color: Color.fromARGB(255, 114, 114, 114)),
-                        ),
-                        focusedBorder: const UnderlineInputBorder(
-                          borderSide: BorderSide(
-                              width: 1, color: Color.fromARGB(255, 87, 87, 87)),
-                        ),
-                      ),
-                      keyboardType: TextInputType.text,
-                      style: const TextStyle(color: Colors.black),
-                      onChanged: (value) => setState(
-                        () {
-                          _district = value;
-                        },
-                      ),
-                    ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
-                    child: TextFormField(
-                      decoration: InputDecoration(
-                        labelText: _deforeprovince,
-                        hintText: 'Province',
-                        labelStyle: const TextStyle(
-                            color: Color.fromARGB(255, 93, 93, 93)),
-                        // helperText: 'Ex. 0812345678',
-                        // helperStyle: TextStyle(color: Colors.white),
-                        enabledBorder: const UnderlineInputBorder(
-                          borderSide: BorderSide(
-                              width: 1,
-                              color: Color.fromARGB(255, 114, 114, 114)),
-                        ),
-                        focusedBorder: const UnderlineInputBorder(
-                          borderSide: BorderSide(
-                              width: 1, color: Color.fromARGB(255, 87, 87, 87)),
-                        ),
-                      ),
-                      keyboardType: TextInputType.text,
-                      style: const TextStyle(color: Colors.black),
-                      onChanged: (value) => setState(
-                        () {
-                          _province = value;
-                        },
-                      ),
-                    ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
-                    child: TextFormField(
-                      decoration: InputDecoration(
-                        labelText: _deforepostalCode,
-                        hintText: 'Postal Code',
-                        labelStyle: const TextStyle(
-                            color: Color.fromARGB(255, 93, 93, 93)),
-                        // helperText: 'Ex. 0812345678',
-                        // helperStyle: TextStyle(color: Colors.white),
-                        enabledBorder: const UnderlineInputBorder(
-                          borderSide: BorderSide(
-                              width: 1,
-                              color: Color.fromARGB(255, 114, 114, 114)),
-                        ),
-                        focusedBorder: const UnderlineInputBorder(
-                          borderSide: BorderSide(
-                              width: 1, color: Color.fromARGB(255, 87, 87, 87)),
-                        ),
-                      ),
-                      keyboardType: TextInputType.number,
-                      style: const TextStyle(color: Colors.black),
-                      onChanged: (value) => setState(
-                        () {
-                          _postalCode = value;
-                        },
-                      ),
-                    ),
-                  ),
-                  Center(
-                    child: Container(
-                      padding: const EdgeInsets.fromLTRB(0, 45, 0, 50),
-                      child: SizedBox(
-                        width: 312.48,
-                        height: 63.4,
-                        child: ElevatedButton(
-                          style: ButtonStyle(
-                            backgroundColor:
-                                MaterialStateProperty.all(Colors.black),
-                            shape: MaterialStateProperty.all(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(15.29),
-                                side: const BorderSide(
-                                    width: 3, color: Colors.black),
-                              ),
-                            ),
-                          ),
-                          onPressed: () {
-                            setDataUserInfo();
-                          },
+                          padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
                           child: const Text(
-                            "Save",
-                            style: TextStyle(fontSize: 24),
+                            'Please enter your Info',
+                            style: TextStyle(
+                              color: Color.fromARGB(255, 255, 255, 255),
+                              fontSize: 17,
+                            ),
+                            textAlign: TextAlign.left,
                           ),
                         ),
-                      ),
+                      ],
                     ),
                   ),
                 ],
               ),
             ),
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.vertical(
+                bottom: Radius.circular(0),
+              ),
+            ),
           ),
-        ),
-      ),
-    );
-  }
+          body: SingleChildScrollView(
+            child: Container(
+              padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+              child: SingleChildScrollView(
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Container(
+                        padding: const EdgeInsets.fromLTRB(15, 15, 15, 0),
+                        child: Column(
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.fromLTRB(15, 15, 15, 0),
+                              child: TextFormField(
+                                decoration: InputDecoration(
+                                  hintText: 'First Name *',
+                                  labelText: _deforefirstName,
+                                  labelStyle: const TextStyle(
+                                      color: Color.fromARGB(255, 93, 93, 93)),
+                                  // helperText: 'Ex. 0812345678',
+                                  // helperStyle: TextStyle(color: Colors.white),
+                                  enabledBorder: const UnderlineInputBorder(
+                                    borderSide: BorderSide(
+                                        width: 1,
+                                        color:
+                                            Color.fromARGB(255, 114, 114, 114)),
+                                  ),
+                                  focusedBorder: const UnderlineInputBorder(
+                                    borderSide: BorderSide(
+                                        width: 1,
+                                        color: Color.fromARGB(255, 87, 87, 87)),
+                                  ),
+                                ),
+                                keyboardType: TextInputType.text,
+                                style: const TextStyle(color: Colors.black),
+                                onChanged: (value) => setState(
+                                  () {
+                                    _firstName = value;
+                                  },
+                                ),
+                              ),
+                            ),
+                            Container(
+                              padding: const EdgeInsets.fromLTRB(15, 15, 15, 0),
+                              child: TextFormField(
+                                decoration: InputDecoration(
+                                  labelText: _deforelastName,
+                                  hintText: 'Last Name *',
+                                  labelStyle: const TextStyle(
+                                      color: Color.fromARGB(255, 93, 93, 93)),
+                                  // helperText: 'Ex. 0812345678',
+                                  // helperStyle: TextStyle(color: Colors.black),
+                                  enabledBorder: const UnderlineInputBorder(
+                                    borderSide: BorderSide(
+                                        width: 1,
+                                        color:
+                                            Color.fromARGB(255, 114, 114, 114)),
+                                  ),
+                                  focusedBorder: const UnderlineInputBorder(
+                                    borderSide: BorderSide(
+                                        width: 1,
+                                        color: Color.fromARGB(255, 87, 87, 87)),
+                                  ),
+                                ),
+                                keyboardType: TextInputType.text,
+                                style: const TextStyle(color: Colors.black),
+                                onChanged: (value) => setState(
+                                  () {
+                                    _lastName = value;
+                                  },
+                                ),
+                              ),
+                            ),
+                            Container(
+                              padding: const EdgeInsets.fromLTRB(15, 15, 15, 0),
+                              child: TextFormField(
+                                decoration: InputDecoration(
+                                  labelText: _deforeemail,
+                                  hintText: 'Email',
+                                  labelStyle: const TextStyle(
+                                      color: Color.fromARGB(255, 93, 93, 93)),
+                                  // helperText: 'Ex. 0812345678',
+                                  // helperStyle: TextStyle(color: Colors.black),
+                                  enabledBorder: const UnderlineInputBorder(
+                                    borderSide: BorderSide(
+                                        width: 1,
+                                        color:
+                                            Color.fromARGB(255, 114, 114, 114)),
+                                  ),
+                                  focusedBorder: const UnderlineInputBorder(
+                                    borderSide: BorderSide(
+                                        width: 1,
+                                        color: Color.fromARGB(255, 87, 87, 87)),
+                                  ),
+                                ),
+                                keyboardType: TextInputType.emailAddress,
+                                style: const TextStyle(color: Colors.black),
+                                onChanged: (value) => setState(
+                                  () {
+                                    _email = value;
+                                  },
+                                ),
+                              ),
+                            ),
+                            Container(
+                              padding: const EdgeInsets.fromLTRB(15, 15, 15, 0),
+                              child: TextFormField(
+                                decoration: InputDecoration(
+                                  labelText: _deforetextIDCard,
+                                  hintText: 'ID Card *',
+                                  labelStyle: const TextStyle(
+                                      color: Color.fromARGB(255, 93, 93, 93)),
+                                  // helperText: 'Ex. 0812345678',
+                                  // helperStyle: TextStyle(color: Colors.black),
+                                  enabledBorder: const UnderlineInputBorder(
+                                    borderSide: BorderSide(
+                                        width: 1,
+                                        color:
+                                            Color.fromARGB(255, 114, 114, 114)),
+                                  ),
+                                  focusedBorder: const UnderlineInputBorder(
+                                    borderSide: BorderSide(
+                                        width: 1,
+                                        color: Color.fromARGB(255, 87, 87, 87)),
+                                  ),
+                                ),
+                                keyboardType: TextInputType.number,
+                                style: const TextStyle(color: Colors.black),
+                                onChanged: (value) => setState(
+                                  () {
+                                    _textIDCard = value;
+                                  },
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.fromLTRB(15, 10, 0, 0),
+                        margin: const EdgeInsets.fromLTRB(15, 0, 0, 0),
+                        child: InkWell(
+                          onTap: () => {openImage('iDCard')},
+                          child: iDCard == ''
+                              ? const Text(
+                                  'กรุณา แนบรูปภาพบัตรประจำตัวประชาชน ***',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.transparent,
+                                    // Step 2 SEE HERE
+                                    shadows: [
+                                      Shadow(
+                                          offset: Offset(0, -5),
+                                          color: Colors.black)
+                                    ],
+                                    decoration: TextDecoration.underline,
+                                    decorationColor:
+                                        Color.fromARGB(255, 177, 0, 0),
+                                  ),
+                                )
+                              : const Text(
+                                  'แนบรูปภาพบัตรประจำตัวประชาชน สำเร็จ',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    // fontWeight: FontWeight.bold,
+                                    color: Colors.transparent,
+                                    // Step 2 SEE HERE
+                                    shadows: [
+                                      Shadow(
+                                          offset: Offset(0, -5),
+                                          color: Colors.black)
+                                    ],
+                                    decoration: TextDecoration.underline,
+                                    decorationColor:
+                                        Color.fromARGB(255, 34, 172, 0),
+                                  ),
+                                ),
+                        ),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.fromLTRB(20, 0, 20, 5),
+                        child: Row(
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.fromLTRB(17, 10, 20, 0),
+                              child: const Text(
+                                'Birthday * :',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ),
+                            Container(
+                              padding: const EdgeInsets.fromLTRB(17, 10, 20, 0),
+                              child: Column(
+                                children: [
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      showDatePicker(
+                                        context: context,
+                                        initialDate: DateTime.now(),
+                                        firstDate: DateTime(1960),
+                                        lastDate: DateTime(3000),
+                                      ).then((date) => pickDate(date!));
+                                    },
+                                    child: Container(
+                                      child: showDate == ''
+                                          ? SingleChildScrollView(
+                                              scrollDirection: Axis.vertical,
+                                              child: Container(
+                                                child: Row(
+                                                  children: [
+                                                    Container(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                    .fromLTRB(
+                                                                0, 0, 20, 0),
+                                                        child: const Icon(Icons
+                                                            .calendar_month)),
+                                                    Container(
+                                                      padding: const EdgeInsets
+                                                              .fromLTRB(
+                                                          0, 0, 20, 0),
+                                                      child: Text(
+                                                          _deforebirthdayshow),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            )
+                                          : SingleChildScrollView(
+                                              scrollDirection: Axis.vertical,
+                                              child: Container(
+                                                child: Row(
+                                                  children: [
+                                                    Container(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                    .fromLTRB(
+                                                                0, 0, 20, 0),
+                                                        child: const Icon(Icons
+                                                            .calendar_month)),
+                                                    Container(
+                                                      padding: const EdgeInsets
+                                                              .fromLTRB(
+                                                          0, 0, 20, 0),
+                                                      child: Text(
+                                                        showDate.toString(),
+                                                      ),
+                                                    )
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                        child: Row(
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.fromLTRB(17, 0, 60, 0),
+                              child: const Text('Sex *  : '),
+                            ),
+                            Container(
+                              padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                              child: Radio(
+                                value: 'M',
+                                groupValue: selectGroupSex,
+                                onChanged: (value) => _selectGroupSex(value!),
+                              ),
+                            ),
+                            const Text('Male'),
+                            Container(
+                              padding: const EdgeInsets.fromLTRB(30, 0, 0, 0),
+                              child: Radio(
+                                value: 'F',
+                                groupValue: selectGroupSex,
+                                onChanged: (value) => _selectGroupSex(value!),
+                              ),
+                            ),
+                            const Text('Female'),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.fromLTRB(30, 15, 30, 0),
+                        child: const Text(
+                          // widget.data.verifyCode['verifyCode'].toString(),
+                          "Address.",
+                          style: TextStyle(
+                            color: Color.fromARGB(255, 0, 0, 0),
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
+                        child: TextFormField(
+                          decoration: InputDecoration(
+                            hintText: 'House No.',
+                            labelText: _deforeaddress,
+                            labelStyle: const TextStyle(
+                                color: Color.fromARGB(255, 93, 93, 93)),
+                            // helperText: 'Ex. 0812345678',
+                            // helperStyle: TextStyle(color: Colors.white),
+                            enabledBorder: const UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                  width: 1,
+                                  color: Color.fromARGB(255, 114, 114, 114)),
+                            ),
+                            focusedBorder: const UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                  width: 1,
+                                  color: Color.fromARGB(255, 87, 87, 87)),
+                            ),
+                          ),
+                          keyboardType: TextInputType.text,
+                          style: const TextStyle(color: Colors.black),
+                          onChanged: (value) => setState(
+                            () {
+                              _address = value;
+                            },
+                          ),
+                        ),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
+                        child: TextFormField(
+                          decoration: InputDecoration(
+                            labelText: _deforesubDistrict,
+                            hintText: 'Sub-district',
+                            labelStyle: const TextStyle(
+                                color: Color.fromARGB(255, 93, 93, 93)),
+                            // helperText: 'Ex. 0812345678',
+                            // helperStyle: TextStyle(color: Colors.white),
+                            enabledBorder: const UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                  width: 1,
+                                  color: Color.fromARGB(255, 114, 114, 114)),
+                            ),
+                            focusedBorder: const UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                  width: 1,
+                                  color: Color.fromARGB(255, 87, 87, 87)),
+                            ),
+                          ),
+                          keyboardType: TextInputType.text,
+                          style: const TextStyle(color: Colors.black),
+                          onChanged: (value) => setState(
+                            () {
+                              _subDistrict = value;
+                            },
+                          ),
+                        ),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
+                        child: TextFormField(
+                          decoration: InputDecoration(
+                            labelText: _deforedistrict,
+                            hintText: 'District',
+                            labelStyle: const TextStyle(
+                                color: Color.fromARGB(255, 93, 93, 93)),
+                            // helperText: 'Ex. 0812345678',
+                            // helperStyle: TextStyle(color: Colors.white),
+                            enabledBorder: const UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                  width: 1,
+                                  color: Color.fromARGB(255, 114, 114, 114)),
+                            ),
+                            focusedBorder: const UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                  width: 1,
+                                  color: Color.fromARGB(255, 87, 87, 87)),
+                            ),
+                          ),
+                          keyboardType: TextInputType.text,
+                          style: const TextStyle(color: Colors.black),
+                          onChanged: (value) => setState(
+                            () {
+                              _district = value;
+                            },
+                          ),
+                        ),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
+                        child: TextFormField(
+                          decoration: InputDecoration(
+                            labelText: _deforeprovince,
+                            hintText: 'Province',
+                            labelStyle: const TextStyle(
+                                color: Color.fromARGB(255, 93, 93, 93)),
+                            // helperText: 'Ex. 0812345678',
+                            // helperStyle: TextStyle(color: Colors.white),
+                            enabledBorder: const UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                  width: 1,
+                                  color: Color.fromARGB(255, 114, 114, 114)),
+                            ),
+                            focusedBorder: const UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                  width: 1,
+                                  color: Color.fromARGB(255, 87, 87, 87)),
+                            ),
+                          ),
+                          keyboardType: TextInputType.text,
+                          style: const TextStyle(color: Colors.black),
+                          onChanged: (value) => setState(
+                            () {
+                              _province = value;
+                            },
+                          ),
+                        ),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
+                        child: TextFormField(
+                          decoration: InputDecoration(
+                            labelText: _deforepostalCode,
+                            hintText: 'Postal Code',
+                            labelStyle: const TextStyle(
+                                color: Color.fromARGB(255, 93, 93, 93)),
+                            // helperText: 'Ex. 0812345678',
+                            // helperStyle: TextStyle(color: Colors.white),
+                            enabledBorder: const UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                  width: 1,
+                                  color: Color.fromARGB(255, 114, 114, 114)),
+                            ),
+                            focusedBorder: const UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                  width: 1,
+                                  color: Color.fromARGB(255, 87, 87, 87)),
+                            ),
+                          ),
+                          keyboardType: TextInputType.number,
+                          style: const TextStyle(color: Colors.black),
+                          onChanged: (value) => setState(
+                            () {
+                              _postalCode = value;
+                            },
+                          ),
+                        ),
+                      ),
+                      Center(
+                        child: Container(
+                          padding: const EdgeInsets.fromLTRB(0, 45, 0, 50),
+                          child: SizedBox(
+                            width: 312.48,
+                            height: 63.4,
+                            child: ElevatedButton(
+                              style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStateProperty.all(Colors.black),
+                                shape: MaterialStateProperty.all(
+                                  RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(15.29),
+                                    side: const BorderSide(
+                                        width: 3, color: Colors.black),
+                                  ),
+                                ),
+                              ),
+                              onPressed: () {
+                                setDataUserInfo();
+                              },
+                              child: const Text(
+                                "Save",
+                                style: TextStyle(fontSize: 24),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        );
 }
