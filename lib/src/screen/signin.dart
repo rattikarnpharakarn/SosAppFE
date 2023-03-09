@@ -5,8 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:sos/src/screen/home.dart';
 import 'package:sos/src/screen/signupPhoneNumber.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import '../provider/userService.dart';
+import 'package:sos/src/sharedInfo/user.dart';
 
 class Signin extends StatefulWidget {
   const Signin({Key? key}) : super(key: key);
@@ -67,48 +66,6 @@ class _SigninState extends State<Signin> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('token', token);
     addUserProfileToSF();
-  }
-
-  // print(data['id']);
-  // print(data['phoneNumber']);
-  // print(data['firstName']);
-  // print(data['lastName']);
-  // print(data['email']);
-  // print(data['birthday']);
-  // print(data['gender']);
-  // print(data['imageProfile']);
-  //
-  // print(idCard['textIDCard']);
-  // print(idCard['pathImage']);
-  //
-  // print(address['address']);
-  // print(address['subDistrict']);
-  // print(address['district']);
-  // print(address['province']);
-  // print(address['postalCode']);
-  // print(address['country']);
-
-  addUserProfileToSF() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    var data = await GetUserProfile();
-    prefs.setString('id', data.id);
-    prefs.setString('phoneNumber', data.phoneNumber);
-    prefs.setString('firstName', data.firstName);
-    prefs.setString('lastName', data.lastName);
-    prefs.setString('email', data.email);
-    prefs.setString('birthday', data.birthday);
-    prefs.setString('gender', data.gender);
-    prefs.setString('imageProfile', data.imageProfile);
-
-    prefs.setString('textIDCard', data.textIDCard);
-    prefs.setString('pathImage', data.pathImage);
-
-    prefs.setString('address', data.address);
-    prefs.setString('subDistrict', data.subDistrict);
-    prefs.setString('district', data.district);
-    prefs.setString('province', data.province);
-    prefs.setString('postalCode', data.postalCode);
-    prefs.setString('country', data.country);
   }
 
   // static const String _baseUrl = "http://sos-app.thddns.net:7330/SosApp/signIn";

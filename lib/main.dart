@@ -74,11 +74,11 @@ class _MyAppState extends State<MyApp> {
       // home: HotlinePage(),
       // home: Signup(),
       // home: SignupPhoneNumber(),
-      home: SosPage1(),
+      // home: SosPage1(),
       // home: UpDataProfilePage(),
       // home: ChatPage(),
       // home: TestPage(),
-      // home: _token == '' ? Signin() : Home(), // หน้าแรกของแอบ
+      home: _token == '' ? Signin() : Home(), // หน้าแรกของแอบ
     );
   }
 }

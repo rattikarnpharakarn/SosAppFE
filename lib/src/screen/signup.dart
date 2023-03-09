@@ -7,8 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sos/src/model/response.dart';
 import 'package:sos/src/model/signup.dart';
-import '../provider/userService.dart';
-
+import 'package:sos/src/sharedInfo/user.dart';
 
 import 'package:http/http.dart' as http;
 
@@ -84,29 +83,6 @@ class _SignupState extends State<Signup> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('token', token);
     addUserProfileToSF();
-  }
-
-  addUserProfileToSF() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    var data = await GetUserProfile();
-    prefs.setString('id', data.id);
-    prefs.setString('phoneNumber', data.phoneNumber);
-    prefs.setString('firstName', data.firstName);
-    prefs.setString('lastName', data.lastName);
-    prefs.setString('email', data.email);
-    prefs.setString('birthday', data.birthday);
-    prefs.setString('gender', data.gender);
-    prefs.setString('imageProfile', data.imageProfile);
-
-    prefs.setString('textIDCard', data.textIDCard);
-    prefs.setString('pathImage', data.pathImage);
-
-    prefs.setString('address', data.address);
-    prefs.setString('subDistrict', data.subDistrict);
-    prefs.setString('district', data.district);
-    prefs.setString('province', data.province);
-    prefs.setString('postalCode', data.postalCode);
-    prefs.setString('country', data.country);
   }
 
   Future<ReturnResponse> createUserInfo() async {
