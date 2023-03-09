@@ -12,6 +12,7 @@ import 'package:sos/src/screen/signup.dart';
 import 'package:sos/src/screen/sos.dart';
 import 'package:sos/src/screen/updateProfile.dart';
 
+import 'src/screen/LoadingPage.dart';
 import 'src/screen/index.dart';
 import 'src/screen/signupPhoneNumber.dart';
 
@@ -34,7 +35,6 @@ Future<void> main() async {
   runApp(MyApp());
 }
 
-
 class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
 
@@ -43,29 +43,26 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
-
-
-
+  bool isLoading = false;
 
   void initState() {
     super.initState();
-    _getImageProfile();
-  }
-
-  String _token = '';
-  _getImageProfile() async {
-    var token = await getUserTokenSf();
-
-    setState(() {
-      _token = token;
+    Future.delayed(Duration(milliseconds: 500), () async {
+      await _getImageProfile();
     });
   }
 
+  String _token = '';
 
+  _getImageProfile() async {
+    var token = await getUserTokenSf();
+    setState(() {
+      _token = token;
+      isLoading = true;
+    });
+  }
 
-  @override
-  Widget build(BuildContext context) {
+  Widget mainSosApp() {
     return MaterialApp(
       title: 'SosApp',
       theme: ThemeData(primarySwatch: Colors.red),
@@ -81,4 +78,19 @@ class _MyAppState extends State<MyApp> {
       home: _token == '' ? Signin() : Home(), // หน้าแรกของแอบ
     );
   }
+
+  Widget mainLoadingPage() {
+    return MaterialApp(
+      title: 'SosApp',
+      theme: ThemeData(primarySwatch: Colors.red),
+      home: const LoadingPage(),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) => isLoading == false
+      ? mainLoadingPage()
+      : mainSosApp();
 }
+
+
