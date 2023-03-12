@@ -298,7 +298,7 @@ class _HistoryPageState extends State<HistoryPage> {
                                               style: TextStyle(fontSize: 20.0)),
                                         ),
                                         Container(
-                                          child: const Text('มีรถชนกันหน้าctw',
+                                          child: const Text('มีรถชนกันหน้า CTW',
                                               style: TextStyle(
                                                 fontSize: 20.0,
                                                 color: Colors.black,

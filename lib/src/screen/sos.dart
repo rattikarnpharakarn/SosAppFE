@@ -461,20 +461,17 @@ class _SosPage1State extends State<SosPage1> {
       userID: id,
     );
 
-
-
     await PostInform(req);
+    _showNotification();
 
-    Future.delayed(Duration(milliseconds: 1000), () async {
-      await _showNotification();
+    Future.delayed(Duration(milliseconds: 1000), () {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const HistoryPage(),
+        ),
+      );
     });
-
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const HistoryPage(),
-      ),
-    );
   }
 
   Future<void> _showNotification() async {
