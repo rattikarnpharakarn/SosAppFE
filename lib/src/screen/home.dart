@@ -260,7 +260,8 @@ class _HomeState extends State<Home> {
                                     padding:
                                         const EdgeInsets.fromLTRB(0, 0, 0, 15),
                                     child: Image.asset(
-                                      'assets/images/fire.png',
+                                      'assets/images/other.png',
+
                                       height: 100,
                                     )),
                                 Container(
@@ -297,7 +298,7 @@ class _HomeState extends State<Home> {
                                     padding:
                                         const EdgeInsets.fromLTRB(0, 0, 0, 15),
                                     child: Image.asset(
-                                      'assets/images/other.png',
+                                      'assets/images/fire.png',
                                       height: 100,
                                     )),
                                 Container(
