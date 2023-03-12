@@ -32,11 +32,11 @@ class _UpDataProfilePageState extends State<UpDataProfilePage> {
     super.initState();
     Future.delayed(Duration(milliseconds: 500), () async {
       await _deforeGetUserInfoSF();
-      await _getNameProfile();
+      await _getToken();
     });
   }
 
-  _getNameProfile() async {
+  _getToken() async {
     var token = await getUserTokenSf();
     setState(()  {
       _token = token;

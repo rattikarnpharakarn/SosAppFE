@@ -164,7 +164,7 @@ class _HistoryPageState extends State<HistoryPage> {
                                         ),
                                         Container(
                                           child: const Text(
-                                              'มีไฟไหม้ที่Central World',
+                                              'มีไฟไหม้ที่ CTW',
                                               style: TextStyle(
                                                 fontSize: 20.0,
                                                 color: Colors.black,

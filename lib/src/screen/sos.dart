@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sos/main.dart';
 
 import 'package:sos/src/component/bottom_bar.dart';
 import 'package:sos/src/component/endDrawer.dart';
@@ -7,13 +10,18 @@ import 'package:sos/src/component/image_navBer.dart';
 import 'package:sos/src/component/sosComponent.dart';
 
 import 'package:image_picker/image_picker.dart';
+import 'package:sos/src/model/emergency/request.dart';
+import 'package:sos/src/provider/emergency/inform.dart';
 
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:sos/src/screen/LoadingPage.dart';
+import 'package:sos/src/screen/history.dart';
 import 'package:url_launcher/url_launcher_string.dart';
+
+import '../model/emergency/response.dart';
 
 class SosPage extends StatefulWidget {
   const SosPage({super.key});
@@ -27,8 +35,11 @@ class NSosPageState extends State<SosPage> {
 
   final int _pageNumber = 2;
   String _textArea = '';
+  String _onSelectName = '';
 
   int onSelect = 0;
+
+  // int indexOnSelect = 0;
 
   bool isLoading = false;
 
@@ -139,6 +150,7 @@ class NSosPageState extends State<SosPage> {
                                 if (onSelect == 1) {
                                   onSelect = 0;
                                 } else {
+                                  _onSelectName = 'เจ็บป่วย';
                                   onSelect = 1;
                                 }
                               });
@@ -166,6 +178,7 @@ class NSosPageState extends State<SosPage> {
                                 if (onSelect == 2) {
                                   onSelect = 0;
                                 } else {
+                                  _onSelectName = 'อุบัติเหตุ';
                                   onSelect = 2;
                                 }
                               });
@@ -193,6 +206,7 @@ class NSosPageState extends State<SosPage> {
                                 if (onSelect == 3) {
                                   onSelect = 0;
                                 } else {
+                                  _onSelectName = 'อาคาร/สถานที่';
                                   onSelect = 3;
                                 }
                               });
@@ -220,6 +234,7 @@ class NSosPageState extends State<SosPage> {
                                 if (onSelect == 4) {
                                   onSelect = 0;
                                 } else {
+                                  _onSelectName = 'อื่นๆ';
                                   onSelect = 4;
                                 }
                               });
@@ -243,7 +258,6 @@ class NSosPageState extends State<SosPage> {
                           child: TextFormField(
                             onChanged: (value) => setState(() {
                               _textArea = value;
-                              print(_textArea);
                             }),
                             maxLines: 6,
                             maxLength: 1000, //or null
@@ -276,7 +290,11 @@ class NSosPageState extends State<SosPage> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => const SosPage1(),
+                                  builder: (context) => SosPage1(
+                                    onSelectSubTypeId: onSelect,
+                                    onSelectName: _onSelectName,
+                                    textArea: _textArea,
+                                  ),
                                 ),
                               );
                             },
@@ -297,7 +315,16 @@ class NSosPageState extends State<SosPage> {
 }
 
 class SosPage1 extends StatefulWidget {
-  const SosPage1({super.key});
+  int onSelectSubTypeId;
+  String textArea;
+  String onSelectName;
+
+  SosPage1({
+    super.key,
+    required this.onSelectSubTypeId,
+    required this.textArea,
+    required this.onSelectName,
+  });
 
   @override
   State<SosPage1> createState() => _SosPage1State();
@@ -305,6 +332,16 @@ class SosPage1 extends StatefulWidget {
 
 class _SosPage1State extends State<SosPage1> {
   bool isLoading = false;
+
+  String _textPhoneNumber = '';
+  String images = '';
+  String latitude = '';
+  String longitude = '';
+  int userID = 0;
+
+  // _description = widget.textArea;
+  // _subTypeId = widget.onSelectSubTypeId;
+
   @override
   void initState() {
     super.initState();
@@ -326,7 +363,6 @@ class _SosPage1State extends State<SosPage1> {
   String selected_camera_or_image = '';
 
   String imagepath = '';
-  String images = '';
 
   openImage(String imageSource) async {
     try {
@@ -357,8 +393,6 @@ class _SosPage1State extends State<SosPage1> {
       print("error while picking file.");
     }
   }
-
-
 
   late String lat;
   late String long;
@@ -396,13 +430,15 @@ class _SosPage1State extends State<SosPage1> {
       lat = position.latitude.toString();
       long = position.longitude.toString();
     });
-
   }
 
   Future<void> _openMap(String lat, String long) async {
+    setState(() {
+      latitude = lat;
+      longitude = long;
+    });
     String googleURL =
         'https://www.google.com/maps/search/?api=1&query=$lat,$long';
-
 
     await launchUrlString(googleURL);
     // if (await canLaunchUrlString(googleURL)) {
@@ -411,271 +447,311 @@ class _SosPage1State extends State<SosPage1> {
     //   throw 'Could not launch $googleURL';
     // }
   }
+
+  Future<void> _callAPIInform() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String id = prefs.getString('id') ?? '';
+    Inform req = Inform(
+      description: widget.textArea,
+      images: images,
+      latitude: latitude,
+      longitude: longitude,
+      phoneNumberCallBack: _textPhoneNumber,
+      subTypeID: widget.onSelectSubTypeId,
+      userID: id,
+    );
+
+
+
+    await PostInform(req);
+
+    Future.delayed(Duration(milliseconds: 1000), () async {
+      await _showNotification();
+    });
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const HistoryPage(),
+      ),
+    );
+  }
+
+  Future<void> _showNotification() async {
+    const AndroidNotificationDetails androidNotificationDetails =
+        AndroidNotificationDetails(
+      'nextflow_noti_002',
+      'แจ้งเตือน',
+      channelDescription: 'Sos',
+      importance: Importance.max,
+      priority: Priority.high,
+      ticker: 'ticker',
+    );
+
+    const NotificationDetails platformChannelDetails = NotificationDetails(
+      android: androidNotificationDetails,
+    );
+
+    await ShowflutterLocalNoificationPlugin.show(1, 'ยืนยันการแจ้งเหตุ',
+        'คุณได้ทำการแจ้งเหตุเรียบร้อยแล้ว', platformChannelDetails);
+  }
+
   @override
   Widget build(BuildContext context) => isLoading == false
       ? const LoadingPage()
       : Scaffold(
-      key: _key,
-      bottomNavigationBar: Bottombar(pageNumber: _pageNumber),
-      // appBar: NavbarPages(),
-      appBar: AppBar(
-        // toolbarHeight: 0,
-        backgroundColor: const Color.fromARGB(255, 248, 0, 0),
-        elevation: 0,
-        centerTitle: false,
-        title: Container(
-          padding: const EdgeInsets.all(10),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                alignment: Alignment.center,
-                padding: const EdgeInsets.fromLTRB(0, 10, 20, 10),
-                child: const Text(
-                  "แจ้งเหตุ",
-                  style: TextStyle(
-                    color: Color.fromARGB(255, 255, 255, 255),
-                    fontSize: 22,
-                    decorationStyle: TextDecorationStyle.solid,
+          key: _key,
+          bottomNavigationBar: Bottombar(pageNumber: _pageNumber),
+          // appBar: NavbarPages(),
+          appBar: AppBar(
+            // toolbarHeight: 0,
+            backgroundColor: const Color.fromARGB(255, 248, 0, 0),
+            elevation: 0,
+            centerTitle: false,
+            title: Container(
+              padding: const EdgeInsets.all(10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    alignment: Alignment.center,
+                    padding: const EdgeInsets.fromLTRB(0, 10, 20, 10),
+                    child: const Text(
+                      "แจ้งเหตุ",
+                      style: TextStyle(
+                        color: Color.fromARGB(255, 255, 255, 255),
+                        fontSize: 22,
+                        decorationStyle: TextDecorationStyle.solid,
+                      ),
+                    ),
                   ),
-                ),
+                  const Spacer(),
+                  Container(
+                    padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        shape: const CircleBorder(),
+                        backgroundColor:
+                            const Color.fromARGB(255, 255, 255, 255),
+                      ),
+                      child: Image_NavBer(height: 40, width: 40),
+                      onPressed: () {
+                        _key.currentState!.openEndDrawer();
+                      },
+                    ),
+                  )
+                ],
               ),
-              const Spacer(),
-              Container(
-                padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    shape: const CircleBorder(),
-                    backgroundColor: const Color.fromARGB(255, 255, 255, 255),
-                  ),
-                  child: Image_NavBer(height: 40, width: 40),
-                  onPressed: () {
-                    _key.currentState!.openEndDrawer();
-                  },
-                ),
-              )
+            ),
+            automaticallyImplyLeading: true,
+            titleSpacing: 0,
+            actions: [
+              Container(),
             ],
           ),
-        ),
-        automaticallyImplyLeading: true,
-        titleSpacing: 0,
-        actions: [
-          Container(),
-        ],
-      ),
-      endDrawer: const EndDrawer(),
-      endDrawerEnableOpenDragGesture: false,
-      body: SingleChildScrollView(
-        child: Form(
-          child: Container(
-            alignment: Alignment.center,
-            padding: const EdgeInsets.all(30),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              textDirection: TextDirection.ltr,
-              children: <Widget>[
-                Container(
-                  padding: const EdgeInsets.all(0),
-                  child: Column(children: [
+          endDrawer: const EndDrawer(),
+          endDrawerEnableOpenDragGesture: false,
+          body: SingleChildScrollView(
+            child: Container(
+              padding: const EdgeInsets.all(25),
+              child: Form(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  textDirection: TextDirection.ltr,
+                  children: [
+                    Row(
+                      children: [
+                        Container(
+                          padding: EdgeInsets.zero,
+                          child: const Text(
+                            'ประเภทของการแจ้งเหต :  ',
+                            style: TextStyle(fontSize: 18),
+                          ),
+                        ),
+                        Container(
+                          padding: EdgeInsets.zero,
+                          child: Text(
+                            widget.onSelectName,
+                            style: const TextStyle(
+                                fontSize: 18, color: Colors.red),
+                          ),
+                        )
+                      ],
+                    ),
+                    Container(
+                      padding: const EdgeInsets.fromLTRB(0, 15, 0, 15),
+                    ),
+                    const Text(
+                      'รายละเอียด : ',
+                      style: TextStyle(fontSize: 18),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.fromLTRB(0, 5, 0, 0),
+                    ),
+                    SizedBox(
+                      child: Text(
+                        widget.textArea,
+                        style: const TextStyle(fontSize: 18, color: Colors.red),
+                      ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.fromLTRB(5, 35, 10, 5),
+                      child: const Text(
+                        'เบอร์โทรศัพท์สำหรับติดต่อกลับ',
+                        style: TextStyle(fontSize: 16),
+                      ),
+                    ),
                     Container(
                       padding: EdgeInsets.zero,
-                      child: Row(
-                        children: [
-                          Container(
-                            padding: EdgeInsets.zero,
-                            child: const Text(
-                              'ประเภทของการแจ้งเหต :  ',
-                              style: TextStyle(fontSize: 18),
+                      child: Card(
+                        shape: RoundedRectangleBorder(
+                          side: const BorderSide(
+                            color: Color.fromARGB(255, 51, 51, 51),
+                          ),
+                          borderRadius: BorderRadius.circular(3), //<-- SEE HERE
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8),
+                          child: TextFormField(
+                            onChanged: (value) => setState(() {
+                              _textPhoneNumber = value;
+                            }),
+                            maxLines: 3,
+                            maxLength: null, //or null
+                            decoration: const InputDecoration.collapsed(
+                              hintText: "",
                             ),
                           ),
-                          Container(
-                            padding: EdgeInsets.zero,
-                            child: const SelectableText(
-                              'อาคาร/สถานที่',
-                              style: TextStyle(fontSize: 18, color: Colors.red),
-                            ),
-                          )
-                        ],
+                        ),
                       ),
                     ),
                     Container(
-                      padding: const EdgeInsets.fromLTRB(0, 20, 10, 0),
+                      padding: const EdgeInsets.fromLTRB(5, 10, 10, 5),
+                      child: location_on != '' && images != ''
+                          ? const Text(
+                              'เพิ่มรูปภาพและเลือกที่อยู่สำเร็จ',
+                              style:
+                                  TextStyle(fontSize: 16, color: Colors.green),
+                            )
+                          : const Text(
+                              '** กรุณาเลือกที่อยู่ และ เพิ่มรูปภาพเพื่อทำให้ข้อมูลครบถ้วนในการแจ้งเหตุ',
+                              style: TextStyle(fontSize: 16, color: Colors.red),
+                            ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.fromLTRB(0, 15, 15, 0),
                       child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Container(
-                            margin: EdgeInsets.zero,
-                            alignment: Alignment.center,
-                            child: const Text(
-                              'รายละเอียด :  ',
-                              style: TextStyle(fontSize: 18),
+                            // todo ยังไม่ได้เพิ่มในส่วนของ Location ให้สามารถเลือกได้
+                            padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+                            child: PopupMenuButton<String>(
+                              initialValue: selected_location,
+                              child: Icon(
+                                color: location_on == ''
+                                    ? Colors.red
+                                    : Colors.green,
+                                Icons.location_on,
+                                size: 40.0,
+                              ),
+                              // Callback that sets the selected popup menu item.
+                              onSelected: (String item) {
+                                setState(() {
+                                  location_on = item;
+                                  print(location_on);
+                                });
+                              },
+                              itemBuilder: (BuildContext context) =>
+                                  <PopupMenuEntry<String>>[
+                                PopupMenuItem<String>(
+                                  value: 'newAddress',
+                                  child: Text('เลือกที่อยู่'),
+                                  onTap: () {
+                                    print('เลือกที่อยู่');
+                                  },
+                                ),
+                                PopupMenuItem<String>(
+                                  value: 'currentAddress',
+                                  child: const Text('ที่อยู่ปัจจุบัน'),
+                                  onTap: () {
+                                    _getCurrentLocation().then((value) async {
+                                      lat = '${value.latitude}';
+                                      long = '${value.longitude}';
+                                      _liveLocation();
+                                      await _openMap(lat, long);
+                                    });
+                                  },
+                                ),
+                              ],
                             ),
                           ),
                           Container(
-                            padding: EdgeInsets.zero,
-                            child: const SelectableText(
-                              'มีไฟไหม้ที่ ห้างสรรพสินค้า',
-                              style: TextStyle(fontSize: 18, color: Colors.red),
+                            padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+                            child: PopupMenuButton<String>(
+                              initialValue: selected_camera_or_image,
+                              child: Icon(
+                                color: images == '' ? Colors.red : Colors.green,
+                                Icons.camera_alt,
+                                size: 40.0,
+                              ),
+                              // Callback that sets the selected popup menu item.
+                              onSelected: (String item) {
+                                setState(() {
+                                  selected_camera_or_image = item;
+                                  openImage(selected_camera_or_image);
+                                });
+                              },
+                              itemBuilder: (BuildContext context) =>
+                                  <PopupMenuEntry<String>>[
+                                const PopupMenuItem<String>(
+                                  value: 'camera',
+                                  child: Text('เปิดกล้อง'),
+                                ),
+                                const PopupMenuItem<String>(
+                                  value: 'gallery',
+                                  child: Text('เลือกไฟล์'),
+                                ),
+                              ],
                             ),
-                          )
+                          ),
                         ],
                       ),
                     ),
-                  ]),
-                ),
-                Container(
-                  padding: const EdgeInsets.fromLTRB(5, 35, 10, 5),
-                  child: const Text(
-                    'เบอร์โทรศัพท์สำหรับติดต่อกลับ',
-                    style: TextStyle(fontSize: 16),
-                  ),
-                ),
-                Container(
-                  padding: EdgeInsets.zero,
-                  child: Card(
-                    shape: RoundedRectangleBorder(
-                      side: const BorderSide(
-                        color: Color.fromARGB(255, 51, 51, 51),
-                      ),
-                      borderRadius: BorderRadius.circular(3), //<-- SEE HERE
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8),
-                      child: TextFormField(
-                        onChanged: (value) => setState(() {
-                          // _textArea = value;
-                          print("1");
-                        }),
-                        maxLines: 3,
-                        maxLength: null, //or null
-                        decoration: const InputDecoration.collapsed(
-                          hintText: "",
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.fromLTRB(5, 10, 10, 5),
-                  child: location_on != '' && images != ''
-                      ? const Text(
-                          'เพิ่มรูปภาพและเลือกที่อยู่สำเร็จ',
-                          style: TextStyle(fontSize: 16, color: Colors.green),
-                        )
-                      : const Text(
-                          '** กรุณาเลือกที่อยู่ และ เพิ่มรูปภาพเพื่อทำให้ข้อมูลครบถ้วนในการแจ้งเหตุ',
-                          style: TextStyle(fontSize: 16, color: Colors.red),
-                        ),
-                ),
-                Container(
-                  padding: const EdgeInsets.fromLTRB(0, 15, 15, 0),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        // todo ยังไม่ได้เพิ่มในส่วนของ Location ให้สามารถเลือกได้
-                        padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
-                        child: PopupMenuButton<String>(
-                          initialValue: selected_location,
-                          child: Icon(
-                            color:
-                                location_on == '' ? Colors.red : Colors.green,
-                            Icons.location_on,
-                            size: 40.0,
-                          ),
-                          // Callback that sets the selected popup menu item.
-                          onSelected: (String item) {
-                            setState(() {
-                              location_on = item;
-                              print(location_on);
-                            });
-                          },
-                          itemBuilder: (BuildContext context) =>
-                              <PopupMenuEntry<String>>[
-                            const PopupMenuItem<String>(
-                              value: 'newAddress',
-                              child: Text('เลือกที่อยู่'),
+                    Center(
+                      child: Container(
+                        padding: const EdgeInsets.fromLTRB(0, 30, 0, 10),
+                        child: SizedBox(
+                          width: 330.48,
+                          height: 63.4,
+                          child: ElevatedButton(
+                            style: ButtonStyle(
+                              backgroundColor:
+                                  MaterialStateProperty.all(Colors.black),
+                              shape: MaterialStateProperty.all(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15.29),
+                                  side: const BorderSide(
+                                      width: 3, color: Colors.black),
+                                ),
+                              ),
                             ),
-                             PopupMenuItem<String>(
-                              value: 'currentAddress',
-                              child: const Text('ที่อยู่ปัจจุบัน'),
-                              onTap: () {
-                                _getCurrentLocation().then((value) async {
-                                  lat = '${value.latitude}';
-                                  long = '${value.longitude}';
-                                  _liveLocation();
-                                 await _openMap(lat,long);
-                                });
-                              },
-                            ),
-                          ],
-                        ),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
-                        child: PopupMenuButton<String>(
-                          initialValue: selected_camera_or_image,
-                          child: Icon(
-                            color: images == '' ? Colors.red : Colors.green,
-                            Icons.camera_alt,
-                            size: 40.0,
-                          ),
-                          // Callback that sets the selected popup menu item.
-                          onSelected: (String item) {
-                            setState(() {
-                              selected_camera_or_image = item;
-                              openImage(selected_camera_or_image);
-                            });
-                          },
-                          itemBuilder: (BuildContext context) =>
-                              <PopupMenuEntry<String>>[
-                            const PopupMenuItem<String>(
-                              value: 'camera',
-                              child: Text('เปิดกล้อง'),
-                            ),
-                            const PopupMenuItem<String>(
-                              value: 'gallery',
-                              child: Text('เลือกไฟล์'),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Center(
-                  child: Container(
-                    padding: const EdgeInsets.fromLTRB(0, 30, 0, 10),
-                    child: SizedBox(
-                      width: 330.48,
-                      height: 63.4,
-                      child: ElevatedButton(
-                        style: ButtonStyle(
-                          backgroundColor:
-                              MaterialStateProperty.all(Colors.black),
-                          shape: MaterialStateProperty.all(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15.29),
-                              side: const BorderSide(
-                                  width: 3, color: Colors.black),
+                            onPressed: () {
+                              _callAPIInform();
+                            },
+                            child: const Text(
+                              "แจ้งเหตุ",
+                              style: TextStyle(fontSize: 24),
                             ),
                           ),
                         ),
-                        onPressed: () {
-                          print('Test ElvevatedButton');
-                        },
-                        child: const Text(
-                          "แจ้งเหตุ",
-                          style: TextStyle(fontSize: 24),
-                        ),
                       ),
                     ),
-                  ),
+                  ],
                 ),
-              ],
+              ),
             ),
           ),
-        ),
-      ),
-    );
-  }
+        );
+}
