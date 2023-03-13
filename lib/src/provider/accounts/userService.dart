@@ -5,11 +5,11 @@ import '../../model/accounts/user.dart';
 
 Future<UserInfo> GetUserProfile() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  String? stringValue = prefs.getString('token');
+  String? stringValue = prefs.getString('token') ?? '' ;
   final response = await http.get(
     Uri.parse('http://10.0.2.2:80/SosApp/accounts/user/'),
     headers: <String, String>{
-      'Authorization': 'Bearer ' + stringValue!,
+      'Authorization': 'Bearer ' + stringValue,
     },
   );
 
@@ -45,6 +45,6 @@ Future<UserInfo> GetUserProfile() async {
   } else {
     // If the server did not return a 201 CREATED response,
     // then throw an exception.
-    throw Exception('Failed to create album.');
+    throw Exception('Failed to GetUserProfile.');
   }
 }

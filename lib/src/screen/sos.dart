@@ -145,7 +145,6 @@ class NSosPageState extends State<SosPage> {
                                     title: 'เจ็บป่วย',
                                   ),
                             onPressed: () {
-                              print('เจ็บป่วย');
                               setState(() {
                                 if (onSelect == 1) {
                                   onSelect = 0;
@@ -173,7 +172,6 @@ class NSosPageState extends State<SosPage> {
                                     title: 'อุบัติเหตุ',
                                   ),
                             onPressed: () {
-                              print('อุบัติเหตุ');
                               setState(() {
                                 if (onSelect == 2) {
                                   onSelect = 0;
@@ -201,7 +199,6 @@ class NSosPageState extends State<SosPage> {
                                     title: 'อาคาร/สถานที่',
                                   ),
                             onPressed: () {
-                              print('อาคาร/สถานที่');
                               setState(() {
                                 if (onSelect == 3) {
                                   onSelect = 0;
@@ -229,7 +226,6 @@ class NSosPageState extends State<SosPage> {
                                     title: 'อื่นๆ',
                                   ),
                             onPressed: () {
-                              print('อื่นๆ');
                               setState(() {
                                 if (onSelect == 4) {
                                   onSelect = 0;
@@ -579,7 +575,7 @@ class _SosPage1State extends State<SosPage1> {
                       padding: const EdgeInsets.fromLTRB(0, 15, 0, 15),
                     ),
                     const Text(
-                      'รายละเอียด : ',
+                      'รายละเอียด',
                       style: TextStyle(fontSize: 18),
                     ),
                     Container(

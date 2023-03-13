@@ -11,10 +11,10 @@ class HotlinePage extends StatefulWidget {
   const HotlinePage({super.key});
 
   @override
-  State<HotlinePage> createState() => HhotlinePageState();
+  State<HotlinePage> createState() => HotlinePageState();
 }
 
-class HhotlinePageState extends State<HotlinePage> {
+class HotlinePageState extends State<HotlinePage> {
   final GlobalKey<ScaffoldState> _key = GlobalKey();
   List<GetHotline> getHotlineList = [];
   bool isLoading = false;
@@ -22,22 +22,24 @@ class HhotlinePageState extends State<HotlinePage> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration(milliseconds: 500), () {
-      GetHotlineList().then((value) {
-        setState(() {
-          for (var data in value.list) {
-            GetHotline getHotline = GetHotline(
-                id: data.id,
-                number: data.number,
-                description: data.description);
-            getHotlineList.add(getHotline);
-          }
-        });
-      });
+    callAPIHotline();
+  }
 
+  callAPIHotline() async {
+    await GetHotlineList().then((value) {
       setState(() {
-        isLoading = true;
+        for (var data in value.list) {
+          GetHotline getHotline = GetHotline(
+              id: data.id,
+              number: data.number,
+              description: data.description);
+          getHotlineList.add(getHotline);
+        }
       });
+    });
+
+    setState(() {
+      isLoading = true;
     });
   }
 
