@@ -35,36 +35,47 @@ class _HistoryPageState extends State<HistoryPage> {
 
   var newFormat = DateFormat("dd-MM-yyyy HH:mm น.");
   List<GetInfrom> getInformList = [];
-
   callAPIGetInformList() async {
-    await GetInformList().then((value) {
-      setState(() {
-        for (var data in value.list) {
-          DateTime dt2 = DateTime.parse(data.date);
-          final String date = newFormat.format(dt2);
+      await GetInformList().then(
+        (value) {
+          if (value.code == "0") {
+            setState(
+              () {
+                for (var data in value.list) {
+                  DateTime dt2 = DateTime.parse(data.date);
+                  final String date = newFormat.format(dt2);
 
-          GetInfrom getInform = GetInfrom(
-            id: data.id,
-            description: data.description,
-            image: data.image,
-            phoneNumberCallBack: data.phoneNumberCallBack,
-            latitude: data.latitude,
-            longitude: data.longitude,
-            username: data.username,
-            workplace: data.workplace,
-            subTypeName: data.subTypeName,
-            date: date,
-            status: data.status,
-          );
+                  GetInfrom getInform = GetInfrom(
+                    id: data.id,
+                    description: data.description,
+                    image: data.image,
+                    phoneNumberCallBack: data.phoneNumberCallBack,
+                    latitude: data.latitude,
+                    longitude: data.longitude,
+                    username: data.username,
+                    workplace: data.workplace,
+                    subTypeName: data.subTypeName,
+                    date: date,
+                    status: data.status,
+                  );
+                  getInformList.add(getInform);
+                }
+              },
+            );
+          }
+        },
+      ).onError((error, stackTrace) {
 
-          getInformList.add(getInform);
-        }
+        // todo ต้องเพิ่ม popup
+        setState(() {
+          isLoading = true;
+        });
       });
-    });
 
-    setState(() {
-      isLoading = true;
-    });
+
+      setState(() {
+        isLoading = true;
+      });
   }
 
   @override
@@ -296,8 +307,8 @@ class _HistoryPage2State extends State<HistoryPage2> {
     });
   }
 
-
   final int _pageNumber = 3;
+
   @override
   Widget build(BuildContext context) => isLoading == false
       ? const LoadingPage()

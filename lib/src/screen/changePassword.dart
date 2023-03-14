@@ -49,7 +49,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
   bool isPasswordError = true;
 
   void setDataUserInfo() {
-    if (_NewPassword != _confirmPassword) {
+    if (_NewPassword != _confirmPassword || _NewPassword == '' || _confirmPassword == '') {
       setState(() {
         isPasswordError = false;
       });
@@ -193,6 +193,11 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                       Container(
                         padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
                         child: TextFormField(
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter OldPassword *';
+                            }
+                          },
                           decoration: const InputDecoration(
                             labelText: 'OldPassword.',
                             labelStyle: TextStyle(
@@ -225,6 +230,11 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                       Container(
                         padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
                         child: TextFormField(
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter NewPassword *';
+                            }
+                          },
                           decoration: const InputDecoration(
                             labelText: 'NewPassword.',
                             labelStyle: TextStyle(
@@ -256,7 +266,12 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                       ),
                       Container(
                         padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
-                        child: TextField(
+                        child: TextFormField(
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter Password *';
+                            }
+                          },
                           decoration: const InputDecoration(
                             labelText: 'Confirm Password.',
                             labelStyle: TextStyle(
@@ -305,7 +320,9 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                                 ),
                               ),
                               onPressed: () {
-                                setDataUserInfo();
+                                if (_formKey.currentState!.validate()) {
+                                  setDataUserInfo();
+                                }
                               },
                               child: const Text(
                                 "Save",

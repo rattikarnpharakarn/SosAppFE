@@ -281,8 +281,13 @@ class _SignupState extends State<Signup> {
                         Container(
                           padding: const EdgeInsets.fromLTRB(15, 15, 15, 0),
                           child: TextFormField(
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Please enter First Name*';
+                              }
+                            },
                             decoration: const InputDecoration(
-                              labelText: 'First Name *',
+                              labelText: 'First Name',
                               labelStyle: TextStyle(
                                   color: Color.fromARGB(255, 93, 93, 93)),
                               // helperText: 'Ex. 0812345678',
@@ -310,8 +315,13 @@ class _SignupState extends State<Signup> {
                         Container(
                           padding: const EdgeInsets.fromLTRB(15, 15, 15, 0),
                           child: TextFormField(
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Please enter Last Name *';
+                              }
+                            },
                             decoration: const InputDecoration(
-                              labelText: 'Last Name *',
+                              labelText: 'Last Name',
                               labelStyle: TextStyle(
                                   color: Color.fromARGB(255, 93, 93, 93)),
                               // helperText: 'Ex. 0812345678',
@@ -368,8 +378,13 @@ class _SignupState extends State<Signup> {
                         Container(
                           padding: const EdgeInsets.fromLTRB(15, 15, 15, 0),
                           child: TextFormField(
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Please enter ID Card *';
+                              }
+                            },
                             decoration: const InputDecoration(
-                              labelText: 'ID Card *',
+                              labelText: 'ID Card',
                               labelStyle: TextStyle(
                                   color: Color.fromARGB(255, 93, 93, 93)),
                               // helperText: 'Ex. 0812345678',
@@ -561,6 +576,11 @@ class _SignupState extends State<Signup> {
                   Container(
                     padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
                     child: TextFormField(
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter House No *';
+                        }
+                      },
                       decoration: const InputDecoration(
                         labelText: 'House No.',
                         labelStyle:
@@ -589,6 +609,11 @@ class _SignupState extends State<Signup> {
                   Container(
                     padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
                     child: TextFormField(
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter Sub-district *';
+                        }
+                      },
                       decoration: const InputDecoration(
                         labelText: 'Sub-district',
                         labelStyle:
@@ -617,6 +642,11 @@ class _SignupState extends State<Signup> {
                   Container(
                     padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
                     child: TextFormField(
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter district *';
+                        }
+                      },
                       decoration: const InputDecoration(
                         labelText: 'District',
                         labelStyle:
@@ -645,6 +675,11 @@ class _SignupState extends State<Signup> {
                   Container(
                     padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
                     child: TextFormField(
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter Province *';
+                        }
+                      },
                       decoration: const InputDecoration(
                         labelText: 'Province',
                         labelStyle:
@@ -673,6 +708,11 @@ class _SignupState extends State<Signup> {
                   Container(
                     padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
                     child: TextFormField(
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter Postal Code *';
+                        }
+                      },
                       decoration: const InputDecoration(
                         labelText: 'Postal Code',
                         labelStyle:
@@ -721,6 +761,11 @@ class _SignupState extends State<Signup> {
                   Container(
                     padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
                     child: TextFormField(
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter Password *';
+                        }
+                      },
                       decoration: const InputDecoration(
                         labelText: 'Password.',
                         labelStyle:
@@ -751,7 +796,12 @@ class _SignupState extends State<Signup> {
                   ),
                   Container(
                     padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
-                    child: TextField(
+                    child: TextFormField(
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter Confirm Password *';
+                        }
+                      },
                       decoration: const InputDecoration(
                         labelText: 'Confirm Password.',
                         labelStyle:
@@ -799,7 +849,9 @@ class _SignupState extends State<Signup> {
                             ),
                           ),
                           onPressed: () {
-                            setDataUserInfo();
+                            if (_formKey.currentState!.validate()) {
+                              setDataUserInfo();
+                            }
                           },
                           child: const Text(
                             "SingUp",

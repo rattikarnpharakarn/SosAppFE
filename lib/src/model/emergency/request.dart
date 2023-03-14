@@ -1,6 +1,6 @@
 class Inform {
   String description;
-  String images;
+  List<String> images;
   String phoneNumberCallBack;
   String latitude;
   String longitude;

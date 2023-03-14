@@ -48,8 +48,9 @@ Future<ReturnResponse> PostInform(Inform req) async {
     var resp = ReturnResponse.fromJson(res);
     return resp;
   } else {
-    // If the server did not return a 201 CREATED response,
-    // then throw an exception.
-    throw Exception('Failed to PostInform.');
+    final res = jsonDecode(response.body);
+
+    var resp = ReturnResponse.fromJson(res);
+    return resp;
   }
 }
