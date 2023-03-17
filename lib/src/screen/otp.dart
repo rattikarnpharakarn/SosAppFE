@@ -94,6 +94,7 @@ class _OTPState extends State<OTP> {
       firstName: '',
       gender: '',
       imageProfile: '',
+      role: 2,
       lastName: '',
       password: '',
       pathImage: '',

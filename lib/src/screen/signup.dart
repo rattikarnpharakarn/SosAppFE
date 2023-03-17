@@ -62,6 +62,7 @@ class _SignupState extends State<Signup> {
           birthday: _dateTime.toString(),
           gender: selectGroupSex.toString(),
           imageProfile: imageProfile,
+          role: user.role,
           pathImage: iDCard,
           textIDCard: _textIDCard,
           address: _address,

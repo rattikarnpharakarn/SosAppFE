@@ -900,7 +900,7 @@ class _SosPage1State extends State<SosPage1> {
                             child: PopupMenuButton<String>(
                               initialValue: selected_camera_or_image,
                               child: Icon(
-                                color: imagepages == ''
+                                color: imagepages == []
                                     ? Colors.red
                                     : Colors.green,
                                 Icons.camera_alt,
@@ -930,35 +930,33 @@ class _SosPage1State extends State<SosPage1> {
                       ),
                     ),
                     Center(
-                      child: imagepages == null
+                      child: imagepages == []
                           ? null
                           : Wrap(
                               children: imagepages.map((imageone) {
-                                return TextButton(
-                                  onPressed: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => DetailScreen(images: imageone),
-                                      ),
-                                    );
-                                  },
-                                  child: Container(
-                                      child: Card(
-                                    child: Container(
-                                      height: 100,
-                                      width: 100,
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(20),
-                                        child: Image.memory(
-                                          base64Decode(imageone),
-                                          width: 150,
-                                          height: 150,
-                                          fit: BoxFit.cover,
+                                return Container(
+                                  padding: const EdgeInsets.all(1.0),
+                                  child: TextButton(
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => DetailScreen(images: imageone),
+                                        ),
+                                      );
+                                    },
+                                        child: Card(
+                                        child: ClipRRect(
+                                          borderRadius: BorderRadius.circular(10),
+                                          child: Image.memory(
+                                            base64Decode(imageone),
+                                            width: 55,
+                                            height: 55,
+                                            fit: BoxFit.cover,
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                  )),
+                                  ),
                                 );
                               }).toList(),
                             ),

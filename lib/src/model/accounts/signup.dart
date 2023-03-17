@@ -8,6 +8,7 @@ class UserInfo {
   String birthday = '';
   String gender = '';
   String imageProfile = '';
+  int role = 2;
   // IDCard
   String textIDCard = '';
   String pathImage = '';
@@ -32,6 +33,7 @@ class UserInfo {
     required this.birthday,
     required this.gender,
     required this.imageProfile,
+    required  this.role,
     // IDCard
     required this.textIDCard,
     required this.pathImage,
@@ -58,6 +60,7 @@ class UserInfo {
       'birthday': birthday,
       'gender': gender,
       'imageProfile': imageProfile,
+      'role': 2,
       'idCard': {
         'textIDCard': textIDCard,
         'pathImage': pathImage,
