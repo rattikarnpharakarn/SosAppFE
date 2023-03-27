@@ -143,7 +143,7 @@ class _UpDataProfilePageState extends State<UpDataProfilePage> {
   }
 
   Future<ReturnResponse> EditUserInfo() async {
-    String url = 'http://10.0.2.2:80/SosApp/accounts/user/${_id}';
+    String url = 'http://34.124.232.197:80/SosApp/accounts/user/${_id}';
     final response = await http.put(
       Uri.parse(url),
       headers: <String, String>{

@@ -73,7 +73,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
   Future<ReturnResponse> changePasswordInfo() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String id = prefs.getString('id') ?? '';
-    String url = 'http://10.0.2.2:80/SosApp/accounts/user/changePassword/${id}';
+    String url = 'http://34.124.232.197:80/SosApp/accounts/user/changePassword/${id}';
     final response = await http.put(
       Uri.parse(url),
       headers: <String, String>{

@@ -11,7 +11,7 @@ Future<GetInformListModel> GetInformList() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String? stringValue = prefs.getString('token') ?? '';
   final response = await http.get(
-    Uri.parse('http://10.0.2.2:81/SosApp/emergency/user/'),
+    Uri.parse('http://34.124.232.197:81/SosApp/emergency/user/'),
     headers: <String, String>{
       'Authorization': 'Bearer ' + stringValue,
     },
@@ -34,7 +34,7 @@ Future<ReturnResponse> PostInform(Inform req) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String? stringValue = prefs.getString('token') ?? '';
   final response = await http.post(
-    Uri.parse('http://10.0.2.2:81/SosApp/emergency/user/'),
+    Uri.parse('http://34.124.232.197:81/SosApp/emergency/user/'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
       'Authorization': 'Bearer ' + stringValue,
