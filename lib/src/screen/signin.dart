@@ -71,7 +71,7 @@ class _SigninState extends State<Signin> {
   // static const String _baseUrl = "http://sos-app.thddns.net:7330/SosApp/signIn";
   login(String username, String password) async {
     final response = await http.post(
-      Uri.parse('http://34.124.232.197:80/SosApp/accounts/signIn'),
+      Uri.parse('http://10.0.2.2:80/SosApp/accounts/signIn'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },

@@ -88,7 +88,7 @@ class _SignupState extends State<Signup> {
 
   Future<ReturnResponse> createUserInfo() async {
     final response = await http.post(
-      Uri.parse('http://34.124.232.197:80/SosApp/accounts/createUser'),
+      Uri.parse('http://10.0.2.2:80/SosApp/accounts/createUser'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },

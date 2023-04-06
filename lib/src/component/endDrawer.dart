@@ -116,7 +116,7 @@ class _EndDrawerState extends State<EndDrawer> {
   Future<ReturnResponse> EditUserInfo() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String id = prefs.getString('id') ?? '';
-    String url = 'http://34.124.232.197:80/SosApp/accounts/user/${id}';
+    String url = 'http://10.0.2.2:80/SosApp/accounts/user/${id}';
     final response = await http.put(
       Uri.parse(url),
       headers: <String, String>{

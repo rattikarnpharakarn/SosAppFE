@@ -7,7 +7,7 @@ Future<UserInfo> GetUserProfile() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String? stringValue = prefs.getString('token') ?? '' ;
   final response = await http.get(
-    Uri.parse('http://34.124.232.197:80/SosApp/accounts/user/'),
+    Uri.parse('http://10.0.2.2:80/SosApp/accounts/user/'),
     headers: <String, String>{
       'Authorization': 'Bearer ' + stringValue,
     },

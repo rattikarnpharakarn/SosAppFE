@@ -50,6 +50,8 @@ dependencies:
   # getGoogleMap
   geolocator: ^8.2.1
   url_launcher: ^6.1.10
+  web_socket_channel: ^2.3.0
+  socket_io_client: ^2.0.1
 
 dev_dependencies:
   flutter_test:

@@ -173,6 +173,7 @@ class _HistoryPageState extends State<HistoryPage> {
             padding: const EdgeInsets.all(10),
             child: Column(
               children: [
+
                 for (GetInfrom m1 in getInformList) ...[
                   Card(
                     shape: RoundedRectangleBorder(

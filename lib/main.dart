@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:sos/src/model/accounts/signup.dart';
+import 'package:sos/src/model/accounts/user.dart';
+import 'package:sos/src/provider/accounts/userService.dart';
+import 'package:sos/src/testPage/chattest.dart';
 import 'package:sos/src/testPage/test.dart';
 import 'package:sos/src/sharedInfo/user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -52,10 +56,15 @@ class _MyAppState extends State<MyApp> {
   }
 
   String _token = '';
+  late String id;
 
   _getImageProfile() async {
     var token = await getUserTokenSf();
+
+    // var data = await GetUserProfile();
+
     setState(() {
+      // id = data.id;
       _token = token;
       isLoading = true;
     });
@@ -72,9 +81,12 @@ class _MyAppState extends State<MyApp> {
       // home: SignupPhoneNumber(),
       // home: SosPage1(),
       // home: UpDataProfilePage(),
-      // home: ChatPage(),
+      // home: ChatTestPage(),
+      home: ChatPage1(),
+      // home: ChatPageForTest(),
       // home: TestPage(),
-      home: _token == '' ? Signin() : Home(), // หน้าแรกของแอบ
+      // home: id == '' ? Signin() : Home(), // หน้าแรกของแอบ
+      // home: _token == '' ? Signin() : Home(), // หน้าแรกของแอบ
     );
   }
 
@@ -87,9 +99,6 @@ class _MyAppState extends State<MyApp> {
   }
 
   @override
-  Widget build(BuildContext context) => isLoading == false
-      ? mainLoadingPage()
-      : mainSosApp();
+  Widget build(BuildContext context) =>
+      isLoading == false ? mainLoadingPage() : mainSosApp();
 }
-
-

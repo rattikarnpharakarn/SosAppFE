@@ -443,7 +443,7 @@ class _SosPage1State extends State<SosPage1> {
         // pickedFile = await imgpicker.pickImage(source: ImageSource.gallery);
         List<XFile>? pickedfiles = await imgpicker.pickMultiImage();
         if (pickedfiles != null) {
-          pickedfiles!.map((imageone) async {
+          pickedfiles.map((imageone) async {
             String imagepath1 = '';
             imagepath1 = imageone.path;
             File imagefile = File(imagepath1);
