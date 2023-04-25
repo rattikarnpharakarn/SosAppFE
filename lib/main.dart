@@ -74,16 +74,13 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       title: 'SosApp',
       theme: ThemeData(primarySwatch: Colors.red),
-      // home: Home(),
       // home: const SosPage(),
       // home: HotlinePage(),
       // home: Signup(),
       // home: SignupPhoneNumber(),
       // home: SosPage1(),
       // home: UpDataProfilePage(),
-      // home: ChatTestPage(),
-      home: ChatPage1(),
-      // home: ChatPageForTest(),
+      home: ChatPage(),
       // home: TestPage(),
       // home: id == '' ? Signin() : Home(), // หน้าแรกของแอบ
       // home: _token == '' ? Signin() : Home(), // หน้าแรกของแอบ

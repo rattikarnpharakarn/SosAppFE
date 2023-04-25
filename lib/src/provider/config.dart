@@ -11,7 +11,7 @@ String urlMessenger = 'http://10.0.2.2:83/SosApp/messenger/';
 
 
 
-String wsMessenger = 'ws://10.0.2.2:83/SosApp/messenger/';
+String wsMessenger = 'http://10.0.2.2:3000';
 
 
 
