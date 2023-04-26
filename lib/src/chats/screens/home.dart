@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:bottom_bar_matu/utils/app_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
@@ -9,7 +12,10 @@ import 'package:sos/src/component/endDrawer.dart';
 import 'package:sos/src/component/image_navBer.dart';
 import 'package:sos/src/model/accounts/user.dart';
 import 'package:sos/src/model/messenger/response.dart';
+import 'package:sos/src/provider/accounts/userService.dart';
+import 'package:sos/src/provider/messenger/messengerService.dart';
 import 'package:sos/src/screen/LoadingPage.dart';
+import 'package:http/http.dart' as http;
 
 class ChatsPage extends StatefulWidget {
   final String username;
@@ -35,22 +41,84 @@ class _HomeScreenState extends State<ChatsPage> {
   final TextEditingController _messageInputController = TextEditingController();
   bool isLoading = false;
 
-  _sendMessage() {
+  _sendMessage() async {
     _socket.emit(widget.getChat.roomChatID, {
       'message': _messageInputController.text.trim(),
       'sender': widget.userInfo.firstName + " " + widget.userInfo.lastName
     });
+    PostMessage(widget.getChat.roomChatID, _messageInputController.text.trim(), "");
     _messageInputController.clear();
+
   }
 
   _connectSocket() {
     _socket.connect();
-    _socket.on(widget.getChat.roomChatID,
-      (data) {
-        Provider.of<ChatsProvider>(context, listen: false).addNewMessage(
-            Message.fromJson(data));
-      }
-    );
+    _socket.on(widget.getChat.roomChatID, (data) {
+      Provider.of<ChatsProvider>(context, listen: false)
+          .addNewMessage(Message.fromJson(data));
+    });
+    _getGetMessageById(widget.getChat.roomChatID);
+
+  }
+
+  var newFormat = DateFormat("dd-MM-yyyy HH:mm น.");
+  List<GetMessageList> geMessageList = [];
+
+  _getGetMessageById(roomChatId) async {
+    await GetMessageById(roomChatId).then(
+      (value) {
+        print(value);
+        if (value.code == "0") {
+          setState(
+            () {
+              Future.forEach(value.list, (data) async {
+                //createdAt
+                DateTime sentAt = DateTime.parse(data.updatedAt);
+                final String createdAt = newFormat.format(sentAt);
+
+                //
+                //updatedAt
+                DateTime dt2 = DateTime.parse(data.updatedAt);
+                final String updatedAt = newFormat.format(dt2);
+
+                GetMessageList getChat = GetMessageList(
+                  id: data.id,
+                  roomChatID: data.roomChatID,
+                  message: data.message,
+                  senderUserId: data.senderUserId,
+                  createdAt: createdAt,
+                  updatedAt: updatedAt,
+                );
+
+                UserInfo userByid = await GetUserProfileById(data.senderUserId);
+                Message _messages = Message(
+                    message: getChat.message,
+                    sentAt: sentAt,
+                    senderUsername:
+                        userByid.firstName + " " + userByid.lastName);
+                Provider.of<ChatsProvider>(context, listen: false)
+                    .addNewMessage(_messages);
+
+                // geMessageList.add(getChat);
+              });
+            },
+          );
+        }
+      },
+    ).onError((error, stackTrace) {
+      print("error _messages");
+      print(error);
+      print("error _messages");
+      // todo ต้องเพิ่ม popup
+      setState(() {
+        isLoading = true;
+      });
+    });
+
+
+    setState(() {
+      isLoading = true;
+    });
   }
 
   @override
@@ -58,13 +126,11 @@ class _HomeScreenState extends State<ChatsPage> {
     super.initState();
     _socket = IO.io(
       'http://10.0.2.2:3000/' + widget.getChat.roomChatID,
-      IO.OptionBuilder().setTransports(['websocket'])
-          .setQuery({
+      IO.OptionBuilder().setTransports(['websocket']).setQuery({
         'username': widget.userInfo.firstName + " " + widget.userInfo.lastName,
       }).build(),
     );
     _connectSocket();
-    isLoading = true;
   }
 
   int _pageNumber = 4;
@@ -172,7 +238,7 @@ class _HomeScreenState extends State<ChatsPage> {
                                   Container(
                                     padding: EdgeInsets.all(1.0),
                                     child: Text(
-                                      DateFormat('hh:mm a')
+                                      DateFormat('dd-MM-yyyy HH:mm น.')
                                           .format(message.sentAt),
                                       style: TextStyle(fontSize: 10),
                                     ),

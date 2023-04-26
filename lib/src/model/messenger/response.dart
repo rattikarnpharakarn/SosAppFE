@@ -1,11 +1,11 @@
 class ReturnResponse {
-  String message = '';
-  String code = '';
+  final String message;
+  final String code;
   final data;
 
   ReturnResponse({
-    required this.message,
     required this.code,
+    required this.message,
     this.data,
   });
 
@@ -89,9 +89,9 @@ class GetChat {
 
 
 class GetMessageModel {
-  String message = '';
-  String code = '';
-  int total;
+  final String message;
+  final String code;
+  final int total;
   final List<GetMessageList> list;
 
   GetMessageModel({
@@ -125,10 +125,10 @@ class GetMessageModel {
 }
 
 class GetMessageList {
-  final String id;
-  final String roomChatID;
+  final int id;
+  final int roomChatID;
   final String message;
-  final String senderUserId;
+  final int senderUserId;
   final String createdAt;
   final String updatedAt;
 

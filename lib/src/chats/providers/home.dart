@@ -7,8 +7,6 @@ class ChatsProvider extends ChangeNotifier {
   List<Message> get messages => _messages;
 
   addNewMessage(Message message) {
-    print(message);
-
     _messages.add(message);
     notifyListeners();
   }
