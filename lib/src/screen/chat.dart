@@ -240,12 +240,12 @@ class _ChatPageState extends State<ChatPage> {
                               style: const TextStyle(color: Colors.black),
                               onChanged: (value) => setState(
                                 () {
-                                  if (value.length >= 3) {}
+                                  if (value.length >= 3) {
+                                    // todo ทำการ ดึก API จาก Account มาแสดง
+                                  }
                                 },
                               ),
                             ),
-
-                            // todo ทำการ ดึก API จาก Account มาแสดง
                           ],
                         ),
                       ),

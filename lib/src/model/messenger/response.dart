@@ -86,3 +86,71 @@ class GetChat {
     );
   }
 }
+
+
+class GetMessageModel {
+  String message = '';
+  String code = '';
+  int total;
+  final List<GetMessageList> list;
+
+  GetMessageModel({
+    required this.code,
+    required this.message,
+    required this.total,
+    required this.list,
+  });
+
+  factory GetMessageModel.fromJson(Map<String, dynamic> json) {
+    List<GetMessageList>? list = [];
+    for (dynamic json in json['data']) {
+      GetMessageList arr = GetMessageList(
+        id: json['id'],
+        roomChatID: json['roomChatID'],
+        message: json['message'],
+        senderUserId: json['senderUserId'],
+        createdAt: json['createdAt'],
+        updatedAt: json['updatedAt'],
+      );
+      list.add(arr);
+    }
+
+    return GetMessageModel(
+      code: json['code'],
+      message: json['message'],
+      total: json['total'],
+      list: list,
+    );
+  }
+}
+
+class GetMessageList {
+  final String id;
+  final String roomChatID;
+  final String message;
+  final String senderUserId;
+  final String createdAt;
+  final String updatedAt;
+
+  GetMessageList({
+    required this.id,
+    required this.roomChatID,
+    required this.message,
+    required this.senderUserId,
+    required this.createdAt,
+    required this.updatedAt,
+  });
+
+  factory GetMessageList.fromJson(Map<String, dynamic> json) {
+    return GetMessageList(
+      id: json['id'],
+      roomChatID: json['roomChatID'],
+      message: json['message'],
+      senderUserId: json['senderUserId'],
+      createdAt: json['createdAt'],
+      updatedAt: json['updatedAt'],
+    );
+  }
+}
+
+

@@ -23,3 +23,41 @@ Future<GetChatListModel> GetChatList() async {
     throw Exception('Failed to GetChatData.');
   }
 }
+
+Future<GetMessageModel> GetMessageById(id) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String? stringValue = prefs.getString('token') ?? '';
+  final response = await http.get(
+    Uri.parse('http://10.0.2.2:83/SosApp/messenger/user/chat/message/' + id),
+    headers: <String, String>{
+      'Authorization': 'Bearer ' + stringValue,
+    },
+  );
+
+  if (response.statusCode == 200) {
+    final res = jsonDecode(response.body);
+    var resp = GetMessageModel.fromJson(res);
+    return resp;
+  } else {
+    throw Exception('Failed to GetChatData.');
+  }
+}
+
+Future<GetMessageModel> PostMessage(id) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String? stringValue = prefs.getString('token') ?? '';
+  final response = await http.get(
+    Uri.parse('http://10.0.2.2:83/SosApp/messenger/user/message' + id),
+    headers: <String, String>{
+      'Authorization': 'Bearer ' + stringValue,
+    },
+  );
+
+  if (response.statusCode == 200) {
+    final res = jsonDecode(response.body);
+    var resp = GetMessageModel.fromJson(res);
+    return resp;
+  } else {
+    throw Exception('Failed to GetChatData.');
+  }
+}
