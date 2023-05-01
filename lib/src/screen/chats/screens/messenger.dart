@@ -5,8 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:provider/provider.dart';
-import 'package:sos/src/chats/model/message.dart';
-import 'package:sos/src/chats/providers/home.dart';
 import 'package:sos/src/component/bottom_bar.dart';
 import 'package:sos/src/component/endDrawer.dart';
 import 'package:sos/src/component/image_navBer.dart';
@@ -16,6 +14,9 @@ import 'package:sos/src/provider/accounts/userService.dart';
 import 'package:sos/src/provider/messenger/messengerService.dart';
 import 'package:sos/src/screen/LoadingPage.dart';
 import 'package:http/http.dart' as http;
+import 'package:sos/src/screen/chats/model/message.dart';
+import 'package:sos/src/screen/chats/providers/messenger.dart';
+import 'package:sos/src/screen/chats/screens/members.dart';
 
 class ChatsPage extends StatefulWidget {
   final String username;
@@ -46,9 +47,9 @@ class _HomeScreenState extends State<ChatsPage> {
       'message': _messageInputController.text.trim(),
       'sender': widget.userInfo.firstName + " " + widget.userInfo.lastName
     });
-    PostMessage(widget.getChat.roomChatID, _messageInputController.text.trim(), "");
+    PostMessage(
+        widget.getChat.roomChatID, _messageInputController.text.trim(), "");
     _messageInputController.clear();
-
   }
 
   _connectSocket() {
@@ -58,7 +59,6 @@ class _HomeScreenState extends State<ChatsPage> {
           .addNewMessage(Message.fromJson(data));
     });
     _getGetMessageById(widget.getChat.roomChatID);
-
   }
 
   var newFormat = DateFormat("dd-MM-yyyy HH:mm น.");
@@ -67,7 +67,6 @@ class _HomeScreenState extends State<ChatsPage> {
   _getGetMessageById(roomChatId) async {
     await GetMessageById(roomChatId).then(
       (value) {
-        print(value);
         if (value.code == "0") {
           setState(
             () {
@@ -112,7 +111,6 @@ class _HomeScreenState extends State<ChatsPage> {
       });
     });
 
-
     setState(() {
       isLoading = true;
     });
@@ -151,15 +149,35 @@ class _HomeScreenState extends State<ChatsPage> {
                   Container(
                     alignment: Alignment.center,
                     padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                    child:  Text(
-                      widget.getChat.roomName,
-                      overflow: TextOverflow.clip,
-                      style: const TextStyle(
-                        color: Color.fromARGB(255, 255, 255, 255),
-                        fontSize: 22,
-                        decorationStyle: TextDecorationStyle.solid,
+                    child: TextButton(
+                      child: Text(
+                        widget.getChat.roomName,
+                        style: const TextStyle(
+                          color: Color.fromARGB(255, 255, 255, 255),
+                          fontSize: 16,
+                          decorationStyle: TextDecorationStyle.solid,
+                        ),
                       ),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => MembersPage(
+                              getChat: widget.getChat,
+                            ),
+                          ),
+                        );
+                      },
                     ),
+                    // Text(
+                    //   widget.getChat.roomName,
+                    //   overflow: TextOverflow.clip,
+                    //   style: const TextStyle(
+                    //     color: Color.fromARGB(255, 255, 255, 255),
+                    //     fontSize: 22,
+                    //     decorationStyle: TextDecorationStyle.solid,
+                    //   ),
+                    // ),
                   ),
                   const Spacer(),
                   Container(

@@ -61,6 +61,7 @@ class GetChat {
   final String ownerId;
   final String createdAt;
   final String updatedAt;
+
   // final String deletedAT;
   final String deleteBy;
 
@@ -86,7 +87,6 @@ class GetChat {
     );
   }
 }
-
 
 class GetMessageModel {
   final String message;
@@ -153,4 +153,75 @@ class GetMessageList {
   }
 }
 
+class GetMemberRoomChatModel {
+  final String message;
+  final String code;
+  final String roomChatID;
+  final String roomName;
+  final String ownerId;
+  final List<GetMemberRoomChatList> memberRoomChat;
 
+  GetMemberRoomChatModel({
+    required this.code,
+    required this.message,
+    required this.roomChatID,
+    required this.roomName,
+    required this.ownerId,
+    required this.memberRoomChat,
+  });
+
+  factory GetMemberRoomChatModel.fromJson(Map<String, dynamic> json) {
+    List<GetMemberRoomChatList>? list = [];
+    for (dynamic json in json['data']['memberRoomChat']) {
+      GetMemberRoomChatList arr = GetMemberRoomChatList(
+        userId: json['userId'],
+      );
+      list.add(arr);
+    }
+
+    return GetMemberRoomChatModel(
+      code: json['code'],
+      message: json['message'],
+      roomChatID: json['data']['roomChatID'],
+      roomName: json['data']['roomName'],
+      ownerId: json['data']['ownerId'],
+      memberRoomChat: list,
+    );
+  }
+}
+
+class GetMemberRoomChatList {
+  final int userId;
+
+  GetMemberRoomChatList({
+    required this.userId,
+  });
+
+  factory GetMemberRoomChatList.fromJson(Map<String, dynamic> json) {
+    return GetMemberRoomChatList(
+      userId: json['userId'],
+    );
+  }
+}
+
+
+class GetMemberRoomChatShow {
+  final int userId;
+  final String firstName;
+  final String lastName;
+
+
+  GetMemberRoomChatShow({
+    required this.userId,
+    required this.firstName,
+    required this.lastName,
+  });
+
+  factory GetMemberRoomChatShow.fromJson(Map<String, dynamic> json) {
+    return GetMemberRoomChatShow(
+      userId: json['userId'],
+      firstName: json['firstName'],
+      lastName: json['lastName'],
+    );
+  }
+}

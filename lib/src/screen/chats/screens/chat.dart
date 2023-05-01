@@ -1,23 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:sos/src/chats/providers/home.dart';
-import 'package:sos/src/chats/screens/home.dart';
 import 'package:sos/src/component/endDrawer.dart';
 import 'package:sos/src/component/bottom_bar.dart';
 import 'package:sos/src/component/imageProfile.dart';
 import 'package:sos/src/component/image_navBer.dart';
 import 'package:sos/src/model/accounts/user.dart';
+import 'package:sos/src/provider/accounts/userService.dart';
 import 'package:sos/src/provider/config.dart';
 import 'package:sos/src/screen/LoadingPage.dart';
 import 'package:intl/intl.dart';
 
 // import 'package:web_socket_channel/io.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
-import 'package:sos/src/screen/chats/addRoomChat.dart';
+import 'package:sos/src/screen/chats/providers/messenger.dart';
+import 'package:sos/src/screen/chats/screens/addRoomChat.dart';
 
-import '../../provider/accounts/userService.dart';
 import 'package:sos/src/model/messenger/response.dart';
 import 'package:sos/src/provider/messenger/messengerService.dart';
+import 'package:sos/src/screen/chats/screens/messenger.dart';
+
 
 class ChatPage extends StatefulWidget {
   const ChatPage({Key? key}) : super(key: key);

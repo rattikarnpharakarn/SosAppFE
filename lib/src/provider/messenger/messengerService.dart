@@ -44,6 +44,25 @@ Future<GetMessageModel> GetMessageById(id) async {
   }
 }
 
+Future<GetMemberRoomChatModel> GetMembersRoomChat(roomChatId) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String? stringValue = prefs.getString('token') ?? '';
+  final response = await http.get(
+    Uri.parse('http://10.0.2.2:83/SosApp/messenger/user/getMembersRoomChat/' + roomChatId),
+    headers: <String, String>{
+      'Authorization': 'Bearer ' + stringValue,
+    },
+  );
+
+  if (response.statusCode == 200) {
+    final res = jsonDecode(response.body);
+    var resp = GetMemberRoomChatModel.fromJson(res);
+    return resp;
+  } else {
+    throw Exception('Failed to GetChatData.');
+  }
+}
+
 Future<ReturnResponse> PostMessage(roomChatID, message, image) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String? stringValue = prefs.getString('token') ?? '';
@@ -82,6 +101,32 @@ Future<ReturnResponse> CreateRoomChat(roomName, userid) async {
     body: jsonEncode(<String, dynamic>{
       'roomName': roomName,
       'groupChat': usersId,
+    }),
+  );
+
+  if (response.statusCode == 200) {
+    final res = jsonDecode(response.body);
+    var resp = ReturnResponse.fromJson(res);
+    return resp;
+  } else {
+    throw Exception(response.statusCode);
+  }
+}
+
+
+Future<ReturnResponse> JoinRoomChat(roomChatIdStr, userid) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String? stringValue = prefs.getString('token') ?? '';
+  var roomChatId = int.parse(roomChatIdStr);
+  final response = await http.post(
+    Uri.parse('http://10.0.2.2:83/SosApp/messenger/user/joinChat'),
+    headers: <String, String>{
+      'Authorization': 'Bearer ' + stringValue,
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: jsonEncode(<String, dynamic>{
+      'roomChatID': roomChatId,
+      'userid' : userid,
     }),
   );
 

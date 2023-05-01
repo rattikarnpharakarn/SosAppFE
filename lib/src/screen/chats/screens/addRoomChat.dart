@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:sos/src/chats/providers/home.dart';
-import 'package:sos/src/chats/screens/home.dart';
 import 'package:sos/src/component/endDrawer.dart';
 import 'package:sos/src/component/bottom_bar.dart';
 import 'package:sos/src/component/imageProfile.dart';
@@ -13,9 +11,9 @@ import 'package:intl/intl.dart';
 
 // import 'package:web_socket_channel/io.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
-import 'package:sos/src/screen/chats/chat.dart';
+import 'package:sos/src/screen/chats/screens/chat.dart';
 
-import '../../provider/accounts/userService.dart';
+import '../../../provider/accounts/userService.dart';
 import 'package:sos/src/model/messenger/response.dart';
 import 'package:sos/src/provider/messenger/messengerService.dart';
 
@@ -204,8 +202,8 @@ class _AddRoomChatPageState extends State<AddRoomChatPage> {
                                     if (_nameRoomInputController.text
                                         .trim()
                                         .isNotEmpty) {
-                                      _searchUser(
-                                          _nameRoomInputController.text.trim());
+                                      /*_searchUser(
+                                          _nameRoomInputController.text.trim());*/
                                       await _createRoomChat();
                                       _nameRoomInputController.clear();
                                       // ignore: use_build_context_synchronously
@@ -249,13 +247,6 @@ class _AddRoomChatPageState extends State<AddRoomChatPage> {
                               ),
                               keyboardType: TextInputType.text,
                               style: const TextStyle(color: Colors.black),
-                              // onChanged: (value) => setState(
-                              //   () {
-                              //     if (value.length >= 3) {
-                              //
-                              //     }
-                              //   },
-                              // ),
                             ),
                           ),
                           Container(
@@ -316,75 +307,73 @@ class _AddRoomChatPageState extends State<AddRoomChatPage> {
                 Container(
                   height: 420,
                   padding: const EdgeInsets.all(6),
-                  child: Expanded(
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      // physics: ClampingScrollPhysics(),
-                      padding: const EdgeInsets.all(2),
-                      itemCount: _getUserList.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return Card(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(0),
-                            side: BorderSide(
-                              color: Colors.grey.shade300,
-                            ),
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    // physics: ClampingScrollPhysics(),
+                    padding: const EdgeInsets.all(2),
+                    itemCount: _getUserList.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return Card(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(0),
+                          side: BorderSide(
+                            color: Colors.grey.shade300,
                           ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(5.0),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                CheckboxListTile(
-                                  onChanged: (value) {
-                                    setState(
-                                      () {
-                                        if (_isChecked[index] == true) {
-                                          var id =
-                                              int.parse(_getUserList[index].id);
-                                          _userIdList.removeWhere((val) {
-                                            return val == id;
-                                          });
-                                          _isChecked[index] = false;
-                                        } else {
-                                          var id =
-                                              int.parse(_getUserList[index].id);
-                                          _userIdList.add(id);
-                                          _isChecked[index] = true;
-                                        }
-                                      },
-                                    );
-                                  },
-                                  value: _isChecked[index],
-                                  title: Row(
-                                    children: [
-                                      Container(
-                                        padding: const EdgeInsets.fromLTRB(
-                                            10, 0, 10, 0),
-                                        child: Image_Profile(
-                                          height: 50,
-                                          width: 50,
-                                          userId: _getUserList[index].id,
-                                        ),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(5.0),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              CheckboxListTile(
+                                onChanged: (value) {
+                                  setState(
+                                    () {
+                                      if (_isChecked[index] == true) {
+                                        var id =
+                                            int.parse(_getUserList[index].id);
+                                        _userIdList.removeWhere((val) {
+                                          return val == id;
+                                        });
+                                        _isChecked[index] = false;
+                                      } else {
+                                        var id =
+                                            int.parse(_getUserList[index].id);
+                                        _userIdList.add(id);
+                                        _isChecked[index] = true;
+                                      }
+                                    },
+                                  );
+                                },
+                                value: _isChecked[index],
+                                title: Row(
+                                  children: [
+                                    Container(
+                                      padding: const EdgeInsets.fromLTRB(
+                                          10, 0, 10, 0),
+                                      child: Image_Profile(
+                                        height: 50,
+                                        width: 50,
+                                        userId: _getUserList[index].id,
                                       ),
-                                      Container(
-                                        padding: const EdgeInsets.fromLTRB(
-                                            0, 0, 10, 0),
-                                        child: Text(
-                                          "${_getUserList[index].firstName} ${_getUserList[index].lastName}",
-                                          style: const TextStyle(fontSize: 16),
-                                        ),
+                                    ),
+                                    Container(
+                                      padding: const EdgeInsets.fromLTRB(
+                                          0, 0, 10, 0),
+                                      child: Text(
+                                        "${_getUserList[index].firstName} ${_getUserList[index].lastName}",
+                                        style: const TextStyle(fontSize: 16),
                                       ),
-                                    ],
-                                  ),
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
-                        );
-                      },
-                    ),
+                        ),
+                      );
+                    },
                   ),
                 ),
               ],

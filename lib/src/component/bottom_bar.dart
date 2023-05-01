@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:sos/src/screen/chats/screens/chat.dart';
 import 'package:sos/src/screen/history.dart';
 import 'package:sos/src/screen/home.dart';
 import 'package:sos/src/screen/hotline.dart';
 import 'package:sos/src/screen/sos.dart';
-import 'package:sos/src/screen/chats/chat.dart';
 
 class Bottombar extends StatefulWidget {
   Bottombar({

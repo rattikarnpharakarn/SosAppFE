@@ -1,23 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:sos/src/model/accounts/signup.dart';
-import 'package:sos/src/model/accounts/user.dart';
-import 'package:sos/src/provider/accounts/userService.dart';
-import 'package:sos/src/testPage/chattest.dart';
-import 'package:sos/src/testPage/test.dart';
 import 'package:sos/src/sharedInfo/user.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
-import 'package:sos/src/screen/chats/chat.dart';
-import 'package:sos/src/screen/home.dart';
-import 'package:sos/src/screen/hotline.dart';
-import 'package:sos/src/screen/signin.dart';
-import 'package:sos/src/screen/signup.dart';
-import 'package:sos/src/screen/sos.dart';
-import 'package:sos/src/screen/updateProfile.dart';
-
 import 'src/screen/LoadingPage.dart';
-import 'src/screen/signupPhoneNumber.dart';
+import 'src/screen/chats/screens/chat.dart';
 
 final FlutterLocalNotificationsPlugin ShowflutterLocalNoificationPlugin =
     FlutterLocalNotificationsPlugin();
