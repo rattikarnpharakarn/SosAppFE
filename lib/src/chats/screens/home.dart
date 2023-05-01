@@ -106,9 +106,6 @@ class _HomeScreenState extends State<ChatsPage> {
         }
       },
     ).onError((error, stackTrace) {
-      print("error _messages");
-      print(error);
-      print("error _messages");
       // todo ต้องเพิ่ม popup
       setState(() {
         isLoading = true;
@@ -153,9 +150,10 @@ class _HomeScreenState extends State<ChatsPage> {
                 children: [
                   Container(
                     alignment: Alignment.center,
-                    padding: const EdgeInsets.fromLTRB(0, 10, 20, 10),
-                    child: Text(
+                    padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                    child:  Text(
                       widget.getChat.roomName,
+                      overflow: TextOverflow.clip,
                       style: const TextStyle(
                         color: Color.fromARGB(255, 255, 255, 255),
                         fontSize: 22,

@@ -92,6 +92,61 @@ Future<UserInfo> GetUserProfileById(userId) async {
   } else {
     // If the server did not return a 201 CREATED response,
     // then throw an exception.
+
+    final dataUser = jsonDecode(response.body);
+
+    String msg = "Code " +response.statusCode.toString() + "\n response : " + dataUser.toString();
+
+    throw Exception(msg);
+  }
+}
+
+
+
+Future<UserImage> GetUserImageById(userId) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String? stringValue = prefs.getString('token') ?? '' ;
+  final response = await http.get(
+    Uri.parse('http://10.0.2.2:80/SosApp/accounts/user/image/'+userId.toString()),
+    headers: <String, String>{
+      'Authorization': 'Bearer ' + stringValue,
+    },
+  );
+
+  if (response.statusCode == 200) {
+    final dataUser = jsonDecode(response.body);
+    final data = dataUser['data'];
+
+    UserImage userInfoRes = UserImage(
+      id: data['id'],
+      imageProfile: data['imageProfile'],
+    );
+    return userInfoRes;
+  } else {
+    // If the server did not return a 201 CREATED response,
+    // then throw an exception.
     throw Exception('Failed to GetUserProfile.');
+  }
+}
+
+
+Future<GetUserListModel> GetSearchUser(value) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String? stringValue = prefs.getString('token') ?? '' ;
+  final response = await http.get(
+    Uri.parse('http://10.0.2.2:80/SosApp/accounts/user/searchUser/' + value),
+    headers: <String, String>{
+      'Authorization': 'Bearer ' + stringValue,
+    },
+  );
+
+  if (response.statusCode == 200) {
+    final res = jsonDecode(response.body);
+    var resp = GetUserListModel.fromJson(res);
+    return resp;
+  } else {
+    final res = jsonDecode(response.body);
+    var resp = GetUserListModel.fromJson(res);
+    throw Exception(resp);
   }
 }

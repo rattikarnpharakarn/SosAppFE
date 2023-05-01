@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:sos/src/model/messenger/response.dart';
+import 'package:sos/src/provider/config.dart';
 
 Future<GetChatListModel> GetChatList() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -43,7 +44,7 @@ Future<GetMessageModel> GetMessageById(id) async {
   }
 }
 
-Future<ReturnResponse> PostMessage(roomChatID,message,image) async {
+Future<ReturnResponse> PostMessage(roomChatID, message, image) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String? stringValue = prefs.getString('token') ?? '';
   final response = await http.post(
@@ -59,6 +60,30 @@ Future<ReturnResponse> PostMessage(roomChatID,message,image) async {
     }),
   );
 
+  if (response.statusCode == 200) {
+    final res = jsonDecode(response.body);
+    var resp = ReturnResponse.fromJson(res);
+    return resp;
+  } else {
+    throw Exception(response.statusCode);
+  }
+}
+
+Future<ReturnResponse> CreateRoomChat(roomName, userid) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String? stringValue = prefs.getString('token') ?? '';
+  Map<String, dynamic> usersId = {"userID": userid};
+  final response = await http.post(
+    Uri.parse('http://10.0.2.2:83/SosApp/messenger/user/createRoomChat'),
+    headers: <String, String>{
+      'Authorization': 'Bearer ' + stringValue,
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: jsonEncode(<String, dynamic>{
+      'roomName': roomName,
+      'groupChat': usersId,
+    }),
+  );
 
   if (response.statusCode == 200) {
     final res = jsonDecode(response.body);

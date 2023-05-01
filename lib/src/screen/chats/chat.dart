@@ -4,6 +4,7 @@ import 'package:sos/src/chats/providers/home.dart';
 import 'package:sos/src/chats/screens/home.dart';
 import 'package:sos/src/component/endDrawer.dart';
 import 'package:sos/src/component/bottom_bar.dart';
+import 'package:sos/src/component/imageProfile.dart';
 import 'package:sos/src/component/image_navBer.dart';
 import 'package:sos/src/model/accounts/user.dart';
 import 'package:sos/src/provider/config.dart';
@@ -12,8 +13,9 @@ import 'package:intl/intl.dart';
 
 // import 'package:web_socket_channel/io.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
+import 'package:sos/src/screen/chats/addRoomChat.dart';
 
-import '../provider/accounts/userService.dart';
+import '../../provider/accounts/userService.dart';
 import 'package:sos/src/model/messenger/response.dart';
 import 'package:sos/src/provider/messenger/messengerService.dart';
 
@@ -26,6 +28,11 @@ class ChatPage extends StatefulWidget {
 
 class _ChatPageState extends State<ChatPage> {
   final GlobalKey<ScaffoldState> _key = GlobalKey();
+  final TextEditingController _valueSearchUserInputController =
+      TextEditingController();
+  final TextEditingController _nameRoomInputController =
+      TextEditingController();
+
   bool isLoading = false;
 
   @override
@@ -35,10 +42,10 @@ class _ChatPageState extends State<ChatPage> {
     _getChatList();
   }
 
-
   // getChat
   List<GetChat> getChatList = [];
   var newFormat = DateFormat("dd-MM-yyyy HH:mm น.");
+
   _getChatList() async {
     await GetChatList().then(
       (value) {
@@ -54,12 +61,6 @@ class _ChatPageState extends State<ChatPage> {
                 DateTime dt2 = DateTime.parse(data.updatedAt);
                 final String updatedAt = newFormat.format(dt2);
 
-                //deletedAT
-                // String deletedAT = '';
-                // if (data.deletedAT != null){
-                //   DateTime dt3 = DateTime.parse(data.deletedAT);
-                //   String deletedAT = newFormat.format(dt3);
-                // }
                 GetChat getChat = GetChat(
                   roomChatID: data.roomChatID,
                   roomName: data.roomName,
@@ -97,10 +98,6 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   int _pageNumber = 4;
-
-  _socket(){
-
-  }
 
   @override
   Widget build(BuildContext context) => isLoading == false
@@ -158,34 +155,36 @@ class _ChatPageState extends State<ChatPage> {
           ),
           endDrawer: EndDrawer(),
           endDrawerEnableOpenDragGesture: false,
-          body: Container(
+          body: SingleChildScrollView(
             padding: const EdgeInsets.all(0.1),
             child: Column(
               children: [
                 for (GetChat m1 in getChatList) ...[
                   ListTile(
-                    onTap: () => {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => ChangeNotifierProvider(
-                            create: (context) => ChatsProvider(),
-                            child: ChatsPage(
-                              username:
-                                  userInfo.firstName + " " + userInfo.lastName,
-                              getChat: m1,
-                              userInfo: userInfo,
+                      onTap: () => {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => ChangeNotifierProvider(
+                                  create: (context) => ChatsProvider(),
+                                  child: ChatsPage(
+                                    username: userInfo.firstName +
+                                        " " +
+                                        userInfo.lastName,
+                                    getChat: m1,
+                                    userInfo: userInfo,
+                                  ),
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
+                          },
+                      title: Text(m1.roomName),
+                      leading: Image_Profile(
+                        height: 43,
+                        width: 43,
+                        userId: m1.ownerId,
+                      ) // todo ทำการดึงรูปภาพของคนที่สร้างห้อง
                       ),
-                    },
-                    title: Text(m1.roomName),
-                    // todo RoomName โดยการดึก API
-                    leading: Image_NavBer(
-                        height: 40,
-                        width: 40), // todo ทำการดึงรูปภาพของคนที่สร้างห้อง
-                  ),
                 ],
               ],
             ),
@@ -193,67 +192,14 @@ class _ChatPageState extends State<ChatPage> {
           floatingActionButton: FloatingActionButton.extended(
             label: Icon(Icons.add),
             tooltip: 'Add', // used by assistive technologies
-            onPressed: () => showDialog<void>(
-              context: context,
-              builder: (BuildContext context) {
-                return Center(
-                  child: Dialog(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12.0)),
-                    child: Container(
-                      padding: EdgeInsets.zero,
-                      constraints: const BoxConstraints(maxHeight: 600),
-                      child: Padding(
-                        padding: const EdgeInsets.all(12.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Container(
-                              padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
-                              child: const Text(
-                                "ค้นหารายชื่อเพิ่อเพิ่มไปยังแชท",
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  decorationStyle: TextDecorationStyle.solid,
-                                ),
-                              ),
-                            ),
-                            TextFormField(
-                              decoration: const InputDecoration(
-                                labelText: "ชื่อ เบอร์โทร หรือ ที่ทำงาน",
-                                labelStyle: TextStyle(
-                                    color: Color(0xD3FF4646),
-                                    decorationStyle:
-                                        TextDecorationStyle.double),
-                                enabledBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(
-                                      width: 1, color: Color(0x86FF4646)),
-                                ),
-                                focusedBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(
-                                    width: 1,
-                                    color: Color(0xD3C02424),
-                                  ),
-                                ),
-                              ),
-                              keyboardType: TextInputType.text,
-                              style: const TextStyle(color: Colors.black),
-                              onChanged: (value) => setState(
-                                () {
-                                  if (value.length >= 3) {
-                                    // todo ทำการ ดึก API จาก Account มาแสดง
-                                  }
-                                },
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                );
-              },
-            ),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => AddRoomChatPage()
+                ),
+              );
+            },
           ),
         );
 }

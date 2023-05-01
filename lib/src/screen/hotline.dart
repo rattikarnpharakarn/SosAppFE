@@ -135,14 +135,14 @@ class HotlinePageState extends State<HotlinePage> {
                               children: <Widget>[
                                 Container(
                                   padding: const EdgeInsets.all(5.0),
-                                  child: Text('${m1.description}',
+                                  child: Text(m1.description,
                                       style: const TextStyle(fontSize: 22.0)),
                                 ),
                                 const Spacer(),
                                 Container(
                                   alignment: Alignment.centerRight,
                                   padding: const EdgeInsets.all(5.0),
-                                  child: Text('${m1.number}',
+                                  child: Text(m1.number,
                                       style: const TextStyle(
                                           fontSize: 23.0, color: Colors.red)),
                                 ),

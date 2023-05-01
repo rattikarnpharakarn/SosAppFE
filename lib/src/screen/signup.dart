@@ -100,7 +100,7 @@ class _SignupState extends State<Signup> {
     if (response.statusCode == 200) {
       final m1 = jsonDecode(response.body);
       var token = m1['data']['token'];
-      await addStringToSF(token);
+      // await addStringToSF(token);
 
       // ignore: use_build_context_synchronously
       Navigator.push(context, MaterialPageRoute(builder: (context) {

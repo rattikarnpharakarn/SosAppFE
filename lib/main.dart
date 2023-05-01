@@ -8,7 +8,7 @@ import 'package:sos/src/testPage/test.dart';
 import 'package:sos/src/sharedInfo/user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:sos/src/screen/chat.dart';
+import 'package:sos/src/screen/chats/chat.dart';
 import 'package:sos/src/screen/home.dart';
 import 'package:sos/src/screen/hotline.dart';
 import 'package:sos/src/screen/signin.dart';

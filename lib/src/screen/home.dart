@@ -23,6 +23,7 @@ class _HomeState extends State<Home> {
   }
 
   bool isLoading = false;
+
   @override
   void initState() {
     super.initState();
@@ -44,7 +45,7 @@ class _HomeState extends State<Home> {
       _name = name;
     });
   }
-  
+
   @override
   Widget build(BuildContext context) => isLoading == false
       ? const LoadingPage()
@@ -178,9 +179,7 @@ class _HomeState extends State<Home> {
                             borderRadius: BorderRadius.circular(15.0),
                           ),
                           child: TextButton(
-                            onPressed: () {
-
-                            },
+                            onPressed: () {},
                             child: Column(
                               children: [
                                 Container(
@@ -192,16 +191,17 @@ class _HomeState extends State<Home> {
                                       height: 100,
                                     )),
                                 Container(
-                                    alignment: Alignment.topLeft,
-                                    padding:
-                                        const EdgeInsets.fromLTRB(10, 0, 0, 0),
-                                    child: const Text(
-                                      'โรงพยาบาล',
-                                      style: TextStyle(
-                                        color: Color.fromRGBO(12, 75, 142, 1),
-                                        fontSize: 25,
-                                      ),
-                                    )),
+                                  alignment: Alignment.topLeft,
+                                  padding:
+                                      const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                  child: const Text(
+                                    'โรงพยาบาล',
+                                    style: TextStyle(
+                                      color: Color.fromRGBO(12, 75, 142, 1),
+                                      fontSize: 25,
+                                    ),
+                                  ),
+                                ),
                               ],
                             ),
                           ),
@@ -215,9 +215,7 @@ class _HomeState extends State<Home> {
                             borderRadius: BorderRadius.circular(15.0),
                           ),
                           child: TextButton(
-                            onPressed: () {
-
-                            },
+                            onPressed: () {},
                             child: Column(
                               children: [
                                 Container(
@@ -228,15 +226,16 @@ class _HomeState extends State<Home> {
                                       height: 100,
                                     )),
                                 Container(
-                                    alignment: Alignment.topLeft,
-                                    padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                                    child: const Text(
-                                      'ปอเต็กตึ๊ง',
-                                      style: TextStyle(
-                                        color: Color.fromRGBO(12, 75, 142, 1),
-                                        fontSize: 25,
-                                      ),
-                                    )),
+                                  alignment: Alignment.topLeft,
+                                  padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                  child: const Text(
+                                    'ปอเต็กตึ๊ง',
+                                    style: TextStyle(
+                                      color: Color.fromRGBO(12, 75, 142, 1),
+                                      fontSize: 25,
+                                    ),
+                                  ),
+                                ),
                               ],
                             ),
                           ),
@@ -250,9 +249,7 @@ class _HomeState extends State<Home> {
                             borderRadius: BorderRadius.circular(15.0),
                           ),
                           child: TextButton(
-                            onPressed: () {
-
-                            },
+                            onPressed: () {},
                             child: Column(
                               children: [
                                 Container(
@@ -261,20 +258,20 @@ class _HomeState extends State<Home> {
                                         const EdgeInsets.fromLTRB(0, 0, 0, 15),
                                     child: Image.asset(
                                       'assets/images/other.png',
-
                                       height: 100,
                                     )),
                                 Container(
-                                    alignment: Alignment.topLeft,
-                                    padding:
-                                        const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                    child: const Text(
-                                      'สถานีดับเพลิง',
-                                      style: TextStyle(
-                                        color: Color.fromRGBO(12, 75, 142, 1),
-                                        fontSize: 25,
-                                      ),
-                                    )),
+                                  alignment: Alignment.topLeft,
+                                  padding:
+                                      const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                  child: const Text(
+                                    'สถานีดับเพลิง',
+                                    style: TextStyle(
+                                      color: Color.fromRGBO(12, 75, 142, 1),
+                                      fontSize: 25,
+                                    ),
+                                  ),
+                                ),
                               ],
                             ),
                           ),
@@ -288,9 +285,7 @@ class _HomeState extends State<Home> {
                             borderRadius: BorderRadius.circular(15.0),
                           ),
                           child: TextButton(
-                            onPressed: () {
-
-                            },
+                            onPressed: () {},
                             child: Column(
                               children: [
                                 Container(
@@ -303,7 +298,8 @@ class _HomeState extends State<Home> {
                                     )),
                                 Container(
                                   alignment: Alignment.topLeft,
-                                  padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                  padding:
+                                      const EdgeInsets.fromLTRB(10, 0, 0, 0),
                                   child: const Text(
                                     'สถานีตำรวจ',
                                     style: TextStyle(
