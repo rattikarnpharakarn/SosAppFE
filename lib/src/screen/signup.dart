@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sos/src/model/accounts/response.dart';
 import 'package:sos/src/model/accounts/signup.dart';
+import 'package:sos/src/provider/config.dart';
 import 'package:sos/src/sharedInfo/user.dart';
 
 import 'package:http/http.dart' as http;
@@ -88,7 +89,7 @@ class _SignupState extends State<Signup> {
 
   Future<ReturnResponse> createUserInfo() async {
     final response = await http.post(
-      Uri.parse('http://10.0.2.2:80/SosApp/accounts/createUser'),
+      Uri.parse('${urlAccount}createUser'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },

@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sos/main.dart';
 import 'package:sos/src/model/accounts/response.dart';
 import 'package:sos/src/model/accounts/signup.dart';
+import 'package:sos/src/provider/config.dart';
 import 'package:sos/src/screen/LoadingPage.dart';
 import 'package:sos/src/sharedInfo/user.dart';
 
@@ -73,7 +74,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
   Future<ReturnResponse> changePasswordInfo() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String id = prefs.getString('id') ?? '';
-    String url = 'http://10.0.2.2:80/SosApp/accounts/user/changePassword/${id}';
+    String url = '${urlAccount}user/changePassword/${id}';
     final response = await http.put(
       Uri.parse(url),
       headers: <String, String>{

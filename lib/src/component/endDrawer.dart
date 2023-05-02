@@ -10,6 +10,7 @@ import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sos/src/component/image_navBer.dart';
 import 'package:sos/src/provider/accounts/userService.dart';
+import 'package:sos/src/provider/config.dart';
 import 'package:sos/src/screen/home.dart';
 import 'package:sos/src/screen/signin.dart';
 import 'package:http/http.dart' as http;
@@ -116,7 +117,7 @@ class _EndDrawerState extends State<EndDrawer> {
   Future<ReturnResponse> EditUserInfo() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String id = prefs.getString('id') ?? '';
-    String url = 'http://10.0.2.2:80/SosApp/accounts/user/${id}';
+    String url = '${urlAccount}user/${id}';
     final response = await http.put(
       Uri.parse(url),
       headers: <String, String>{

@@ -1,13 +1,14 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sos/src/provider/config.dart';
 import '../../model/accounts/user.dart';
 
 Future<UserInfo> GetUserProfile() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String? stringValue = prefs.getString('token') ?? '' ;
   final response = await http.get(
-    Uri.parse('http://10.0.2.2:80/SosApp/accounts/user/'),
+    Uri.parse('${urlAccount}user/'),
     headers: <String, String>{
       'Authorization': 'Bearer ' + stringValue,
     },
@@ -54,7 +55,7 @@ Future<UserInfo> GetUserProfileById(userId) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String? stringValue = prefs.getString('token') ?? '' ;
   final response = await http.get(
-    Uri.parse('http://10.0.2.2:80/SosApp/accounts/user/'+userId.toString()),
+    Uri.parse('${urlAccount}user/'+userId.toString()),
     headers: <String, String>{
       'Authorization': 'Bearer ' + stringValue,
     },
@@ -107,7 +108,7 @@ Future<UserImage> GetUserImageById(userId) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String? stringValue = prefs.getString('token') ?? '' ;
   final response = await http.get(
-    Uri.parse('http://10.0.2.2:80/SosApp/accounts/user/image/'+userId.toString()),
+    Uri.parse('${urlAccount}user/image/'+userId.toString()),
     headers: <String, String>{
       'Authorization': 'Bearer ' + stringValue,
     },
@@ -134,7 +135,7 @@ Future<GetUserListModel> GetSearchUser(value) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String? stringValue = prefs.getString('token') ?? '' ;
   final response = await http.get(
-    Uri.parse('http://10.0.2.2:80/SosApp/accounts/user/searchUser/' + value),
+    Uri.parse('${urlAccount}user/searchUser/' + value),
     headers: <String, String>{
       'Authorization': 'Bearer ' + stringValue,
     },

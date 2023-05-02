@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sos/src/provider/config.dart';
 
 import '../../main.dart';
 import 'otp.dart';
@@ -65,7 +66,7 @@ class _SignupPhoneNumberState extends State<SignupPhoneNumber> {
 
   Future<Data> Singupwithphone(String phoneNumber) async {
     final response = await http.post(
-      Uri.parse('http://10.0.2.2:80/SosApp/accounts/sendOTP'),
+      Uri.parse('${urlAccount}sendOTP'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },

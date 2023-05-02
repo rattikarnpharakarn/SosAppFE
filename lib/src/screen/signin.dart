@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:sos/src/provider/config.dart';
 import 'package:sos/src/screen/home.dart';
 import 'package:sos/src/screen/signupPhoneNumber.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -71,7 +72,7 @@ class _SigninState extends State<Signin> {
   // static const String _baseUrl = "http://sos-app.thddns.net:7330/SosApp/signIn";
   login(String username, String password) async {
     final response = await http.post(
-      Uri.parse('http://10.0.2.2:80/SosApp/accounts/signIn'),
+      Uri.parse('${urlAccount}signIn'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },

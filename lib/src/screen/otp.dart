@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:sos/src/provider/config.dart';
 import 'package:sos/src/screen/signup.dart';
 
 import 'dart:convert';
@@ -75,7 +76,7 @@ class _OTPState extends State<OTP> {
     final otpValue =
         box1.toString() + box2.toString() + box3.toString() + box4.toString();
     final response = await http.post(
-      Uri.parse('http://10.0.2.2:80/SosApp/accounts/verifyOTP'),
+      Uri.parse('${urlAccount}verifyOTP'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },

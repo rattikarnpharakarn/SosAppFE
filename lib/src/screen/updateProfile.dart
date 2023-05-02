@@ -10,6 +10,7 @@ import 'package:sos/src/model/accounts/signup.dart';
 
 import 'package:http/http.dart' as http;
 import 'package:sos/src/provider/accounts/userService.dart';
+import 'package:sos/src/provider/config.dart';
 import 'package:sos/src/screen/LoadingPage.dart';
 import 'package:sos/src/sharedInfo/user.dart';
 
@@ -143,7 +144,7 @@ class _UpDataProfilePageState extends State<UpDataProfilePage> {
   }
 
   Future<ReturnResponse> EditUserInfo() async {
-    String url = 'http://10.0.2.2:80/SosApp/accounts/user/${_id}';
+    String url = '${urlAccount}user/${_id}';
     final response = await http.put(
       Uri.parse(url),
       headers: <String, String>{

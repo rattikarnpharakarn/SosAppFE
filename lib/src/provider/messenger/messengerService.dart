@@ -10,7 +10,7 @@ Future<GetChatListModel> GetChatList() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String? stringValue = prefs.getString('token') ?? '';
   final response = await http.get(
-    Uri.parse('http://10.0.2.2:83/SosApp/messenger/user/getChatList'),
+    Uri.parse('${urlMessenger}user/getChatList'),
     headers: <String, String>{
       'Authorization': 'Bearer ' + stringValue,
     },
@@ -29,7 +29,7 @@ Future<GetMessageModel> GetMessageById(id) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String? stringValue = prefs.getString('token') ?? '';
   final response = await http.get(
-    Uri.parse('http://10.0.2.2:83/SosApp/messenger/user/chat/message/' + id),
+    Uri.parse('${urlMessenger}user/chat/message/' + id),
     headers: <String, String>{
       'Authorization': 'Bearer ' + stringValue,
     },
@@ -48,7 +48,7 @@ Future<GetMemberRoomChatModel> GetMembersRoomChat(roomChatId) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String? stringValue = prefs.getString('token') ?? '';
   final response = await http.get(
-    Uri.parse('http://10.0.2.2:83/SosApp/messenger/user/getMembersRoomChat/' + roomChatId),
+    Uri.parse('${urlMessenger}user/getMembersRoomChat/' + roomChatId),
     headers: <String, String>{
       'Authorization': 'Bearer ' + stringValue,
     },
@@ -67,7 +67,7 @@ Future<ReturnResponse> PostMessage(roomChatID, message, image) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String? stringValue = prefs.getString('token') ?? '';
   final response = await http.post(
-    Uri.parse('http://10.0.2.2:83/SosApp/messenger/user/chat/message'),
+    Uri.parse('${urlMessenger}user/chat/message'),
     headers: <String, String>{
       'Authorization': 'Bearer ' + stringValue,
       'Content-Type': 'application/json; charset=UTF-8',
@@ -93,7 +93,7 @@ Future<ReturnResponse> CreateRoomChat(roomName, userid) async {
   String? stringValue = prefs.getString('token') ?? '';
   Map<String, dynamic> usersId = {"userID": userid};
   final response = await http.post(
-    Uri.parse('http://10.0.2.2:83/SosApp/messenger/user/createRoomChat'),
+    Uri.parse('${urlMessenger}user/createRoomChat'),
     headers: <String, String>{
       'Authorization': 'Bearer ' + stringValue,
       'Content-Type': 'application/json; charset=UTF-8',
@@ -119,7 +119,7 @@ Future<ReturnResponse> JoinRoomChat(roomChatIdStr, userid) async {
   String? stringValue = prefs.getString('token') ?? '';
   var roomChatId = int.parse(roomChatIdStr);
   final response = await http.post(
-    Uri.parse('http://10.0.2.2:83/SosApp/messenger/user/joinChat'),
+    Uri.parse('${urlMessenger}user/joinChat'),
     headers: <String, String>{
       'Authorization': 'Bearer ' + stringValue,
       'Content-Type': 'application/json; charset=UTF-8',

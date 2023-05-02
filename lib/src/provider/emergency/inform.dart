@@ -5,13 +5,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:sos/src/model/emergency/request.dart';
 import 'package:sos/src/model/emergency/response.dart';
+import 'package:sos/src/provider/config.dart';
 
 
 Future<GetInformListModel> GetInformList() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String? stringValue = prefs.getString('token') ?? '';
   final response = await http.get(
-    Uri.parse('http://10.0.2.2:81/SosApp/emergency/user/'),
+    Uri.parse('${urlEmergency}user/'),
     headers: <String, String>{
       'Authorization': 'Bearer ' + stringValue,
     },
@@ -32,7 +33,7 @@ Future<ReturnResponse> PostInform(Inform req) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String? stringValue = prefs.getString('token') ?? '';
   final response = await http.post(
-    Uri.parse('http://10.0.2.2:81/SosApp/emergency/user/'),
+    Uri.parse('${urlEmergency}user/'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
       'Authorization': 'Bearer ' + stringValue,

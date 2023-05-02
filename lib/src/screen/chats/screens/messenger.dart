@@ -11,6 +11,7 @@ import 'package:sos/src/component/image_navBer.dart';
 import 'package:sos/src/model/accounts/user.dart';
 import 'package:sos/src/model/messenger/response.dart';
 import 'package:sos/src/provider/accounts/userService.dart';
+import 'package:sos/src/provider/config.dart';
 import 'package:sos/src/provider/messenger/messengerService.dart';
 import 'package:sos/src/screen/LoadingPage.dart';
 import 'package:http/http.dart' as http;
@@ -120,7 +121,7 @@ class _HomeScreenState extends State<ChatsPage> {
   void initState() {
     super.initState();
     _socket = IO.io(
-      'http://10.0.2.2:3000/' + widget.getChat.roomChatID,
+      urlWsMessenger + widget.getChat.roomChatID,
       IO.OptionBuilder().setTransports(['websocket']).setQuery({
         'username': widget.userInfo.firstName + " " + widget.userInfo.lastName,
       }).build(),

@@ -4,10 +4,11 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sos/src/model/hotlines/response.dart';
 import 'package:sos/src/model/hotlines/response.dart';
+import 'package:sos/src/provider/config.dart';
 
 Future<GetHotlineListModel> GetHotlineList() async {
   final response = await http.get(
-    Uri.parse('http://10.0.2.2:82/SosApp/hotline/'),
+    Uri.parse(urlHotline),
   );
 
   if (response.statusCode == 200) {
