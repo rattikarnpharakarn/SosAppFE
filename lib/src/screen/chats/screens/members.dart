@@ -62,7 +62,7 @@ class _MembersScreenState extends State<MembersPage> {
           );
         }
 
-        Future.delayed(Duration(milliseconds: 500), () async {
+        Future.delayed(Duration(milliseconds: 1000), () async {
           setState(() {
             isLoading = true;
           });
@@ -234,9 +234,9 @@ class _MembersScreenState extends State<MembersPage> {
                                   IconButton(
                                     onPressed: () async {
                                       _joinRoomChat(widget.getChat.roomChatID);
-                                        Navigator.pop(
-                                          context,
-                                        );
+                                      Navigator.pop(
+                                        context,
+                                      );
                                     },
                                     icon: const Icon(
                                       Icons.group_add_outlined,
@@ -390,6 +390,13 @@ class _MembersScreenState extends State<MembersPage> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          Container(
+                            padding: const EdgeInsets.fromLTRB(13, 5, 13, 0),
+                            child: const Text(
+                              "สมาชิกในห้องแชท",
+                              style: TextStyle(fontSize: 16),
+                            ),
+                          ),
                           for (GetMemberRoomChatShow m1
                               in _getMemberRoomChatShow) ...[
                             Row(
