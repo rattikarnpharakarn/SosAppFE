@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:sos/src/model/accounts/user.dart';
+import 'package:sos/src/provider/accounts/userService.dart';
+import 'package:sos/src/screen/sos.dart';
 import 'package:sos/src/sharedInfo/user.dart';
 import 'src/screen/LoadingPage.dart';
 import 'src/screen/chats/screens/chat.dart';
+import 'src/screen/home.dart';
+import 'src/screen/signin.dart';
 
 final FlutterLocalNotificationsPlugin ShowflutterLocalNoificationPlugin =
     FlutterLocalNotificationsPlugin();
@@ -35,22 +40,15 @@ class _MyAppState extends State<MyApp> {
 
   void initState() {
     super.initState();
-    Future.delayed(Duration(milliseconds: 500), () async {
-      await _getImageProfile();
-    });
+    _getUserProfile();
   }
 
-  String _token = '';
-  late String id;
+  late UserInfo userInfo;
 
-  _getImageProfile() async {
-    var token = await getUserTokenSf();
-
-    // var data = await GetUserProfile();
-
+  _getUserProfile() async {
+    UserInfo data = await GetUserProfile();
     setState(() {
-      // id = data.id;
-      _token = token;
+      userInfo = data;
       isLoading = true;
     });
   }
@@ -59,16 +57,8 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       title: 'SosApp',
       theme: ThemeData(primarySwatch: Colors.red),
-      // home: const SosPage(),
-      // home: HotlinePage(),
-      // home: Signup(),
-      // home: SignupPhoneNumber(),
-      // home: SosPage1(),
-      // home: UpDataProfilePage(),
-      home: ChatPage(),
-      // home: TestPage(),
-      // home: id == '' ? Signin() : Home(), // หน้าแรกของแอบ
-      // home: _token == '' ? Signin() : Home(), // หน้าแรกของแอบ
+      // home: userInfo.id == '' ? Signin() : Home(),
+      home: SosPage(),
     );
   }
 

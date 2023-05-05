@@ -23,7 +23,7 @@ class ReturnResponse {
 class GetInformListModel {
   String message = '';
   String code = '';
-  final List<GetInfrom> list;
+  final List<GetInform> list;
 
   GetInformListModel({
     required this.code,
@@ -32,9 +32,9 @@ class GetInformListModel {
   });
 
   factory GetInformListModel.fromJson(Map<String, dynamic> json) {
-    List<GetInfrom>? list = [];
+    List<GetInform>? list = [];
     for (dynamic e in json['data']) {
-      GetInfrom arr = GetInfrom(
+      GetInform arr = GetInform(
         id: e['id'] ?? '',
         description: e['description'] ?? '',
         image: e['image'] ?? '',
@@ -45,7 +45,7 @@ class GetInformListModel {
         workplace: e['workplace'] ?? '',
         subTypeName: e['subTypeName'] ?? '',
         date: e['date'] ?? '',
-        status:  e['status'] ?? '',
+        status: e['status'] ?? '',
       );
       list.add(arr);
     }
@@ -58,7 +58,7 @@ class GetInformListModel {
   }
 }
 
-class GetInfrom {
+class GetInform {
   final String id;
   final String description;
   final String image;
@@ -71,7 +71,7 @@ class GetInfrom {
   final String date;
   final String status;
 
-  GetInfrom({
+  GetInform({
     required this.id,
     required this.description,
     required this.image,
@@ -85,8 +85,8 @@ class GetInfrom {
     required this.status,
   });
 
-  factory GetInfrom.fromJson(Map<String, dynamic> json) {
-    return GetInfrom(
+  factory GetInform.fromJson(Map<String, dynamic> json) {
+    return GetInform(
       id: json['id'],
       description: json['description'],
       image: json['image'],
@@ -98,6 +98,134 @@ class GetInfrom {
       subTypeName: json['subTypeName'],
       date: json['date'],
       status: json['status'],
+    );
+  }
+}
+
+class GetInformByIdModel {
+  String? message;
+  String? code;
+  String? id;
+  String? description;
+  List<GetInformByIdImage>? images;
+  String? phoneNumberCallBack;
+  String? latitude;
+  String? longitude;
+  String? username;
+  String? workplace;
+  String? subTypeName;
+  String? date;
+  String? status;
+
+  GetInformByIdModel({
+    this.code,
+    this.message,
+    this.id,
+    this.description,
+    this.images,
+    this.phoneNumberCallBack,
+    this.latitude,
+    this.longitude,
+    this.username,
+    this.workplace,
+    this.subTypeName,
+    this.date,
+    this.status,
+  });
+
+  factory GetInformByIdModel.fromJson(Map<String, dynamic> json) {
+    List<GetInformByIdImage>? images = [];
+    for (dynamic e in json['data']['image']) {
+      GetInformByIdImage arr = GetInformByIdImage(
+        imageId: e['ImageId'] ?? '',
+        image: e['Image'] ?? '',
+      );
+      images.add(arr);
+    }
+    return GetInformByIdModel(
+      code: json['code'],
+      message: json['message'],
+      id: json['data']['id'],
+      description: json['data']['description'],
+      images: images,
+      phoneNumberCallBack: json['data']['phoneNumberCallBack'],
+      latitude: json['data']['latitude'],
+      longitude: json['data']['longitude'],
+      username: json['data']['username'],
+      workplace: json['data']['workplace'],
+      subTypeName: json['data']['subTypeName'],
+      date: json['data']['date'],
+      status: json['data']['status'],
+    );
+  }
+}
+
+class GetInformById {
+  final String id;
+  final String description;
+  final List<GetInformByIdImage> images;
+  final String phoneNumberCallBack;
+  final String latitude;
+  final String longitude;
+  String username = '';
+  String workplace = '';
+  final String subTypeName;
+  final String date;
+  final String status;
+
+  GetInformById({
+    required this.id,
+    required this.description,
+    required this.images,
+    required this.phoneNumberCallBack,
+    required this.latitude,
+    required this.longitude,
+    required this.username,
+    required this.workplace,
+    required this.subTypeName,
+    required this.date,
+    required this.status,
+  });
+
+  factory GetInformById.fromJson(Map<String, dynamic> json) {
+    List<GetInformByIdImage>? images = [];
+    for (dynamic e in json['data']['image']) {
+      GetInformByIdImage arr = GetInformByIdImage(
+        imageId: e['ImageId'] ?? '',
+        image: e['Image'] ?? '',
+      );
+      images.add(arr);
+    }
+
+    return GetInformById(
+      id: json['id'],
+      description: json['description'],
+      images: images,
+      phoneNumberCallBack: json['phoneNumberCallBack'],
+      latitude: json['latitude'],
+      longitude: json['longitude'],
+      username: json['username'],
+      workplace: json['workplace'],
+      subTypeName: json['subTypeName'],
+      date: json['date'],
+      status: json['status'],
+    );
+  }
+}
+
+class GetInformByIdImage {
+  final String imageId;
+  final String image;
+
+  GetInformByIdImage({
+    required this.imageId,
+    required this.image,
+  });
+
+  factory GetInformByIdImage.fromJson(Map<String, dynamic> json) {
+    return GetInformByIdImage(
+      imageId: json['imageId'],
+      image: json['image'],
     );
   }
 }

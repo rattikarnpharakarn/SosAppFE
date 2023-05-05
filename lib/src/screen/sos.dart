@@ -1,9 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sos/main.dart';
 
 import 'package:sos/src/component/bottom_bar.dart';
 import 'package:sos/src/component/endDrawer.dart';
@@ -21,8 +19,6 @@ import 'dart:typed_data';
 import 'package:sos/src/screen/LoadingPage.dart';
 import 'package:sos/src/screen/history.dart';
 import 'package:url_launcher/url_launcher_string.dart';
-
-import '../model/emergency/response.dart';
 
 class SosPage extends StatefulWidget {
   const SosPage({super.key});
@@ -900,7 +896,7 @@ class _SosPage1State extends State<SosPage1> {
                             child: PopupMenuButton<String>(
                               initialValue: selected_camera_or_image,
                               child: Icon(
-                                color: imagepages == []
+                                color: imagepages.length <= 0
                                     ? Colors.red
                                     : Colors.green,
                                 Icons.camera_alt,
@@ -933,21 +929,24 @@ class _SosPage1State extends State<SosPage1> {
                       child: imagepages == []
                           ? null
                           : Wrap(
-                              children: imagepages.map((imageone) {
-                                return Container(
-                                  padding: const EdgeInsets.all(1.0),
-                                  child: TextButton(
-                                    onPressed: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => DetailScreen(images: imageone),
-                                        ),
-                                      );
-                                    },
-                                        child: Card(
+                              children: imagepages.map(
+                                (imageone) {
+                                  return Container(
+                                    padding: const EdgeInsets.all(1.0),
+                                    child: TextButton(
+                                      onPressed: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                DetailScreen(images: imageone),
+                                          ),
+                                        );
+                                      },
+                                      child: Card(
                                         child: ClipRRect(
-                                          borderRadius: BorderRadius.circular(10),
+                                          borderRadius:
+                                              BorderRadius.circular(10),
                                           child: Image.memory(
                                             base64Decode(imageone),
                                             width: 55,
@@ -956,9 +955,10 @@ class _SosPage1State extends State<SosPage1> {
                                           ),
                                         ),
                                       ),
-                                  ),
-                                );
-                              }).toList(),
+                                    ),
+                                  );
+                                },
+                              ).toList(),
                             ),
                     ),
                     Center(

@@ -27,6 +27,25 @@ Future<GetInformListModel> GetInformList() async {
   }
 }
 
+Future<GetInformByIdModel> GetInformListById(id) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String? stringValue = prefs.getString('token') ?? '';
+  final response = await http.get(
+    Uri.parse('${urlEmergency}user/'+id),
+    headers: <String, String>{
+      'Authorization': 'Bearer ' + stringValue,
+    },
+  );
+
+  if (response.statusCode == 200) {
+    final res = jsonDecode(response.body);
+    var resp = GetInformByIdModel.fromJson(res);
+    return resp;
+  } else {
+    throw Exception('Failed to GetInformListModel.');
+  }
+}
+
 
 
 Future<ReturnResponse> PostInform(Inform req) async {

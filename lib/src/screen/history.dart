@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:ui';
 
 import 'package:bottom_bar_matu/bottom_bar/bottom_bar_bubble.dart';
@@ -11,6 +12,7 @@ import 'package:sos/src/model/emergency/response.dart';
 import 'package:sos/src/provider/emergency/inform.dart';
 import 'package:sos/src/screen/LoadingPage.dart';
 import 'package:sos/src/screen/signin.dart';
+import 'package:sos/src/screen/sos.dart';
 
 import '../component/bottom_bar.dart';
 import '../component/form_data.dart';
@@ -34,48 +36,47 @@ class _HistoryPageState extends State<HistoryPage> {
   }
 
   var newFormat = DateFormat("dd-MM-yyyy HH:mm น.");
-  List<GetInfrom> getInformList = [];
+  List<GetInform> getInformList = [];
+
   callAPIGetInformList() async {
-      await GetInformList().then(
-        (value) {
-          if (value.code == "0") {
-            setState(
-              () {
-                for (var data in value.list) {
-                  DateTime dt2 = DateTime.parse(data.date);
-                  final String date = newFormat.format(dt2);
+    await GetInformList().then(
+      (value) {
+        if (value.code == "0") {
+          setState(
+            () {
+              for (var data in value.list) {
+                DateTime dt2 = DateTime.parse(data.date);
+                final String date = newFormat.format(dt2);
 
-                  GetInfrom getInform = GetInfrom(
-                    id: data.id,
-                    description: data.description,
-                    image: data.image,
-                    phoneNumberCallBack: data.phoneNumberCallBack,
-                    latitude: data.latitude,
-                    longitude: data.longitude,
-                    username: data.username,
-                    workplace: data.workplace,
-                    subTypeName: data.subTypeName,
-                    date: date,
-                    status: data.status,
-                  );
-                  getInformList.add(getInform);
-                }
-              },
-            );
-          }
-        },
-      ).onError((error, stackTrace) {
-
-        // todo ต้องเพิ่ม popup
-        setState(() {
-          isLoading = true;
-        });
-      });
-
-
+                GetInform getInform = GetInform(
+                  id: data.id,
+                  description: data.description,
+                  image: data.image,
+                  phoneNumberCallBack: data.phoneNumberCallBack,
+                  latitude: data.latitude,
+                  longitude: data.longitude,
+                  username: data.username,
+                  workplace: data.workplace,
+                  subTypeName: data.subTypeName,
+                  date: date,
+                  status: data.status,
+                );
+                getInformList.add(getInform);
+              }
+            },
+          );
+        }
+      },
+    ).onError((error, stackTrace) {
+      // todo ต้องเพิ่ม popup
       setState(() {
         isLoading = true;
       });
+    });
+
+    setState(() {
+      isLoading = true;
+    });
   }
 
   @override
@@ -173,7 +174,7 @@ class _HistoryPageState extends State<HistoryPage> {
             padding: const EdgeInsets.all(10),
             child: Column(
               children: [
-                for (GetInfrom m1 in getInformList) ...[
+                for (GetInform m1 in getInformList) ...[
                   Card(
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15.0),
@@ -184,7 +185,8 @@ class _HistoryPageState extends State<HistoryPage> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => HistoryPage2(getInfrom: m1),
+                            builder: (context) =>
+                                HistoryPageById(getInform: m1),
                           ),
                         );
                       },
@@ -280,34 +282,70 @@ class _HistoryPageState extends State<HistoryPage> {
         );
 }
 
-class HistoryPage2 extends StatefulWidget {
-  GetInfrom getInfrom;
+class HistoryPageById extends StatefulWidget {
+  GetInform getInform;
 
-  HistoryPage2({Key? key, required this.getInfrom}) : super(key: key);
+  HistoryPageById({Key? key, required this.getInform}) : super(key: key);
 
   @override
-  State<HistoryPage2> createState() => _HistoryPage2State(getInfrom: getInfrom);
+  State<HistoryPageById> createState() => _HistoryPageByIdState();
 }
 
-class _HistoryPage2State extends State<HistoryPage2> {
+class _HistoryPageByIdState extends State<HistoryPageById> {
   final GlobalKey<ScaffoldState> _key = GlobalKey();
-  GetInfrom getInfrom;
-
-  _HistoryPage2State({
-    required this.getInfrom,
-  });
 
   bool isLoading = false;
 
   @override
   void initState() {
     super.initState();
+    _getInformById();
+  }
+
+  var newFormat = DateFormat("dd-MM-yyyy HH:mm น.");
+  late GetInformByIdModel getInformById;
+  List<String> imagepages = [];
+  _getInformById() async {
+    GetInformByIdModel data = await GetInformListById(widget.getInform.id);
+
     setState(() {
+      for (var data in data.images!)  {
+        imagepages.add(data.image);
+      }
+      getInformById = data;
       isLoading = true;
     });
+
+
   }
 
   final int _pageNumber = 3;
+
+  Widget textRow(String text1, TextStyle textStyle1, String text2,
+      TextStyle textStyle2, String text3, TextStyle textStyle3) {
+    return Container(
+      padding: const EdgeInsets.all(2),
+      child: Row(
+        children: [
+          Text(
+            text1,
+            style: textStyle1,
+          ),
+          Text(
+            text2,
+            style: textStyle2,
+          ),
+          const Spacer(
+            flex: 4,
+          ),
+          Text(
+            text3,
+            style: textStyle3,
+          ),
+        ],
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) => isLoading == false
@@ -320,7 +358,7 @@ class _HistoryPage2State extends State<HistoryPage2> {
             // toolbarHeight: 0,
             backgroundColor: const Color.fromARGB(255, 248, 0, 0),
             elevation: 0,
-            centerTitle: false,
+            // centerTitle: false,
             title: Container(
               padding: const EdgeInsets.all(10),
               child: Row(
@@ -369,7 +407,135 @@ class _HistoryPage2State extends State<HistoryPage2> {
           endDrawerEnableOpenDragGesture: false,
           body: SingleChildScrollView(
             padding: const EdgeInsets.all(10),
-            child: Text(getInfrom.id),
+            child: Column(
+              children: [
+                Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15.0),
+                  ),
+                  elevation: 10,
+                  child: Container(
+                    padding: const EdgeInsets.all(10),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        textRow(
+                          'ประเภท : ',
+                          const TextStyle(
+                            fontSize: 18,
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          widget.getInform.subTypeName,
+                          const TextStyle(fontSize: 16, color: Colors.red),
+                          widget.getInform.date,
+                          TextStyle(fontSize: 15.0, color: Colors.black54),
+                        ),
+                        Container(
+                          alignment: Alignment.topLeft,
+                          padding: const EdgeInsets.all(2),
+                          child: const Text(
+                            'รายละเอียด',
+                            style: TextStyle(
+                              fontSize: 18,
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        Container(
+                          alignment: Alignment.topLeft,
+                          padding: const EdgeInsets.all(2),
+                          child: Text(
+                            widget.getInform.description,
+                            style: const TextStyle(
+                                fontSize: 16, color: Colors.red),
+                          ),
+                        ),
+                        textRow(
+                          'ผู้รับแจ้ง : ',
+                          const TextStyle(
+                            fontSize: 18,
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          widget.getInform.username,
+                          const TextStyle(
+                            fontSize: 16,
+                            color: Colors.blue,
+                          ),
+                          '',
+                          TextStyle(fontSize: 15.0),
+                        ),
+                        textRow(
+                          'สถานที่ ที่รับแจ้ง : ',
+                          const TextStyle(
+                            fontSize: 18,
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          widget.getInform.workplace,
+                          const TextStyle(fontSize: 16, color: Colors.teal),
+                          '',
+                          TextStyle(fontSize: 15.0),
+                        ),
+                        textRow(
+                          'สถานะ : ',
+                          const TextStyle(
+                            fontSize: 18,
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          widget.getInform.status,
+                          const TextStyle(
+                            fontSize: 16,
+                            color: Colors.green,
+                          ),
+                          '',
+                          TextStyle(fontSize: 15.0),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Center(
+                  child: imagepages == []
+                      ? null
+                      : Wrap(
+                    children: imagepages.map(
+                          (imageone) {
+                        return Container(
+                          padding: const EdgeInsets.all(1.0),
+                          child: TextButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      DetailScreen(images: imageone),
+                                ),
+                              );
+                            },
+                            child: Card(
+                              child: ClipRRect(
+                                borderRadius:
+                                BorderRadius.circular(10),
+                                child: Image.memory(
+                                  base64Decode(imageone),
+                                  width: 150,
+                                  height: 150,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    ).toList(),
+                  ),
+                ),
+              ],
+            ),
           ),
         );
 }

@@ -29,10 +29,6 @@ class ChatPage extends StatefulWidget {
 
 class _ChatPageState extends State<ChatPage> {
   final GlobalKey<ScaffoldState> _key = GlobalKey();
-  final TextEditingController _valueSearchUserInputController =
-      TextEditingController();
-  final TextEditingController _nameRoomInputController =
-      TextEditingController();
 
   bool isLoading = false;
 
