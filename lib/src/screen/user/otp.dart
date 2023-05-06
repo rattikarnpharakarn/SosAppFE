@@ -122,9 +122,7 @@ class _OTPState extends State<OTP> {
       );
       return Data.fromJson(jsonDecode(response.body));
     } else {
-      // If the server did not return a 201 CREATED response,
-      // then throw an exception.
-      throw Exception('Failed to create album.');
+      throw Exception('Send APIName : verifyOTP || statusCode : ${response.statusCode.toString()} || Msg : ${jsonDecode(response.body)}');
     }
   }
 

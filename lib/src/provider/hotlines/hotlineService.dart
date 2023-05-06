@@ -17,8 +17,6 @@ Future<GetHotlineListModel> GetHotlineList() async {
    var resp = GetHotlineListModel.fromJson(hotlineList);
     return resp;
   } else {
-    // If the server did not return a 201 CREATED response,
-    // then throw an exception.
-    throw Exception('Failed to create album.');
+    throw Exception('Send APIName : GetHotlineList || statusCode : ${response.statusCode.toString()} || Msg : ${jsonDecode(response.body)}');
   }
 }

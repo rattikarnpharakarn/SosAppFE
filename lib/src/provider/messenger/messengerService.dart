@@ -21,7 +21,7 @@ Future<GetChatListModel> GetChatList() async {
     var resp = GetChatListModel.fromJson(res);
     return resp;
   } else {
-    throw Exception('Failed to GetChatData.');
+    throw Exception('Send APIName : GetChatList || statusCode : ${response.statusCode.toString()} || Msg : ${jsonDecode(response.body)}');
   }
 }
 
@@ -40,7 +40,7 @@ Future<GetMessageModel> GetMessageById(id) async {
     var resp = GetMessageModel.fromJson(res);
     return resp;
   } else {
-    throw Exception('Failed to GetChatData.');
+    throw Exception('Send APIName : GetMessageById || statusCode : ${response.statusCode.toString()} || Msg : ${jsonDecode(response.body)}');
   }
 }
 
@@ -59,7 +59,7 @@ Future<GetMemberRoomChatModel> GetMembersRoomChat(roomChatId) async {
     var resp = GetMemberRoomChatModel.fromJson(res);
     return resp;
   } else {
-    throw Exception('Failed to GetChatData.');
+    throw Exception('Send APIName : GetMembersRoomChat || statusCode : ${response.statusCode.toString()} || Msg : ${jsonDecode(response.body)}');
   }
 }
 
@@ -84,7 +84,7 @@ Future<ReturnResponse> PostMessage(roomChatID, message, image) async {
     var resp = ReturnResponse.fromJson(res);
     return resp;
   } else {
-    throw Exception(response.statusCode);
+    throw Exception('Send APIName : PostMessage || statusCode : ${response.statusCode.toString()} || Msg : ${jsonDecode(response.body)}');
   }
 }
 
@@ -109,10 +109,9 @@ Future<ReturnResponse> CreateRoomChat(roomName, userid) async {
     var resp = ReturnResponse.fromJson(res);
     return resp;
   } else {
-    throw Exception(response.statusCode);
+    throw Exception('Send APIName : CreateRoomChat || statusCode : ${response.statusCode.toString()} || Msg : ${jsonDecode(response.body)}');
   }
 }
-
 
 Future<ReturnResponse> JoinRoomChat(roomChatIdStr, userid) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -135,6 +134,6 @@ Future<ReturnResponse> JoinRoomChat(roomChatIdStr, userid) async {
     var resp = ReturnResponse.fromJson(res);
     return resp;
   } else {
-    throw Exception(response.statusCode);
+    throw Exception('Send APIName : JoinRoomChat || statusCode : ${response.statusCode.toString()} || Msg : ${jsonDecode(response.body)}');
   }
 }

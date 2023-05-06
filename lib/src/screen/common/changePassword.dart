@@ -94,10 +94,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
 
       return ReturnResponse.fromJson(jsonDecode(response.body));
     } else {
-      // print(response.body);
-      var dataResponse = jsonDecode(response.body);
-
-      throw Exception(dataResponse);
+      throw Exception('Send APIName : changePasswordInfo || statusCode : ${response.statusCode.toString()} || Msg : ${jsonDecode(response.body)}');
     }
   }
 

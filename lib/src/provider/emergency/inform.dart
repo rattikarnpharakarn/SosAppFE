@@ -23,7 +23,7 @@ Future<GetInformListModel> GetInformList() async {
     var resp = GetInformListModel.fromJson(res);
     return resp;
   } else {
-    throw Exception('Failed to GetInformListModel.');
+    throw Exception('Send APIName : GetInformList || statusCode : ${response.statusCode.toString()} || Msg : ${jsonDecode(response.body)}');
   }
 }
 
@@ -42,7 +42,7 @@ Future<GetInformByIdModel> GetInformListById(id) async {
     var resp = GetInformByIdModel.fromJson(res);
     return resp;
   } else {
-    throw Exception('Failed to GetInformListModel.');
+    throw Exception('Send APIName : GetInformListById || statusCode : ${response.statusCode.toString()} || Msg : ${jsonDecode(response.body)}');
   }
 }
 

@@ -164,10 +164,7 @@ class _UpDataProfilePageState extends State<UpDataProfilePage> {
 
       return ReturnResponse.fromJson(jsonDecode(response.body));
     } else {
-      // print(response.body);
-      var dataResponse = jsonDecode(response.body);
-
-      throw Exception(dataResponse);
+      throw Exception('Send APIName : EditUserInfo || statusCode : ${response.statusCode.toString()} || Msg : ${jsonDecode(response.body)}');
     }
   }
 

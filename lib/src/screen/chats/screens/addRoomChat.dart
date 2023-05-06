@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:sos/src/component/button_bar_ops.dart';
 import 'package:sos/src/component/endDrawer.dart';
 import 'package:sos/src/component/bottom_bar.dart';
 import 'package:sos/src/component/imageProfile.dart';
 import 'package:sos/src/component/image_navBer.dart';
 import 'package:sos/src/model/accounts/user.dart';
 import 'package:intl/intl.dart';
-
 
 import 'package:sos/src/screen/chats/screens/chat.dart';
 
@@ -15,7 +15,9 @@ import 'package:sos/src/provider/messenger/messengerService.dart';
 import '../../common/LoadingPage.dart';
 
 class AddRoomChatPage extends StatefulWidget {
-  const AddRoomChatPage({Key? key}) : super(key: key);
+  final String roleId;
+
+  const AddRoomChatPage({Key? key, required this.roleId}) : super(key: key);
 
   @override
   State<AddRoomChatPage> createState() => _AddRoomChatPageState();
@@ -31,10 +33,18 @@ class _AddRoomChatPageState extends State<AddRoomChatPage> {
   bool isLoading = false;
   late List<bool> _isChecked;
   List<int> _userIdList = [];
+  int _pageNumber = 4;
 
   @override
   void initState() {
     super.initState();
+
+    if (widget.roleId == "2") {
+      _pageNumber = 4;
+    } else if (widget.roleId == "3") {
+      _pageNumber = 3;
+    }
+
     setState(() {
       isLoading = true;
     });
@@ -90,10 +100,6 @@ class _AddRoomChatPageState extends State<AddRoomChatPage> {
       // print(error);
       // print(stackTrace);
       // print("======== error ========");
-
-      setState(() {
-        isLoading = true;
-      });
     });
   }
 
@@ -101,14 +107,16 @@ class _AddRoomChatPageState extends State<AddRoomChatPage> {
     CreateRoomChat(_nameRoomInputController.text.trim(), _userIdList);
   }
 
-  int _pageNumber = 4;
-
   @override
   Widget build(BuildContext context) => isLoading == false
       ? const LoadingPage()
       : Scaffold(
           key: _key,
-          bottomNavigationBar: Bottombar(pageNumber: _pageNumber),
+          bottomNavigationBar: widget.roleId== "2"
+              ? Bottombar(pageNumber: _pageNumber)
+              : widget.roleId == "3"
+                  ? ButtonBarOps(pageNumber: _pageNumber)
+                  : null,
           appBar: AppBar(
             // toolbarHeight: 0,
             backgroundColor: const Color.fromARGB(255, 248, 0, 0),

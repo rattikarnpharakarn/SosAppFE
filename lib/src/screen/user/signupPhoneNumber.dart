@@ -86,7 +86,9 @@ class _SignupPhoneNumberState extends State<SignupPhoneNumber> {
       String verifyCode = vf["data"]['verifyCode'];
       // ignore: use_build_context_synchronously
       _showNotification(otp, verifyCode);
-      Navigator.push(
+
+      // ignore: use_build_context_synchronously
+      Navigator.pushReplacement(
         context,
         MaterialPageRoute(
           builder: (context) => OTP(data: item),
@@ -95,9 +97,7 @@ class _SignupPhoneNumberState extends State<SignupPhoneNumber> {
 
       return Data.fromJson(jsonDecode(response.body));
     } else {
-      // If the server did not return a 201 CREATED response,
-      // then throw an exception.
-      throw Exception('Failed to create album.');
+      throw Exception('Send APIName : Singupwithphone || statusCode : ${response.statusCode.toString()} || Msg : ${jsonDecode(response.body)}');
     }
   }
 

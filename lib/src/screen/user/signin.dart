@@ -97,9 +97,7 @@ class _SigninState extends State<Signin> {
         ),
       );
     } else {
-      // If the server did not return a 201 CREATED response,
-      // then throw an exception.
-      throw Exception('Failed to create album.');
+      throw Exception('Send APIName : login || statusCode : ${response.statusCode.toString()} || Msg : ${jsonDecode(response.body)}');
     }
   }
 

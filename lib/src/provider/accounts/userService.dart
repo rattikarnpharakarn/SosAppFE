@@ -74,9 +74,7 @@ Future<UserInfo> GetUserProfile() async {
     );
     return userInfoRes;
   } else {
-    // If the server did not return a 201 CREATED response,
-    // then throw an exception.
-    throw Exception('Code : ' + response.statusCode.toString());
+    throw Exception('Send APIName : GetUserProfile || statusCode : ${response.statusCode.toString()} || Msg : ${jsonDecode(response.body)}');
   }
 }
 
@@ -123,17 +121,7 @@ Future<UserInfo> GetUserProfileById(userId) async {
     );
     return userInfoRes;
   } else {
-    // If the server did not return a 201 CREATED response,
-    // then throw an exception.
-
-    final dataUser = jsonDecode(response.body);
-
-    String msg = "Code " +
-        response.statusCode.toString() +
-        "\n response : " +
-        dataUser.toString();
-
-    throw Exception(msg);
+    throw Exception('Send APIName : GetUserProfileById || statusCode : ${response.statusCode.toString()} || Msg : ${jsonDecode(response.body)}');
   }
 }
 
@@ -141,7 +129,7 @@ Future<UserImage> GetUserImageById(userId) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String? stringValue = prefs.getString('token') ?? '';
   final response = await http.get(
-    Uri.parse('${urlAccount}user/image/' + userId.toString()),
+    Uri.parse('${urlAccount}image/' + userId.toString()),
     headers: <String, String>{
       'Authorization': 'Bearer ' + stringValue,
     },
@@ -157,9 +145,7 @@ Future<UserImage> GetUserImageById(userId) async {
     );
     return userInfoRes;
   } else {
-    // If the server did not return a 201 CREATED response,
-    // then throw an exception.
-    throw Exception('Failed to GetUserProfile.');
+    throw Exception('Send APIName : GetUserImageById || statusCode : ${response.statusCode.toString()} || Msg : ${jsonDecode(response.body)}');
   }
 }
 
@@ -167,7 +153,7 @@ Future<GetUserListModel> GetSearchUser(value) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String? stringValue = prefs.getString('token') ?? '';
   final response = await http.get(
-    Uri.parse('${urlAccount}user/searchUser/' + value),
+    Uri.parse('${urlAccount}searchUser/' + value),
     headers: <String, String>{
       'Authorization': 'Bearer ' + stringValue,
     },

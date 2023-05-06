@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:sos/src/screen/chats/screens/chat.dart';
-import 'package:sos/src/screen/user/sos.dart';
 
-import '../screen/user/history.dart';
-import '../screen/user/home.dart' as user;
-import '../screen/ops/home.dart' as ops;
-import '../screen/user/hotline.dart';
+import '../screen/ops/history.dart';
+import '../screen/ops/home.dart';
+import '../screen/ops/hotline.dart';
 
-class Bottombar extends StatefulWidget {
-  Bottombar({
+class ButtonBarOps extends StatefulWidget {
+  ButtonBarOps({
     super.key,
     required this.pageNumber,
   });
@@ -16,12 +14,12 @@ class Bottombar extends StatefulWidget {
 
   @override
   // ignore: no_logic_in_create_state
-  State<Bottombar> createState() => _ButtonbarState(pageNumber: pageNumber);
+  State<ButtonBarOps> createState() => _ButtonBarOpsState(pageNumber: pageNumber);
 }
 
-class _ButtonbarState extends State<Bottombar> {
+class _ButtonBarOpsState extends State<ButtonBarOps> {
   final PageController controller = PageController();
-  _ButtonbarState({
+  _ButtonBarOpsState({
     required this.pageNumber,
   });
 
@@ -42,7 +40,7 @@ class _ButtonbarState extends State<Bottombar> {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => const user.Home(),
+            builder: (context) => const HomeOps(),
           ),
         );
       } else if (pageNumber == 1) {
@@ -56,17 +54,10 @@ class _ButtonbarState extends State<Bottombar> {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => const SosPage(),
-          ),
-        );
-      } else if (pageNumber == 3) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
             builder: (context) => const HistoryPage(),
           ),
         );
-      } else if (pageNumber == 4) {
+      } else if (pageNumber == 3) {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
@@ -94,10 +85,6 @@ class _ButtonbarState extends State<Bottombar> {
             backgroundColor: Color.fromARGB(255, 255, 255, 255),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.adjust_rounded),
-            label: 'SOS',
-          ),
-          BottomNavigationBarItem(
             icon: Icon(Icons.history),
             label: 'ล่าสุด',
             backgroundColor: Color.fromARGB(255, 255, 255, 255),
@@ -117,5 +104,4 @@ class _ButtonbarState extends State<Bottombar> {
     );
   }
 }
-
 

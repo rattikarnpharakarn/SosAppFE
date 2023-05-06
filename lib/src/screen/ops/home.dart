@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:sos/src/component/button_bar_ops.dart';
 
 import '../../component/bottom_bar.dart';
 import '../../component/endDrawer.dart';
@@ -52,7 +53,7 @@ class _HomeOpsState extends State<HomeOps> {
       ? const LoadingPage()
       : Scaffold(
           key: _key,
-          // bottomNavigationBar: Bottombar(pageNumber: _pageNumber),
+          bottomNavigationBar: ButtonBarOps(pageNumber: _pageNumber),
           // appBar: NavbarPages(),
           appBar: AppBar(
             // toolbarHeight: 0,
