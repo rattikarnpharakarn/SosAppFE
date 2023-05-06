@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:sos/src/model/accounts/user.dart';
 import 'package:sos/src/provider/accounts/userService.dart';
+import 'package:sos/src/screen/ops/home.dart';
 import 'package:sos/src/screen/user/sos.dart';
 import 'package:sos/src/sharedInfo/user.dart';
 import 'src/screen/common/LoadingPage.dart';
@@ -47,7 +48,7 @@ class _MyAppState extends State<MyApp> {
 
   _getUserProfile() async {
     UserInfo data = await GetUserProfile();
-
+    // print(userInfo.roleId);
     setState(() {
       isLoading = true;
       userInfo = data;
@@ -58,7 +59,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       title: 'SosApp',
       theme: ThemeData(primarySwatch: Colors.red),
-      home: userInfo.id == '' ? Signin() : Home(),
+      home: userInfo.id == '' ? const Signin() : userInfo.roleId == "2" ? Home() : HomeOps(),
       // home: SosPage(),
     );
   }

@@ -27,12 +27,14 @@ Future<UserInfo> GetUserProfile() async {
       province: '',
       postalCode: '',
       country: '',
+      roleId: '',
+      roleName: '',
     );
     return userInfoRes;
   }
 
   final response = await http.get(
-    Uri.parse('${urlAccount}user/'),
+    Uri.parse('${urlAccount}'),
     headers: <String, String>{
       'Authorization': 'Bearer ' + stringValue,
     },
@@ -46,6 +48,7 @@ Future<UserInfo> GetUserProfile() async {
     final data = dataUser['data'];
     final idCard = data['idCard'];
     final address = data['address'];
+    final role = data['userRole'];
 
     UserInfo userInfoRes = UserInfo(
       id: data['id'],
@@ -66,6 +69,8 @@ Future<UserInfo> GetUserProfile() async {
       province: address['province'],
       postalCode: address['postalCode'],
       country: address['country'],
+      roleId: role['id'],
+      roleName: role['name'],
     );
     return userInfoRes;
   } else {
@@ -92,6 +97,7 @@ Future<UserInfo> GetUserProfileById(userId) async {
     final data = dataUser['data'];
     final idCard = data['idCard'];
     final address = data['address'];
+    final role = data['userRole'];
 
     UserInfo userInfoRes = UserInfo(
       id: data['id'],
@@ -112,6 +118,8 @@ Future<UserInfo> GetUserProfileById(userId) async {
       province: address['province'],
       postalCode: address['postalCode'],
       country: address['country'],
+      roleId: role['id'],
+      roleName: role['name'],
     );
     return userInfoRes;
   } else {

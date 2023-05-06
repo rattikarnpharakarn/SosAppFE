@@ -20,6 +20,11 @@ class UserInfo {
   String postalCode = '';
   String country = '';
 
+  //role
+  String roleId = '';
+  String roleName = '';
+
+
   UserInfo({
     required this.id,
     required this.phoneNumber,
@@ -39,6 +44,8 @@ class UserInfo {
     required this.province,
     required this.postalCode,
     required this.country,
+    required this.roleId,
+    required this.roleName,
   });
 
   Map toJson() {
@@ -62,6 +69,10 @@ class UserInfo {
         'province': province,
         'postalCode': postalCode,
         'country': "ไทย"
+      },
+      'userRole' : {
+        'id' : roleId,
+        'name' : roleName,
       }
     };
   }
