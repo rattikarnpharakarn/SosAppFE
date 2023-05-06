@@ -11,9 +11,9 @@ import 'package:sos/src/model/accounts/signup.dart';
 import 'package:http/http.dart' as http;
 import 'package:sos/src/provider/accounts/userService.dart';
 import 'package:sos/src/provider/config.dart';
-import 'package:sos/src/screen/LoadingPage.dart';
 import 'package:sos/src/sharedInfo/user.dart';
 
+import '../common/LoadingPage.dart';
 import 'home.dart';
 
 class UpDataProfilePage extends StatefulWidget {

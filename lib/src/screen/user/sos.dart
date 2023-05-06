@@ -16,9 +16,10 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:sos/src/screen/LoadingPage.dart';
-import 'package:sos/src/screen/history.dart';
 import 'package:url_launcher/url_launcher_string.dart';
+
+import '../common/LoadingPage.dart';
+import 'history.dart';
 
 class SosPage extends StatefulWidget {
   const SosPage({super.key});

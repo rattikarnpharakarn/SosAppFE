@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:sos/src/model/accounts/user.dart';
 import 'package:sos/src/provider/accounts/userService.dart';
-import 'package:sos/src/screen/sos.dart';
+import 'package:sos/src/screen/user/sos.dart';
 import 'package:sos/src/sharedInfo/user.dart';
-import 'src/screen/LoadingPage.dart';
+import 'src/screen/common/LoadingPage.dart';
 import 'src/screen/chats/screens/chat.dart';
-import 'src/screen/home.dart';
-import 'src/screen/signin.dart';
+import 'src/screen/user/home.dart';
+import 'src/screen/user/signin.dart';
 
 final FlutterLocalNotificationsPlugin ShowflutterLocalNoificationPlugin =
     FlutterLocalNotificationsPlugin();
@@ -47,9 +47,10 @@ class _MyAppState extends State<MyApp> {
 
   _getUserProfile() async {
     UserInfo data = await GetUserProfile();
+
     setState(() {
-      userInfo = data;
       isLoading = true;
+      userInfo = data;
     });
   }
 
@@ -57,8 +58,8 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       title: 'SosApp',
       theme: ThemeData(primarySwatch: Colors.red),
-      // home: userInfo.id == '' ? Signin() : Home(),
-      home: SosPage(),
+      home: userInfo.id == '' ? Signin() : Home(),
+      // home: SosPage(),
     );
   }
 

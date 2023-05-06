@@ -6,19 +6,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sos/src/component/image_navBer.dart';
-import 'package:sos/src/provider/accounts/userService.dart';
 import 'package:sos/src/provider/config.dart';
-import 'package:sos/src/screen/home.dart';
-import 'package:sos/src/screen/signin.dart';
 import 'package:http/http.dart' as http;
 
 import '../model/accounts/response.dart';
 import '../model/accounts/signup.dart';
-import '../screen/changePassword.dart';
-import '../screen/updateProfile.dart';
+import '../screen/common/changePassword.dart';
+import '../screen/user/home.dart';
+import '../screen/user/signin.dart';
+import '../screen/user/updateProfile.dart';
 import '../sharedInfo/user.dart';
 
 class EndDrawer extends StatefulWidget {

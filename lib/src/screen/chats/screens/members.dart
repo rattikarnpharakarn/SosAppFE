@@ -8,7 +8,8 @@ import 'package:sos/src/model/accounts/user.dart';
 import 'package:sos/src/model/messenger/response.dart';
 import 'package:sos/src/provider/accounts/userService.dart';
 import 'package:sos/src/provider/messenger/messengerService.dart';
-import 'package:sos/src/screen/LoadingPage.dart';
+
+import '../../common/LoadingPage.dart';
 
 class MembersPage extends StatefulWidget {
   final GetChat getChat;

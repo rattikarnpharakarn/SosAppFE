@@ -1,6 +1,3 @@
-import 'dart:convert';
-
-import 'package:bottom_bar_matu/utils/app_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
@@ -13,11 +10,11 @@ import 'package:sos/src/model/messenger/response.dart';
 import 'package:sos/src/provider/accounts/userService.dart';
 import 'package:sos/src/provider/config.dart';
 import 'package:sos/src/provider/messenger/messengerService.dart';
-import 'package:sos/src/screen/LoadingPage.dart';
-import 'package:http/http.dart' as http;
 import 'package:sos/src/screen/chats/model/message.dart';
 import 'package:sos/src/screen/chats/providers/messenger.dart';
 import 'package:sos/src/screen/chats/screens/members.dart';
+
+import '../../common/LoadingPage.dart';
 
 class ChatsPage extends StatefulWidget {
   final String username;

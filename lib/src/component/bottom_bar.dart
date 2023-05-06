@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:sos/src/screen/chats/screens/chat.dart';
-import 'package:sos/src/screen/history.dart';
-import 'package:sos/src/screen/home.dart';
-import 'package:sos/src/screen/hotline.dart';
-import 'package:sos/src/screen/sos.dart';
+import 'package:sos/src/screen/user/sos.dart';
+
+import '../screen/user/history.dart';
+import '../screen/user/home.dart';
+import '../screen/user/hotline.dart';
 
 class Bottombar extends StatefulWidget {
   Bottombar({
@@ -37,35 +38,35 @@ class _BottombarState extends State<Bottombar> {
       });
 
       if (pageNumber == 0) {
-        Navigator.push(
+        Navigator.pushReplacement(
           context,
           MaterialPageRoute(
             builder: (context) => const Home(),
           ),
         );
       } else if (pageNumber == 1) {
-        Navigator.push(
+        Navigator.pushReplacement(
           context,
           MaterialPageRoute(
             builder: (context) => const HotlinePage(),
           ),
         );
       } else if (pageNumber == 2) {
-        Navigator.push(
+        Navigator.pushReplacement(
           context,
           MaterialPageRoute(
             builder: (context) => const SosPage(),
           ),
         );
       } else if (pageNumber == 3) {
-        Navigator.push(
+        Navigator.pushReplacement(
           context,
           MaterialPageRoute(
             builder: (context) => const HistoryPage(),
           ),
         );
       } else if (pageNumber == 4) {
-        Navigator.push(
+        Navigator.pushReplacement(
           context,
           MaterialPageRoute(
             builder: (context) => const ChatPage(),

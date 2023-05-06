@@ -3,10 +3,11 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:sos/src/provider/config.dart';
-import 'package:sos/src/screen/home.dart';
-import 'package:sos/src/screen/signupPhoneNumber.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sos/src/sharedInfo/user.dart';
+
+import 'home.dart';
+import 'signupPhoneNumber.dart';
 
 class Signin extends StatefulWidget {
   const Signin({Key? key}) : super(key: key);

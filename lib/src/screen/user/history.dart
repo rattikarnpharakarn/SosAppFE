@@ -10,12 +10,12 @@ import 'package:sos/src/component/image_navBer.dart';
 import 'package:sos/src/component/navBar.dart';
 import 'package:sos/src/model/emergency/response.dart';
 import 'package:sos/src/provider/emergency/inform.dart';
-import 'package:sos/src/screen/LoadingPage.dart';
-import 'package:sos/src/screen/signin.dart';
-import 'package:sos/src/screen/sos.dart';
+import 'package:sos/src/screen/common/LoadingPage.dart';
+import 'package:sos/src/screen/user/signin.dart';
+import 'package:sos/src/screen/user/sos.dart';
 
-import '../component/bottom_bar.dart';
-import '../component/form_data.dart';
+import '../../component/bottom_bar.dart';
+import '../../component/form_data.dart';
 
 class HistoryPage extends StatefulWidget {
   const HistoryPage({super.key});

@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:sos/src/provider/config.dart';
-import 'package:sos/src/screen/signup.dart';
 
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:sos/src/screen/signupPhoneNumber.dart';
+import 'package:sos/src/screen/user/signupPhoneNumber.dart';
 import 'dart:developer' as developer;
 
-import '../model/accounts/signup.dart';
+import '../../model/accounts/signup.dart';
+import 'signup.dart';
 
 class OTP extends StatefulWidget {
   const OTP({Key? key, required this.data}) : super(key: key);

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:sos/main.dart';
 import 'package:sos/src/provider/config.dart';
+import 'package:sos/src/screen/user/otp.dart';
 
-import '../../main.dart';
-import 'otp.dart';
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;

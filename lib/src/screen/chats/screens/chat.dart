@@ -6,18 +6,16 @@ import 'package:sos/src/component/imageProfile.dart';
 import 'package:sos/src/component/image_navBer.dart';
 import 'package:sos/src/model/accounts/user.dart';
 import 'package:sos/src/provider/accounts/userService.dart';
-import 'package:sos/src/provider/config.dart';
-import 'package:sos/src/screen/LoadingPage.dart';
 import 'package:intl/intl.dart';
 
-// import 'package:web_socket_channel/io.dart';
-import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:sos/src/screen/chats/providers/messenger.dart';
 import 'package:sos/src/screen/chats/screens/addRoomChat.dart';
 
 import 'package:sos/src/model/messenger/response.dart';
 import 'package:sos/src/provider/messenger/messengerService.dart';
 import 'package:sos/src/screen/chats/screens/messenger.dart';
+
+import '../../common/LoadingPage.dart';
 
 
 class ChatPage extends StatefulWidget {

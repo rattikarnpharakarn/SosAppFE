@@ -1,10 +1,13 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:sos/src/component/endDrawer.dart';
-import 'package:sos/src/component/image_navBer.dart';
-import '../component/bottom_bar.dart';
-import '../sharedInfo/user.dart';
-import 'LoadingPage.dart';
+
+
+import '../../component/bottom_bar.dart';
+import '../../component/endDrawer.dart';
+import '../../component/image_navBer.dart';
+import '../../sharedInfo/user.dart';
+import '../common/LoadingPage.dart';
+
 
 class Home extends StatefulWidget {
   const Home({super.key});

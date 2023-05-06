@@ -7,10 +7,10 @@ import 'package:sos/main.dart';
 import 'package:sos/src/model/accounts/response.dart';
 import 'package:sos/src/model/accounts/signup.dart';
 import 'package:sos/src/provider/config.dart';
-import 'package:sos/src/screen/LoadingPage.dart';
 import 'package:sos/src/sharedInfo/user.dart';
 
-import 'home.dart';
+import 'LoadingPage.dart';
+
 
 class ChangePasswordPage extends StatefulWidget {
   const ChangePasswordPage({Key? key}) : super(key: key);
