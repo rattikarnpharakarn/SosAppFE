@@ -7,9 +7,12 @@ import '../../component/endDrawer.dart';
 import '../../component/image_navBer.dart';
 import '../../sharedInfo/user.dart';
 import '../common/LoadingPage.dart';
+import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class HomeOps extends StatefulWidget {
-  const HomeOps({super.key});
+  final IO.Socket socket;
+
+  const HomeOps({super.key, required this.socket});
 
   @override
   State<HomeOps> createState() => _HomeOpsState();
@@ -53,7 +56,10 @@ class _HomeOpsState extends State<HomeOps> {
       ? const LoadingPage()
       : Scaffold(
           key: _key,
-          bottomNavigationBar: ButtonBarOps(pageNumber: _pageNumber),
+          bottomNavigationBar: ButtonBarOps(
+            pageNumber: _pageNumber,
+            socket: widget.socket,
+          ),
           // appBar: NavbarPages(),
           appBar: AppBar(
             // toolbarHeight: 0,

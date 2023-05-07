@@ -12,9 +12,12 @@ import 'package:sos/src/screen/user/sos.dart';
 
 import '../../component/bottom_bar.dart';
 import '../../component/button_bar_ops.dart';
+import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class HistoryPage extends StatefulWidget {
-  const HistoryPage({super.key});
+  final IO.Socket socket;
+
+  const HistoryPage({super.key, required this.socket});
 
   @override
   State<HistoryPage> createState() => _HistoryPageState();
@@ -113,9 +116,11 @@ class _HistoryPageState extends State<HistoryPage> {
       ? const LoadingPage()
       : Scaffold(
           key: _key,
-    bottomNavigationBar: ButtonBarOps(pageNumber: _pageNumber),
-
-    // appBar: NavbarPages(),
+          bottomNavigationBar: ButtonBarOps(
+            pageNumber: _pageNumber,
+            socket: widget.socket,
+          ),
+          // appBar: NavbarPages(),
           appBar: AppBar(
             // toolbarHeight: 0,
             backgroundColor: const Color.fromARGB(255, 248, 0, 0),
@@ -302,18 +307,17 @@ class _HistoryPageByIdState extends State<HistoryPageById> {
   var newFormat = DateFormat("dd-MM-yyyy HH:mm น.");
   late GetInformByIdModel getInformById;
   List<String> imagepages = [];
+
   _getInformById() async {
     GetInformByIdModel data = await GetInformListById(widget.getInform.id);
 
     setState(() {
-      for (var data in data.images!)  {
+      for (var data in data.images!) {
         imagepages.add(data.image);
       }
       getInformById = data;
       isLoading = true;
     });
-
-
   }
 
   final int _pageNumber = 3;
@@ -499,37 +503,36 @@ class _HistoryPageByIdState extends State<HistoryPageById> {
                   child: imagepages == []
                       ? null
                       : Wrap(
-                    children: imagepages.map(
-                          (imageone) {
-                        return Container(
-                          padding: const EdgeInsets.all(1.0),
-                          child: TextButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      DetailScreen(images: imageone),
+                          children: imagepages.map(
+                            (imageone) {
+                              return Container(
+                                padding: const EdgeInsets.all(1.0),
+                                child: TextButton(
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            DetailScreen(images: imageone),
+                                      ),
+                                    );
+                                  },
+                                  child: Card(
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(10),
+                                      child: Image.memory(
+                                        base64Decode(imageone),
+                                        width: 150,
+                                        height: 150,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  ),
                                 ),
                               );
                             },
-                            child: Card(
-                              child: ClipRRect(
-                                borderRadius:
-                                BorderRadius.circular(10),
-                                child: Image.memory(
-                                  base64Decode(imageone),
-                                  width: 150,
-                                  height: 150,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            ),
-                          ),
-                        );
-                      },
-                    ).toList(),
-                  ),
+                          ).toList(),
+                        ),
                 ),
               ],
             ),

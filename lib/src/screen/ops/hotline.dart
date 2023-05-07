@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:sos/src/provider/config.dart';
 
 import 'package:url_launcher/url_launcher_string.dart';
 
@@ -6,27 +9,59 @@ import '../../component/bottom_bar.dart';
 import '../../component/button_bar_ops.dart';
 import '../../component/endDrawer.dart';
 import '../../component/image_navBer.dart';
+import '../../model/accounts/user.dart';
 import '../../model/hotlines/response.dart';
+import '../../provider/accounts/userService.dart';
 import '../../provider/hotlines/hotlineService.dart';
 import '../common/LoadingPage.dart';
+import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class HotlinePage extends StatefulWidget {
-  const HotlinePage({super.key});
+  final IO.Socket socket;
+
+
+  const HotlinePage({super.key,required this.socket});
 
   @override
   State<HotlinePage> createState() => HotlinePageState();
 }
+
 
 class HotlinePageState extends State<HotlinePage> {
   final GlobalKey<ScaffoldState> _key = GlobalKey();
   List<GetHotline> getHotlineList = [];
   bool isLoading = false;
 
+  late UserInfo userProfile;
+
   @override
   void initState() {
     super.initState();
+    _getUserProfile();
     callAPIHotline();
   }
+
+  _getUserProfile() async {
+    UserInfo data = await GetUserProfile();
+    setState(() {
+      userProfile = data;
+    });
+  }
+  //
+  // _socker() {
+  //   _socket = IO.io(
+  //     urlWsMessenger,
+  //     IO.OptionBuilder().setTransports(['websocket']).setQuery({
+  //       'username': userProfile.firstName + " " + userProfile.lastName,
+  //     }).build(),
+  //   );
+  //   for (var i = 0; i <= 5; i++) {
+  //     _socket.emit('emergency', {
+  //       'message': i,
+  //       'sender': userProfile.firstName + " " + userProfile.lastName,
+  //     });
+  //   }
+  // }
 
   callAPIHotline() async {
     await GetHotlineList().then((value) {
@@ -51,7 +86,10 @@ class HotlinePageState extends State<HotlinePage> {
       ? const LoadingPage()
       : Scaffold(
           key: _key,
-          bottomNavigationBar: ButtonBarOps(pageNumber: _pageNumber),
+          bottomNavigationBar: ButtonBarOps(
+            pageNumber: _pageNumber,
+            socket: widget.socket,
+          ),
           // appBar: NavbarPages(),
           appBar: AppBar(
             // toolbarHeight: 0,

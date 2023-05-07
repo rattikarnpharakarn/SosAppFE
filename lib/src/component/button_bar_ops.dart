@@ -4,26 +4,26 @@ import 'package:sos/src/screen/chats/screens/chat.dart';
 import '../screen/ops/history.dart';
 import '../screen/ops/home.dart';
 import '../screen/ops/hotline.dart';
+import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class ButtonBarOps extends StatefulWidget {
+  final IO.Socket socket;
+
   ButtonBarOps({
     super.key,
     required this.pageNumber,
+    required this.socket,
   });
+
   int pageNumber;
 
   @override
   // ignore: no_logic_in_create_state
-  State<ButtonBarOps> createState() => _ButtonBarOpsState(pageNumber: pageNumber);
+  State<ButtonBarOps> createState() => _ButtonBarOpsState();
 }
 
 class _ButtonBarOpsState extends State<ButtonBarOps> {
   final PageController controller = PageController();
-  _ButtonBarOpsState({
-    required this.pageNumber,
-  });
-
-  int pageNumber;
 
   @override
   void dispose() {
@@ -31,37 +31,37 @@ class _ButtonBarOpsState extends State<ButtonBarOps> {
   }
 
   void _onItemTapped(int index) {
-    if (index != pageNumber) {
+    if (index != widget.pageNumber) {
       setState(() {
-        pageNumber = index;
+        widget.pageNumber = index;
       });
 
-      if (pageNumber == 0) {
+      if (widget.pageNumber == 0) {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => const HomeOps(),
+            builder: (context) => HomeOps(socket: widget.socket),
           ),
         );
-      } else if (pageNumber == 1) {
+      } else if (widget.pageNumber == 1) {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => const HotlinePage(),
+            builder: (context) =>  HotlinePage(socket: widget.socket),
           ),
         );
-      } else if (pageNumber == 2) {
+      } else if (widget.pageNumber == 2) {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => const HistoryPage(),
+            builder: (context) =>  HistoryPage(socket: widget.socket),
           ),
         );
-      } else if (pageNumber == 3) {
+      } else if (widget.pageNumber == 3) {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => const ChatPage(),
+            builder: (context) =>  ChatPage(socket: widget.socket),
           ),
         );
       }
@@ -95,7 +95,7 @@ class _ButtonBarOpsState extends State<ButtonBarOps> {
             backgroundColor: Color.fromARGB(255, 255, 255, 255),
           ),
         ],
-        currentIndex: pageNumber,
+        currentIndex: widget.pageNumber,
         selectedItemColor: Color.fromARGB(255, 255, 0, 0),
         unselectedItemColor: Color.fromARGB(255, 0, 0, 0),
         backgroundColor: Color.fromARGB(255, 255, 255, 255),
@@ -104,4 +104,3 @@ class _ButtonBarOpsState extends State<ButtonBarOps> {
     );
   }
 }
-

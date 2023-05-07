@@ -3,15 +3,19 @@ import 'package:sos/src/screen/chats/screens/chat.dart';
 import 'package:sos/src/screen/user/sos.dart';
 
 import '../screen/user/history.dart';
-import '../screen/user/home.dart' as user;
-import '../screen/ops/home.dart' as ops;
+import '../screen/user/home.dart';
+import 'package:socket_io_client/socket_io_client.dart' as IO;
 import '../screen/user/hotline.dart';
 
 class Bottombar extends StatefulWidget {
+  final IO.Socket? socket;
+
   Bottombar({
     super.key,
     required this.pageNumber,
+    this.socket,
   });
+
   int pageNumber;
 
   @override
@@ -21,6 +25,7 @@ class Bottombar extends StatefulWidget {
 
 class _ButtonbarState extends State<Bottombar> {
   final PageController controller = PageController();
+
   _ButtonbarState({
     required this.pageNumber,
   });
@@ -42,7 +47,7 @@ class _ButtonbarState extends State<Bottombar> {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => const user.Home(),
+            builder: (context) => const Home(),
           ),
         );
       } else if (pageNumber == 1) {
@@ -70,7 +75,7 @@ class _ButtonbarState extends State<Bottombar> {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => const ChatPage(),
+            builder: (context) => ChatPage(socket: widget.socket!),
           ),
         );
       }
@@ -117,5 +122,3 @@ class _ButtonbarState extends State<Bottombar> {
     );
   }
 }
-
-

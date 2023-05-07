@@ -34,7 +34,7 @@ Future<UserInfo> GetUserProfile() async {
   }
 
   final response = await http.get(
-    Uri.parse('${urlAccount}'),
+    Uri.parse('${urlAccount}user/'),
     headers: <String, String>{
       'Authorization': 'Bearer ' + stringValue,
     },
@@ -129,7 +129,7 @@ Future<UserImage> GetUserImageById(userId) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String? stringValue = prefs.getString('token') ?? '';
   final response = await http.get(
-    Uri.parse('${urlAccount}image/' + userId.toString()),
+    Uri.parse('${urlAccount}user/image/' + userId.toString()),
     headers: <String, String>{
       'Authorization': 'Bearer ' + stringValue,
     },
@@ -153,7 +153,7 @@ Future<GetUserListModel> GetSearchUser(value) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String? stringValue = prefs.getString('token') ?? '';
   final response = await http.get(
-    Uri.parse('${urlAccount}searchUser/' + value),
+    Uri.parse('${urlAccount}user/searchUser/' + value),
     headers: <String, String>{
       'Authorization': 'Bearer ' + stringValue,
     },

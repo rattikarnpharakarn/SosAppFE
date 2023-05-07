@@ -15,11 +15,14 @@ import 'package:sos/src/screen/chats/screens/addRoomChat.dart';
 import 'package:sos/src/model/messenger/response.dart';
 import 'package:sos/src/provider/messenger/messengerService.dart';
 import 'package:sos/src/screen/chats/screens/messenger.dart';
+import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 import '../../common/LoadingPage.dart';
 
 class ChatPage extends StatefulWidget {
-  const ChatPage({Key? key}) : super(key: key);
+  final IO.Socket? socket;
+
+  ChatPage({Key? key,  this.socket}) : super(key: key);
 
   @override
   State<ChatPage> createState() => _ChatPageState();
@@ -43,10 +46,10 @@ class _ChatPageState extends State<ChatPage> {
 
   _getChatList() async {
     await GetChatList().then(
-      (value) {
+          (value) {
         if (value.code == "0") {
           setState(
-            () {
+                () {
               for (var data in value.list) {
                 //createdAt
                 DateTime dt1 = DateTime.parse(data.createdAt);
@@ -96,111 +99,119 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   @override
-  Widget build(BuildContext context) => isLoading == false
-      ? const LoadingPage()
-      : Scaffold(
-          key: _key,
-          bottomNavigationBar: userInfo.roleId == "2"
-              ? Bottombar(pageNumber: _pageNumber)
-              : userInfo.roleId == "3"
-                  ? ButtonBarOps(pageNumber: _pageNumber)
-                  : null,
-          appBar: AppBar(
-            // toolbarHeight: 0,
-            backgroundColor: const Color.fromARGB(255, 248, 0, 0),
-            elevation: 0,
-            // centerTitle: false,
-            title: Container(
-              padding: const EdgeInsets.all(10),
-              child: Row(
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
-                        child: const Text(
-                          "ห้องสนทนา",
-                          style: TextStyle(
-                            color: Color.fromARGB(255, 255, 255, 255),
-                            fontSize: 20,
-                            decorationStyle: TextDecorationStyle.solid,
-                          ),
+  Widget build(BuildContext context) =>
+      isLoading == false
+          ? const LoadingPage()
+          : Scaffold(
+        key: _key,
+        bottomNavigationBar: userInfo.roleId == "2"
+            ? Bottombar(pageNumber: _pageNumber)
+            : userInfo.roleId == "3"
+            ? ButtonBarOps(
+          pageNumber: _pageNumber,
+          socket: widget.socket!,
+        )
+            : null,
+        appBar: AppBar(
+          // toolbarHeight: 0,
+          backgroundColor: const Color.fromARGB(255, 248, 0, 0),
+          elevation: 0,
+          // centerTitle: false,
+          title: Container(
+            padding: const EdgeInsets.all(10),
+            child: Row(
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+                      child: const Text(
+                        "ห้องสนทนา",
+                        style: TextStyle(
+                          color: Color.fromARGB(255, 255, 255, 255),
+                          fontSize: 20,
+                          decorationStyle: TextDecorationStyle.solid,
                         ),
                       ),
-                    ],
-                  ),
-                  const Spacer(),
-                  Container(
-                    padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        shape: const CircleBorder(),
-                        backgroundColor: Color.fromARGB(255, 255, 255, 255),
-                      ),
-                      child: Image_NavBer(height: 40, width: 40),
-                      onPressed: () {
-                        _key.currentState!.openEndDrawer();
-                      },
                     ),
-                  )
-                ],
-              ),
-            ),
-            automaticallyImplyLeading: false,
-            titleSpacing: 0,
-            actions: [
-              Container(),
-            ],
-          ),
-          endDrawer: EndDrawer(),
-          endDrawerEnableOpenDragGesture: false,
-          body: SingleChildScrollView(
-            padding: const EdgeInsets.all(0.1),
-            child: Column(
-              children: [
-                for (GetChat m1 in getChatList) ...[
-                  ListTile(
-                      onTap: () => {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (_) => ChangeNotifierProvider(
-                                  create: (context) => ChatsProvider(),
-                                  child: ChatsPage(
-                                    username: userInfo.firstName +
-                                        " " +
-                                        userInfo.lastName,
-                                    getChat: m1,
-                                    userInfo: userInfo,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          },
-                      title: Text(m1.roomName),
-                      leading: Image_Profile(
-                        height: 43,
-                        width: 43,
-                        userId: m1.ownerId,
-                      ) // todo ทำการดึงรูปภาพของคนที่สร้างห้อง
-                      ),
-                ],
+                  ],
+                ),
+                const Spacer(),
+                Container(
+                  padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      shape: const CircleBorder(),
+                      backgroundColor: Color.fromARGB(255, 255, 255, 255),
+                    ),
+                    child: Image_NavBer(height: 40, width: 40),
+                    onPressed: () {
+                      _key.currentState!.openEndDrawer();
+                    },
+                  ),
+                )
               ],
             ),
           ),
-          floatingActionButton: FloatingActionButton.extended(
-            label: Icon(Icons.add),
-            tooltip: 'Add', // used by assistive technologies
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => AddRoomChatPage(
-                          roleId: userInfo.roleId,
-                        )),
-              );
-            },
+          automaticallyImplyLeading: false,
+          titleSpacing: 0,
+          actions: [
+            Container(),
+          ],
+        ),
+        endDrawer: EndDrawer(),
+        endDrawerEnableOpenDragGesture: false,
+        body: SingleChildScrollView(
+          padding: const EdgeInsets.all(0.1),
+          child: Column(
+            children: [
+              for (GetChat m1 in getChatList) ...[
+                ListTile(
+                    onTap: () =>
+                    {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) =>
+                              ChangeNotifierProvider(
+                                create: (context) => ChatsProvider(),
+                                child: ChatsPage(
+                                  username: userInfo.firstName +
+                                      " " +
+                                      userInfo.lastName,
+                                  getChat: m1,
+                                  userInfo: userInfo,
+                                ),
+                              ),
+                        ),
+                      ),
+                    },
+                    title: Text(m1.roomName),
+                    leading: Image_Profile(
+                      height: 43,
+                      width: 43,
+                      userId: m1.ownerId,
+                    ) // todo ทำการดึงรูปภาพของคนที่สร้างห้อง
+                ),
+              ],
+            ],
           ),
-        );
+        ),
+        floatingActionButton: FloatingActionButton.extended(
+          label: Icon(Icons.add),
+          tooltip: 'Add', // used by assistive technologies
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>
+                      AddRoomChatPage(
+                        socket: widget.socket!,
+                        roleId: userInfo.roleId,
+                      )),
+            );
+          },
+        ),
+      );
 }

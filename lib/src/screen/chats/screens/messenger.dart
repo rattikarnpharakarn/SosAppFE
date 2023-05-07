@@ -40,15 +40,19 @@ class _HomeScreenState extends State<ChatsPage> {
   final TextEditingController _messageInputController = TextEditingController();
   bool isLoading = false;
 
-  _sendMessage() async {
-    _socket.emit(widget.getChat.roomChatID, {
-      'message': _messageInputController.text.trim(),
-      'sender': widget.userInfo.firstName + " " + widget.userInfo.lastName
-    });
-    PostMessage(
-        widget.getChat.roomChatID, _messageInputController.text.trim(), "");
-    _messageInputController.clear();
+
+  @override
+  void initState() {
+    super.initState();
+    _socket = IO.io(
+      urlWsMessenger + widget.getChat.roomChatID,
+      IO.OptionBuilder().setTransports(['websocket']).setQuery({
+        'username': widget.userInfo.firstName + " " + widget.userInfo.lastName,
+      }).build(),
+    );
+    _connectSocket();
   }
+
 
   _connectSocket() {
     _socket.connect();
@@ -57,6 +61,17 @@ class _HomeScreenState extends State<ChatsPage> {
           .addNewMessage(Message.fromJson(data));
     });
     _getGetMessageById(widget.getChat.roomChatID);
+  }
+
+
+  _sendMessage() async {
+    _socket.emit(widget.getChat.roomChatID, {
+      'message': _messageInputController.text.trim(),
+      'sender': widget.userInfo.firstName + " " + widget.userInfo.lastName
+    });
+    PostMessage(
+        widget.getChat.roomChatID, _messageInputController.text.trim(), "");
+    _messageInputController.clear();
   }
 
   var newFormat = DateFormat("dd-MM-yyyy HH:mm น.");
@@ -112,18 +127,6 @@ class _HomeScreenState extends State<ChatsPage> {
     setState(() {
       isLoading = true;
     });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _socket = IO.io(
-      urlWsMessenger + widget.getChat.roomChatID,
-      IO.OptionBuilder().setTransports(['websocket']).setQuery({
-        'username': widget.userInfo.firstName + " " + widget.userInfo.lastName,
-      }).build(),
-    );
-    _connectSocket();
   }
 
   int _pageNumber = 4;
