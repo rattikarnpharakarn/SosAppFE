@@ -75,7 +75,7 @@ class _ButtonbarState extends State<Bottombar> {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => ChatPage(socket: widget.socket!),
+            builder: (context) => ChatPage(socket: widget.socket),
           ),
         );
       }

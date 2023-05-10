@@ -128,7 +128,6 @@ class _OTPState extends State<OTP> {
 
   @override
   Widget build(BuildContext context) {
-    developer.log('in');
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 248, 0, 0),
       appBar: AppBar(

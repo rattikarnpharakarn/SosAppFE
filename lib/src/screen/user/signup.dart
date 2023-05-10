@@ -8,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sos/src/model/accounts/response.dart';
 import 'package:sos/src/model/accounts/signup.dart';
 import 'package:sos/src/provider/config.dart';
+import 'package:sos/src/screen/user/signin.dart';
 import 'package:sos/src/sharedInfo/user.dart';
 
 import 'package:http/http.dart' as http;
@@ -105,7 +106,7 @@ class _SignupState extends State<Signup> {
 
       // ignore: use_build_context_synchronously
       Navigator.push(context, MaterialPageRoute(builder: (context) {
-        return const Home();
+        return const Signin();
       }));
 
       return ReturnResponse.fromJson(jsonDecode(response.body));

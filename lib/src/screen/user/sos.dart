@@ -9,7 +9,10 @@ import 'package:sos/src/component/image_navBer.dart';
 import 'package:sos/src/component/sosComponent.dart';
 
 import 'package:image_picker/image_picker.dart';
+import 'package:sos/src/model/accounts/user.dart';
 import 'package:sos/src/model/emergency/request.dart';
+import 'package:sos/src/provider/accounts/userService.dart';
+import 'package:sos/src/provider/config.dart';
 import 'package:sos/src/provider/emergency/inform.dart';
 
 import 'dart:convert';
@@ -20,6 +23,8 @@ import 'package:url_launcher/url_launcher_string.dart';
 
 import '../common/LoadingPage.dart';
 import 'history.dart';
+import 'package:socket_io_client/socket_io_client.dart' as IO;
+
 
 class SosPage extends StatefulWidget {
   const SosPage({super.key});
@@ -385,6 +390,8 @@ class NSosPageState extends State<SosPage> {
         );
 }
 
+
+
 class SosPage1 extends StatefulWidget {
   int onSelectSubTypeId;
   String textArea;
@@ -402,6 +409,9 @@ class SosPage1 extends StatefulWidget {
 }
 
 class _SosPage1State extends State<SosPage1> {
+
+  late IO.Socket _socket;
+
   final GlobalKey<ScaffoldState> _key = GlobalKey();
   bool isLoading = false;
 
@@ -409,9 +419,6 @@ class _SosPage1State extends State<SosPage1> {
   String latitude = '';
   String longitude = '';
   int userID = 0;
-
-  // _description = widget.textArea;
-  // _subTypeId = widget.onSelectSubTypeId;
 
   @override
   void initState() {
@@ -536,8 +543,8 @@ class _SosPage1State extends State<SosPage1> {
   }
 
   Future<void> _callAPIInform() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String id = prefs.getString('id') ?? '';
+    UserInfo data = await GetUserProfile();
+
     Inform req = Inform(
       description: widget.textArea,
       images: imagepages,
@@ -545,7 +552,7 @@ class _SosPage1State extends State<SosPage1> {
       longitude: longitude,
       phoneNumberCallBack: _textPhoneNumber,
       subTypeID: widget.onSelectSubTypeId,
-      userID: id,
+      userID: data.id,
     );
 
     var res = await PostInform(req);
@@ -614,6 +621,20 @@ class _SosPage1State extends State<SosPage1> {
         },
       );
     } else {
+      _socket = IO.io(
+        urlWsMessenger,
+        IO.OptionBuilder().setTransports(['websocket']).setQuery({
+          'username': data.firstName + " " + data.lastName,
+        }).build(),
+      );
+
+      _socket.connect();
+      _socket.emit("emergency", {
+        'message': "Test SOS",
+        'sender':  data.firstName + " " + data.lastName,
+      });
+
+
       // ignore: use_build_context_synchronously
       await showCupertinoModalPopup<void>(
         context: context,

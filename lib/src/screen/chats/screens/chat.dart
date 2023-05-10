@@ -22,7 +22,7 @@ import '../../common/LoadingPage.dart';
 class ChatPage extends StatefulWidget {
   final IO.Socket? socket;
 
-  ChatPage({Key? key,  this.socket}) : super(key: key);
+  const ChatPage({Key? key,  this.socket}) : super(key: key);
 
   @override
   State<ChatPage> createState() => _ChatPageState();
