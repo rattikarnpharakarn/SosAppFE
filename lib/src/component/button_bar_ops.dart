@@ -7,12 +7,9 @@ import '../screen/ops/hotline.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class ButtonBarOps extends StatefulWidget {
-  final IO.Socket socket;
-
   ButtonBarOps({
     super.key,
     required this.pageNumber,
-    required this.socket,
   });
 
   int pageNumber;
@@ -40,28 +37,28 @@ class _ButtonBarOpsState extends State<ButtonBarOps> {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => HomeOps(socket: widget.socket),
+            builder: (context) => HomeOps(),
           ),
         );
       } else if (widget.pageNumber == 1) {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) =>  HotlinePage(socket: widget.socket),
+            builder: (context) =>  HotlinePage(),
           ),
         );
       } else if (widget.pageNumber == 2) {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) =>  HistoryPage(socket: widget.socket),
+            builder: (context) =>  HistoryPage(),
           ),
         );
       } else if (widget.pageNumber == 3) {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) =>  ChatPage(socket: widget.socket),
+            builder: (context) =>  ChatPage(),
           ),
         );
       }

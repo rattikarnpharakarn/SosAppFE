@@ -12,12 +12,10 @@ import 'package:sos/src/screen/user/sos.dart';
 
 import '../../component/bottom_bar.dart';
 import '../../component/button_bar_ops.dart';
-import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class HistoryPage extends StatefulWidget {
-  final IO.Socket socket;
 
-  const HistoryPage({super.key, required this.socket});
+  const HistoryPage({super.key,});
 
   @override
   State<HistoryPage> createState() => _HistoryPageState();
@@ -118,7 +116,6 @@ class _HistoryPageState extends State<HistoryPage> {
           key: _key,
           bottomNavigationBar: ButtonBarOps(
             pageNumber: _pageNumber,
-            socket: widget.socket,
           ),
           // appBar: NavbarPages(),
           appBar: AppBar(

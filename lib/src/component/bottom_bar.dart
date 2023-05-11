@@ -4,16 +4,13 @@ import 'package:sos/src/screen/user/sos.dart';
 
 import '../screen/user/history.dart';
 import '../screen/user/home.dart';
-import 'package:socket_io_client/socket_io_client.dart' as IO;
 import '../screen/user/hotline.dart';
 
 class Bottombar extends StatefulWidget {
-  final IO.Socket? socket;
 
   Bottombar({
     super.key,
     required this.pageNumber,
-    this.socket,
   });
 
   int pageNumber;
@@ -75,7 +72,7 @@ class _ButtonbarState extends State<Bottombar> {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => ChatPage(socket: widget.socket),
+            builder: (context) => ChatPage(),
           ),
         );
       }

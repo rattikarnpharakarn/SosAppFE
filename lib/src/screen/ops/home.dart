@@ -10,9 +10,8 @@ import '../common/LoadingPage.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class HomeOps extends StatefulWidget {
-  final IO.Socket socket;
 
-  const HomeOps({super.key, required this.socket});
+  const HomeOps({super.key});
 
   @override
   State<HomeOps> createState() => _HomeOpsState();
@@ -58,7 +57,6 @@ class _HomeOpsState extends State<HomeOps> {
           key: _key,
           bottomNavigationBar: ButtonBarOps(
             pageNumber: _pageNumber,
-            socket: widget.socket,
           ),
           // appBar: NavbarPages(),
           appBar: AppBar(

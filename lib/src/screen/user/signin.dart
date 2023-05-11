@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:sos/main.dart';
 import 'package:sos/src/provider/config.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sos/src/sharedInfo/user.dart';
@@ -92,7 +93,7 @@ class _SigninState extends State<Signin> {
         context,
         MaterialPageRoute(
           builder: (context) {
-            return const Home();
+            return const MyApp();
           },
         ),
       );

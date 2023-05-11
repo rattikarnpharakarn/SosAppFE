@@ -42,26 +42,7 @@ Future<void> main() async {
 
   await ShowflutterLocalNoificationPlugin.initialize(initializationSettings);
 
-  UserInfo data = await GetUserProfile();
-  if (data.roleId != "2") {
-    await initializeService();
-
-    UserInfo data = await GetUserProfile();
-    _socket = IO.io(
-      urlWsMessenger,
-      IO.OptionBuilder().setTransports(['websocket']).setQuery({
-        'username': data.firstName + " " + data.lastName,
-      }).build(),
-    );
-
-    _socket.connect();
-
-    _socket.on('emergency', (data) {
-      print(jsonEncode(data));
-      //todo FlutterLocalNotificationsPlugin
-    });
-
-  }
+  await initializeService();
 
   runApp(const MyApp());
 }
@@ -70,16 +51,16 @@ Future<void> initializeService() async {
   final service = FlutterBackgroundService();
 
   /// OPTIONAL, using custom notification channel id
-  const AndroidNotificationChannel channel = AndroidNotificationChannel(
-    'my_foreground', // id
-    'MY FOREGROUND SERVICE', // title
-    description:
-    'This channel is used for important notifications.', // description
-    importance: Importance.high, // importance must be at low or higher level
-  );
+  // const AndroidNotificationChannel channel = AndroidNotificationChannel(
+  //   'my_foreground', // id
+  //   'MY FOREGROUND SERVICE', // title
+  //   description:
+  //       'This channel is used for important notifications.', // description
+  //   importance: Importance.high, // importance must be at low or higher level
+  // );
 
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-  FlutterLocalNotificationsPlugin();
+      FlutterLocalNotificationsPlugin();
 
   // if (Platform.isIOS) {
   //   await flutterLocalNotificationsPlugin.initialize(
@@ -89,11 +70,10 @@ Future<void> initializeService() async {
   //   );
   // }
 
-
-  await flutterLocalNotificationsPlugin
-      .resolvePlatformSpecificImplementation<
-      AndroidFlutterLocalNotificationsPlugin>()
-      ?.createNotificationChannel(channel);
+  // await flutterLocalNotificationsPlugin
+  //     .resolvePlatformSpecificImplementation<
+  //         AndroidFlutterLocalNotificationsPlugin>()
+  //     ?.createNotificationChannel(channel);
 
   await service.configure(
     androidConfiguration: AndroidConfiguration(
@@ -124,8 +104,6 @@ Future<void> initializeService() async {
   service.startService();
 }
 
-
-
 @pragma('vm:entry-point')
 void onStart(ServiceInstance service) async {
   // Only available for flutter 3.0.0 and later
@@ -139,7 +117,7 @@ void onStart(ServiceInstance service) async {
 
   /// OPTIONAL when use custom notification
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-  FlutterLocalNotificationsPlugin();
+      FlutterLocalNotificationsPlugin();
 
   if (service is AndroidServiceInstance) {
     service.on('setAsForeground').listen((event) {
@@ -155,60 +133,92 @@ void onStart(ServiceInstance service) async {
     service.stopSelf();
   });
 
-
-
-  // bring to foreground
-  Timer.periodic(const Duration(seconds: 1), (timer) async {
-    if (service is AndroidServiceInstance) {
-      if (await service.isForegroundService()) {
-        /// OPTIONAL for use custom notification
-        /// the notification id must be equals with AndroidConfiguration when you call configure() method.
-        flutterLocalNotificationsPlugin.show(
-          888,
-          'COOL SERVICE',
-          'Awesome ${DateTime.now()}',
-          const NotificationDetails(
-            android: AndroidNotificationDetails(
-              'my_foreground',
-              'MY FOREGROUND SERVICE',
-              icon: 'ic_bg_service_small',
-              ongoing: true,
-            ),
-          ),
-        );
-
-        // if you don't using custom notification, uncomment this
-        service.setForegroundNotificationInfo(
-          title: "My App Service",
-          content: "Updated at ${DateTime.now()}",
-        );
-      }
-    }
-
-    /// you can see this log in logcat
-    print('FLUTTER BACKGROUND SERVICE: ${DateTime.now()}');
-
-    // test using external plugin
-    final deviceInfo = DeviceInfoPlugin();
-    String? device;
-    if (Platform.isAndroid) {
-      final androidInfo = await deviceInfo.androidInfo;
-      device = androidInfo.model;
-    }
-
-    if (Platform.isIOS) {
-      final iosInfo = await deviceInfo.iosInfo;
-      device = iosInfo.model;
-    }
-
-    service.invoke(
-      'update',
-      {
-        "current_date": DateTime.now().toIso8601String(),
-        "device": device,
-      },
+  UserInfo data = await GetUserProfile();
+  if (data.roleId != "2") {
+    _socket = IO.io(
+      urlWsMessenger,
+      IO.OptionBuilder().setTransports(['websocket']).setQuery({
+        'username': data.firstName + " " + data.lastName,
+      }).build(),
     );
-  });
+    _socket.connect();
+
+
+    const AndroidNotificationDetails androidNotificationDetails =
+    AndroidNotificationDetails(
+      'nextflow_noti_SOS',
+      'SOS',
+      channelDescription: 'SOS',
+      importance: Importance.max,
+      priority: Priority.high,
+      ticker: 'ticker',
+    );
+
+    const NotificationDetails platformChannelDetails = NotificationDetails(
+      android: androidNotificationDetails,
+    );
+
+    _socket.on('emergency', (m1) async {
+      await ShowflutterLocalNoificationPlugin.show(
+        2,
+        'SOS',
+        m1.toString(),
+        platformChannelDetails,
+      );
+      print(" +++++++++++++ data : " + m1.toString());
+    });
+
+    // bring to foreground
+    Timer.periodic(const Duration(seconds: 1), (timer) async {
+      if (service is AndroidServiceInstance) {
+        if (await service.isForegroundService()) {}
+      }
+
+      // await ShowflutterLocalNoificationPlugin.show(
+      //     2,
+      //     'SOS',
+      //     'Data ${data.id}',
+      //     platformChannelDetails);
+
+      // _socket.emit("emergency", {
+      //   'message': "1",
+      //   'sender': data.firstName + " " + data.lastName,
+      // });
+
+
+
+      // await ShowflutterLocalNoificationPlugin.show(
+      //   222,
+      //   'TEST',
+      //   "TEST",
+      //   platformChannelDetails,
+      // );
+
+      /// you can see this log in logcat
+      // print('FLUTTER BACKGROUND SERVICE: ${DateTime.now()}');
+
+      // test using external plugin
+      final deviceInfo = DeviceInfoPlugin();
+      String? device;
+      if (Platform.isAndroid) {
+        final androidInfo = await deviceInfo.androidInfo;
+        device = androidInfo.model;
+      }
+
+      if (Platform.isIOS) {
+        final iosInfo = await deviceInfo.iosInfo;
+        device = iosInfo.model;
+      }
+
+      service.invoke(
+        'update',
+        {
+          "current_date": DateTime.now().toIso8601String(),
+          "device": device,
+        },
+      );
+    });
+  }
 }
 
 @pragma('vm:entry-point')
@@ -224,7 +234,6 @@ Future<bool> onIosBackground(ServiceInstance service) async {
 
   return true;
 }
-
 
 class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -245,7 +254,6 @@ class _MyAppState extends State<MyApp> {
 
   _getUserProfile() async {
     UserInfo data = await GetUserProfile();
-    // print(userInfo.roleId);
     setState(() {
       isLoading = true;
       userInfo = data;
@@ -260,7 +268,7 @@ class _MyAppState extends State<MyApp> {
           ? const Signin()
           : userInfo.roleId == "2"
               ? Home()
-              : HomeOps(socket: _socket),
+              : HomeOps(),
       // home: SosPage(),
     );
   }

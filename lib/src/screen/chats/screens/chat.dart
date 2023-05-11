@@ -15,14 +15,12 @@ import 'package:sos/src/screen/chats/screens/addRoomChat.dart';
 import 'package:sos/src/model/messenger/response.dart';
 import 'package:sos/src/provider/messenger/messengerService.dart';
 import 'package:sos/src/screen/chats/screens/messenger.dart';
-import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 import '../../common/LoadingPage.dart';
 
 class ChatPage extends StatefulWidget {
-  final IO.Socket? socket;
 
-  const ChatPage({Key? key,  this.socket}) : super(key: key);
+  const ChatPage({Key? key}) : super(key: key);
 
   @override
   State<ChatPage> createState() => _ChatPageState();
@@ -109,7 +107,6 @@ class _ChatPageState extends State<ChatPage> {
             : userInfo.roleId == "3"
             ? ButtonBarOps(
           pageNumber: _pageNumber,
-          socket: widget.socket!,
         )
             : null,
         appBar: AppBar(
@@ -207,7 +204,6 @@ class _ChatPageState extends State<ChatPage> {
               MaterialPageRoute(
                   builder: (context) =>
                       AddRoomChatPage(
-                        socket: widget.socket!,
                         roleId: userInfo.roleId,
                       )),
             );

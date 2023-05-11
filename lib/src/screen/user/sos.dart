@@ -25,7 +25,6 @@ import '../common/LoadingPage.dart';
 import 'history.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
-
 class SosPage extends StatefulWidget {
   const SosPage({super.key});
 
@@ -47,7 +46,7 @@ class NSosPageState extends State<SosPage> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration(milliseconds: 500), () {
+    Future.delayed(Duration(milliseconds: 500), ()  {
       setState(() {
         isLoading = true;
       });
@@ -388,9 +387,12 @@ class NSosPageState extends State<SosPage> {
             ),
           ),
         );
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
 }
-
-
 
 class SosPage1 extends StatefulWidget {
   int onSelectSubTypeId;
@@ -409,7 +411,6 @@ class SosPage1 extends StatefulWidget {
 }
 
 class _SosPage1State extends State<SosPage1> {
-
   late IO.Socket _socket;
 
   final GlobalKey<ScaffoldState> _key = GlobalKey();
@@ -423,11 +424,27 @@ class _SosPage1State extends State<SosPage1> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration(milliseconds: 500), () {
+    Future.delayed(Duration(milliseconds: 500), () async {
+      UserInfo data = await GetUserProfile();
+      _socket = IO.io(
+        urlWsMessenger,
+        IO.OptionBuilder().setTransports(['websocket']).setQuery({
+          'username': data.firstName + " " + data.lastName,
+        }).build(),
+      );
+
+      _socket.connect();
       setState(() {
         isLoading = true;
       });
     });
+  }
+
+  @override
+  void dispose() {
+    _socket.onDisconnect((data) => print('Socket.IO server disconnected'));
+    _socket.dispose();
+    super.dispose();
   }
 
   final int _pageNumber = 2;
@@ -621,19 +638,10 @@ class _SosPage1State extends State<SosPage1> {
         },
       );
     } else {
-      _socket = IO.io(
-        urlWsMessenger,
-        IO.OptionBuilder().setTransports(['websocket']).setQuery({
-          'username': data.firstName + " " + data.lastName,
-        }).build(),
-      );
-
-      _socket.connect();
       _socket.emit("emergency", {
-        'message': "Test SOS",
-        'sender':  data.firstName + " " + data.lastName,
+        'message': data.firstName + " " + data.lastName,
+        'sender': data.firstName + " " + data.lastName,
       });
-
 
       // ignore: use_build_context_synchronously
       await showCupertinoModalPopup<void>(
@@ -682,12 +690,15 @@ class _SosPage1State extends State<SosPage1> {
                                 'ok',
                                 style: TextStyle(fontSize: 16),
                               ),
-                              onPressed: () => Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const HistoryPage(),
+                              onPressed: () => {
+                                _socket.ondisconnect(),
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const HistoryPage(),
+                                  ),
                                 ),
-                              ),
+                              },
                             ),
                           ),
                         ],
@@ -703,25 +714,6 @@ class _SosPage1State extends State<SosPage1> {
       // _showNotification();
     }
   }
-
-  // Future<void> _showNotification() async {
-  //   const AndroidNotificationDetails androidNotificationDetails =
-  //       AndroidNotificationDetails(
-  //     'nextflow_noti_002',
-  //     'แจ้งเตือน',
-  //     channelDescription: 'Sos',
-  //     importance: Importance.max,
-  //     priority: Priority.high,
-  //     ticker: 'ticker',
-  //   );
-  //
-  //   const NotificationDetails platformChannelDetails = NotificationDetails(
-  //     android: androidNotificationDetails,
-  //   );
-  //
-  //   await ShowflutterLocalNoificationPlugin.show(1, 'ยืนยันการแจ้งเหตุ',
-  //       'คุณได้ทำการแจ้งเหตุเรียบร้อยแล้ว', platformChannelDetails);
-  // }
 
   @override
   Widget build(BuildContext context) => isLoading == false
@@ -906,7 +898,7 @@ class _SosPage1State extends State<SosPage1> {
                                       lat = '${value.latitude}';
                                       long = '${value.longitude}';
                                       _liveLocation();
-                                      await _openMap(lat, long);
+                                      // await _openMap(lat, long);
                                     });
                                   },
                                 ),

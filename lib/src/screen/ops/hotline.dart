@@ -17,10 +17,10 @@ import '../common/LoadingPage.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class HotlinePage extends StatefulWidget {
-  final IO.Socket socket;
 
 
-  const HotlinePage({super.key,required this.socket});
+
+  const HotlinePage({super.key});
 
   @override
   State<HotlinePage> createState() => HotlinePageState();
@@ -88,7 +88,6 @@ class HotlinePageState extends State<HotlinePage> {
           key: _key,
           bottomNavigationBar: ButtonBarOps(
             pageNumber: _pageNumber,
-            socket: widget.socket,
           ),
           // appBar: NavbarPages(),
           appBar: AppBar(
