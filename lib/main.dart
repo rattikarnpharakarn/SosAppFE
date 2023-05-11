@@ -168,10 +168,25 @@ void onStart(ServiceInstance service) async {
       print(" +++++++++++++ data : " + m1.toString());
     });
 
+    _socket.emit("emergency", {
+      'message': "1",
+      'sender': data.firstName + " " + data.lastName,
+    });
+
     // bring to foreground
     Timer.periodic(const Duration(seconds: 1), (timer) async {
       if (service is AndroidServiceInstance) {
-        if (await service.isForegroundService()) {}
+        if (await service.isForegroundService()) {
+          _socket.on('emergency', (m1) async {
+            await ShowflutterLocalNoificationPlugin.show(
+              222,
+              'SOS',
+              m1.toString(),
+              platformChannelDetails,
+            );
+            print(" +++++++++++++ data : " + m1.toString());
+          });
+        }
       }
 
       // await ShowflutterLocalNoificationPlugin.show(
@@ -185,14 +200,6 @@ void onStart(ServiceInstance service) async {
       //   'sender': data.firstName + " " + data.lastName,
       // });
 
-
-
-      // await ShowflutterLocalNoificationPlugin.show(
-      //   222,
-      //   'TEST',
-      //   "TEST",
-      //   platformChannelDetails,
-      // );
 
       /// you can see this log in logcat
       // print('FLUTTER BACKGROUND SERVICE: ${DateTime.now()}');

@@ -437,6 +437,8 @@ class _SosPage1State extends State<SosPage1> {
       setState(() {
         isLoading = true;
       });
+
+
     });
   }
 
@@ -897,7 +899,12 @@ class _SosPage1State extends State<SosPage1> {
                                     _getCurrentLocation().then((value) async {
                                       lat = '${value.latitude}';
                                       long = '${value.longitude}';
+
                                       _liveLocation();
+                                      setState(() {
+                                        latitude = lat;
+                                        longitude = long;
+                                      });
                                       // await _openMap(lat, long);
                                     });
                                   },

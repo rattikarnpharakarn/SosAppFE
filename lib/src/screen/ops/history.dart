@@ -5,10 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:sos/src/component/endDrawer.dart';
 import 'package:sos/src/component/image_navBer.dart';
+import 'package:sos/src/model/emergency/request.dart';
 import 'package:sos/src/model/emergency/response.dart';
 import 'package:sos/src/provider/emergency/inform.dart';
 import 'package:sos/src/screen/common/LoadingPage.dart';
 import 'package:sos/src/screen/user/sos.dart';
+import 'package:sos/src/sharedInfo/user.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../component/bottom_bar.dart';
 import '../../component/button_bar_ops.dart';
@@ -36,7 +39,7 @@ class _HistoryPageState extends State<HistoryPage> {
   List<GetInform> getInformList = [];
 
   callAPIGetInformList() async {
-    await GetInformList().then(
+    await GetInformListOps().then(
       (value) {
         if (value.code == "0") {
           setState(
@@ -133,7 +136,7 @@ class _HistoryPageState extends State<HistoryPage> {
                       Container(
                         padding: const EdgeInsets.all(1),
                         child: const Text(
-                          "ประวัติการแจ้งเหตุ",
+                          "ประวัติการรับแจ้งเหตุ",
                           style: TextStyle(
                             color: Color.fromARGB(255, 255, 255, 255),
                             fontSize: 20,
@@ -228,7 +231,7 @@ class _HistoryPageState extends State<HistoryPage> {
                               ),
                             ),
                             textRow(
-                              'ผู้รับแจ้ง : ',
+                              'ผู้แจ้งเหตุ : ',
                               const TextStyle(
                                 fontSize: 18,
                                 color: Colors.black,
@@ -243,18 +246,6 @@ class _HistoryPageState extends State<HistoryPage> {
                               TextStyle(fontSize: 15.0),
                             ),
                             textRow(
-                              'สถานที่ ที่รับแจ้ง : ',
-                              const TextStyle(
-                                fontSize: 18,
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold,
-                              ),
-                              m1.workplace,
-                              const TextStyle(fontSize: 16, color: Colors.teal),
-                              '',
-                              TextStyle(fontSize: 15.0),
-                            ),
-                            textRow(
                               'สถานะ : ',
                               const TextStyle(
                                 fontSize: 18,
@@ -262,9 +253,11 @@ class _HistoryPageState extends State<HistoryPage> {
                                 fontWeight: FontWeight.bold,
                               ),
                               m1.status,
-                              const TextStyle(
+                              TextStyle(
                                 fontSize: 16,
-                                color: Colors.green,
+                                color: m1.status == "รับเรื่องการแจ้งเหตุแล้ว" ? Colors.red :
+                                m1.status == "กำลังดำเนินการ" ? Colors.orange :
+                                m1.status == "ดำเนินการเสร็จสิ้น" ? Colors.green : null,
                               ),
                               '',
                               TextStyle(fontSize: 15.0),
@@ -306,7 +299,7 @@ class _HistoryPageByIdState extends State<HistoryPageById> {
   List<String> imagepages = [];
 
   _getInformById() async {
-    GetInformByIdModel data = await GetInformListById(widget.getInform.id);
+    GetInformByIdModel data = await GetInformByIdOps(widget.getInform.id);
 
     setState(() {
       for (var data in data.images!) {
@@ -317,7 +310,7 @@ class _HistoryPageByIdState extends State<HistoryPageById> {
     });
   }
 
-  final int _pageNumber = 3;
+  final int _pageNumber = 2;
 
   Widget textRow(String text1, TextStyle textStyle1, String text2,
       TextStyle textStyle2, String text3, TextStyle textStyle3) {
@@ -345,12 +338,31 @@ class _HistoryPageByIdState extends State<HistoryPageById> {
     );
   }
 
+  Future<void> _openMap(String lat, String long) async {
+    String googleURL =
+        'https://www.google.com/maps/search/?api=1&query=$lat,$long';
+
+    await launchUrlString(googleURL);
+  }
+
+  Future<ReturnResponse> _updateInform(status) async {
+    String opsIdStr = await getUserIDSF();
+    var infomrId = widget.getInform.id;
+    var opsId = int.parse(opsIdStr);
+    UpdateInform req = UpdateInform(
+      opsID: opsId,
+      status: status,
+    );
+    Future<ReturnResponse> res = UpdateInformOps(req, infomrId);
+    return res;
+  }
+
   @override
   Widget build(BuildContext context) => isLoading == false
       ? const LoadingPage()
       : Scaffold(
           key: _key,
-          bottomNavigationBar: Bottombar(pageNumber: _pageNumber),
+          bottomNavigationBar: ButtonBarOps(pageNumber: _pageNumber),
           // appBar: NavbarPages(),
           appBar: AppBar(
             // toolbarHeight: 0,
@@ -451,7 +463,7 @@ class _HistoryPageByIdState extends State<HistoryPageById> {
                           ),
                         ),
                         textRow(
-                          'ผู้รับแจ้ง : ',
+                          'ผู้แจ้งเหตุ : ',
                           const TextStyle(
                             fontSize: 18,
                             color: Colors.black,
@@ -466,18 +478,6 @@ class _HistoryPageByIdState extends State<HistoryPageById> {
                           TextStyle(fontSize: 15.0),
                         ),
                         textRow(
-                          'สถานที่ ที่รับแจ้ง : ',
-                          const TextStyle(
-                            fontSize: 18,
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          widget.getInform.workplace,
-                          const TextStyle(fontSize: 16, color: Colors.teal),
-                          '',
-                          TextStyle(fontSize: 15.0),
-                        ),
-                        textRow(
                           'สถานะ : ',
                           const TextStyle(
                             fontSize: 18,
@@ -485,13 +485,109 @@ class _HistoryPageByIdState extends State<HistoryPageById> {
                             fontWeight: FontWeight.bold,
                           ),
                           widget.getInform.status,
-                          const TextStyle(
+                          TextStyle(
                             fontSize: 16,
-                            color: Colors.green,
+                            color: widget.getInform.status == "รับเรื่องการแจ้งเหตุแล้ว" ? Colors.red :
+                            widget.getInform.status == "กำลังดำเนินการ" ? Colors.orange :
+                            widget.getInform.status == "ดำเนินการเสร็จสิ้น" ? Colors.green : null,
                           ),
                           '',
                           TextStyle(fontSize: 15.0),
                         ),
+                        Row(
+                          children: [
+                            Container(
+                              alignment: Alignment.topLeft,
+                              child: TextButton(
+                                onPressed: () {
+                                  _openMap(widget.getInform.latitude,
+                                      widget.getInform.longitude);
+                                },
+                                child: const Text(
+                                  'OpenMap',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.blue,
+                                    decoration: TextDecoration.underline,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const Spacer(
+                              flex: 4,
+                            ),
+                            Container(
+                              alignment: Alignment.topLeft,
+                              child: widget.getInform.status == "รับเรื่องการแจ้งเหตุแล้ว" ?
+                              ElevatedButton(
+                                style: ButtonStyle(
+                                  backgroundColor:
+                                  MaterialStateProperty.all(Colors.red.shade400),
+                                  shape: MaterialStateProperty.all(
+                                    RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(15.29),
+                                      side:  BorderSide(
+                                          width: 1, color: Colors.red),
+                                    ),
+                                  ),
+                                ),
+                                onPressed: () async {
+                                  await _updateInform(3);
+                                  Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          HistoryPage(),
+                                    ),
+                                  );
+                                },
+                                child: const Text(
+                                  'อัพเดทสถานะ ดำเนินงาน',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.white,
+                                    decoration: TextDecoration.underline,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ) : widget.getInform.status == "ดำเนินการเสร็จสิ้น" ?
+                              null:
+                              ElevatedButton(
+                                style: ButtonStyle(
+                                  backgroundColor:
+                                  MaterialStateProperty.all(Colors.orange.shade400),
+                                  shape: MaterialStateProperty.all(
+                                    RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(15.29),
+                                      side:  BorderSide(
+                                          width: 1, color: Colors.orange),
+                                    ),
+                                  ),
+                                ),
+                                onPressed: () async {
+                                  await _updateInform(4);
+                                  Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          HistoryPage(),
+                                    ),
+                                  );
+                                },
+                                child: const Text(
+                                  'อัพเดทสถานะ จบการทำงาน',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.white,
+                                    decoration: TextDecoration.underline,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ) ,
+                            ),
+                          ],
+                        )
                       ],
                     ),
                   ),

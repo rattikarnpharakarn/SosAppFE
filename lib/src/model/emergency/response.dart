@@ -135,13 +135,17 @@ class GetInformByIdModel {
 
   factory GetInformByIdModel.fromJson(Map<String, dynamic> json) {
     List<GetInformByIdImage>? images = [];
-    for (dynamic e in json['data']['image']) {
-      GetInformByIdImage arr = GetInformByIdImage(
-        imageId: e['ImageId'] ?? '',
-        image: e['Image'] ?? '',
-      );
-      images.add(arr);
+
+    if (json['data']['image'] != null) {
+      for (dynamic e in json['data']['image']) {
+        GetInformByIdImage arr = GetInformByIdImage(
+          imageId: e['ImageId'] ?? '',
+          image: e['Image'] ?? '',
+        );
+        images.add(arr);
+      }
     }
+
     return GetInformByIdModel(
       code: json['code'],
       message: json['message'],

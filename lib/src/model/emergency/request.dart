@@ -29,3 +29,17 @@ class Inform {
     };
   }
 }
+
+class UpdateInform {
+  int opsID;
+  int status;
+
+  UpdateInform({
+    required this.opsID,
+    required this.status,
+  });
+
+  Map toJson() {
+    return {'opsID': opsID, 'status': status};
+  }
+}
