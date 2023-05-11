@@ -560,7 +560,7 @@ class _HistoryPageByIdState extends State<HistoryPageById> {
                                   shape: MaterialStateProperty.all(
                                     RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(15.29),
-                                      side:  BorderSide(
+                                      side: const BorderSide(
                                           width: 1, color: Colors.orange),
                                     ),
                                   ),
