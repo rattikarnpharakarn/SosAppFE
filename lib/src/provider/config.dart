@@ -7,7 +7,7 @@ String urlAccount = 'http://10.0.2.2:80/SosApp/accounts/';
 String urlEmergency = 'http://10.0.2.2:81/SosApp/emergency/';
 String urlHotline = 'http://10.0.2.2:82/SosApp/hotline/';
 String urlMessenger = 'http://10.0.2.2:83/SosApp/messenger/';
-String urlWsMessenger = 'http://10.0.2.2:3000/';
+String urlWsMessenger = 'http://10.0.2.2:84/';
 
 
 

@@ -256,8 +256,8 @@ class _HistoryPageState extends State<HistoryPage> {
                               TextStyle(
                                 fontSize: 16,
                                 color: m1.status == "รับเรื่องการแจ้งเหตุแล้ว" ? Colors.red :
-                                m1.status == "กำลังดำเนินการ" ? Colors.orange :
-                                m1.status == "ดำเนินการเสร็จสิ้น" ? Colors.green : null,
+                                m1.status == "กำลังดำเนินงาน" ? Colors.orange :
+                                m1.status == "ดำเนินงานเสร็จสิ้น" ? Colors.green : null,
                               ),
                               '',
                               TextStyle(fontSize: 15.0),
@@ -488,8 +488,8 @@ class _HistoryPageByIdState extends State<HistoryPageById> {
                           TextStyle(
                             fontSize: 16,
                             color: widget.getInform.status == "รับเรื่องการแจ้งเหตุแล้ว" ? Colors.red :
-                            widget.getInform.status == "กำลังดำเนินการ" ? Colors.orange :
-                            widget.getInform.status == "ดำเนินการเสร็จสิ้น" ? Colors.green : null,
+                            widget.getInform.status == "กำลังดำเนินงาน" ? Colors.orange :
+                            widget.getInform.status == "ดำเนินงานเสร็จสิ้น" ? Colors.green : null,
                           ),
                           '',
                           TextStyle(fontSize: 15.0),
@@ -551,7 +551,7 @@ class _HistoryPageByIdState extends State<HistoryPageById> {
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                              ) : widget.getInform.status == "ดำเนินการเสร็จสิ้น" ?
+                              ) : widget.getInform.status == "ดำเนินงานเสร็จสิ้น" ?
                               null:
                               ElevatedButton(
                                 style: ButtonStyle(
