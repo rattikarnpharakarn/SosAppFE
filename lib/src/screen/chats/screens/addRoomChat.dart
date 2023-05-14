@@ -8,6 +8,7 @@ import 'package:sos/src/model/accounts/user.dart';
 import 'package:intl/intl.dart';
 
 import 'package:sos/src/screen/chats/screens/chat.dart';
+import 'package:sos/src/screen/common/snack_bar_sos.dart';
 
 import '../../../provider/accounts/userService.dart';
 import 'package:sos/src/provider/messenger/messengerService.dart';
@@ -99,11 +100,11 @@ class _AddRoomChatPageState extends State<AddRoomChatPage> {
         });
       },
     ).onError((error, stackTrace) {
-      // todo ต้องเพิ่ม popup
-      // print("======== error ========");
-      // print(error);
-      // print(stackTrace);
-      // print("======== error ========");
+     // todo ต้องเพิ่ม popup
+      print("======== error ========");
+      print(error);
+      print(stackTrace);
+      print("======== error ========");
     });
   }
 
@@ -222,6 +223,21 @@ class _AddRoomChatPageState extends State<AddRoomChatPage> {
                                           builder: (context) => ChatPage(),
                                         ),
                                       );
+                                    }else if (_nameRoomInputController.text.length < 3){
+                                      String msg = 'ชื่อห้องต้องไม่ต่ำกว่า 3 ตัวขึ้นไป';
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        snackBarSos(
+                                            context,
+                                            Text(
+                                              msg,
+                                              style: const TextStyle(
+                                                color: Colors.black,
+                                              ),
+                                            ),
+                                            Colors.white,
+                                            170
+                                        ),
+                                      );
                                     }
                                   },
                                   icon: const Icon(
@@ -297,6 +313,22 @@ class _AddRoomChatPageState extends State<AddRoomChatPage> {
                                             _valueSearchUserInputController.text
                                                 .trim());
                                         _valueSearchUserInputController.clear();
+                                      }
+                                      else if (_valueSearchUserInputController.text.length < 3){
+                                        String msg = 'ตัวอักษรต้องไม่ต่ำกว่า 3 ตัวขึ้นไป';
+                                        ScaffoldMessenger.of(context).showSnackBar(
+                                          snackBarSos(
+                                            context,
+                                            Text(
+                                              msg,
+                                              style: const TextStyle(
+                                                color: Colors.black,
+                                              ),
+                                            ),
+                                            Colors.white,
+                                              170
+                                          ),
+                                        );
                                       }
                                     },
                                     icon: const Icon(

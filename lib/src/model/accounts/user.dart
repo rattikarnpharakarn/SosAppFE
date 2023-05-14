@@ -24,7 +24,6 @@ class UserInfo {
   String roleId = '';
   String roleName = '';
 
-
   UserInfo({
     required this.id,
     required this.phoneNumber,
@@ -70,9 +69,9 @@ class UserInfo {
         'postalCode': postalCode,
         'country': "ไทย"
       },
-      'userRole' : {
-        'id' : roleId,
-        'name' : roleName,
+      'userRole': {
+        'id': roleId,
+        'name': roleName,
       }
     };
   }
@@ -99,7 +98,7 @@ class GetUserListModel {
   final String message;
   final String code;
   final int total;
-  final List<GetUserList> list;
+  late List<GetUserList> list = [];
 
   GetUserListModel({
     required this.code,
@@ -110,35 +109,42 @@ class GetUserListModel {
 
   factory GetUserListModel.fromJson(Map<String, dynamic> json) {
     List<GetUserList>? list = [];
-    for (dynamic json in json['data']) {
-      GetUserList arr = GetUserList(
-        id: json['id'],
-        phoneNumber: json['phoneNumber'],
-        firstName: json['firstName'],
-        lastName: json['lastName'],
-        email: json['email'],
-        birthday: json['birthday'],
-        gender: json['gender'],
-        imageProfile: json['imageProfile'],
-        // workplace: json['workplace'],
-        // IDCard
-        textIDCard: json['idCard']['textIDCard'],
-        pathImage: json['idCard']['pathImage'],
-        // address
-        address: json['address']['address'],
-        subDistrict: json['address']['subDistrict'],
-        district: json['address']['district'],
-        province: json['address']['province'],
-        postalCode: json['address']['postalCode'],
-        country: json['address']['country'],
-      );
-      list.add(arr);
+    if (json['data'] != null) {
+      for (dynamic json in json['data']) {
+        GetUserList arr = GetUserList(
+          id: json['id'],
+          phoneNumber: json['phoneNumber'],
+          firstName: json['firstName'],
+          lastName: json['lastName'],
+          email: json['email'],
+          birthday: json['birthday'],
+          gender: json['gender'],
+          imageProfile: json['imageProfile'],
+          // workplace: json['workplace'],
+          // IDCard
+          textIDCard: json['idCard']['textIDCard'],
+          pathImage: json['idCard']['pathImage'],
+          // address
+          address: json['address']['address'],
+          subDistrict: json['address']['subDistrict'],
+          district: json['address']['district'],
+          province: json['address']['province'],
+          postalCode: json['address']['postalCode'],
+          country: json['address']['country'],
+        );
+        list.add(arr);
+      }
+    }
+
+    int total = 0;
+    if (json['total'] != null){
+      total = json['total'];
     }
 
     return GetUserListModel(
       code: json['code'],
       message: json['message'],
-      total: json['total'],
+      total: total,
       list: list,
     );
   }
@@ -153,6 +159,7 @@ class GetUserList {
   String birthday = '';
   String gender = '';
   String imageProfile = '';
+
   // String workplace = '';
 
   // IDCard

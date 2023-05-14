@@ -5,9 +5,11 @@ import 'package:http/http.dart' as http;
 import 'package:sos/main.dart';
 import 'package:sos/src/provider/config.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sos/src/screen/common/snack_bar_sos.dart';
 import 'package:sos/src/sharedInfo/user.dart';
+import 'package:form_field_validator/form_field_validator.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
-import 'home.dart';
 import 'signupPhoneNumber.dart';
 
 class Signin extends StatefulWidget {
@@ -18,12 +20,8 @@ class Signin extends StatefulWidget {
 }
 
 class _SigninState extends State<Signin> {
-  final TextEditingController _controller = TextEditingController();
-  Future<Album>? _futureAlbum;
-
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
-
   final TextEditingController _controllerPhone = TextEditingController();
+  final formKey = GlobalKey<FormState>();
 
   final TextEditingController _controllerPass = TextEditingController();
 
@@ -72,7 +70,7 @@ class _SigninState extends State<Signin> {
   }
 
   // static const String _baseUrl = "http://sos-app.thddns.net:7330/SosApp/signIn";
-  login(String username, String password) async {
+  Future<String> login(String username, String password) async {
     final response = await http.post(
       Uri.parse('${urlAccount}signIn'),
       headers: <String, String>{
@@ -83,22 +81,18 @@ class _SigninState extends State<Signin> {
         'password': password,
       }),
     );
-
     if (response.statusCode == 200) {
+      print(2);
+
       final m1 = jsonDecode(response.body);
       await addStringToSF(m1['token']);
-
-      // ignore: use_build_context_synchronously
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) {
-            return const MyApp();
-          },
-        ),
-      );
+      return '0';
     } else {
-      throw Exception('Send APIName : login || statusCode : ${response.statusCode.toString()} || Msg : ${jsonDecode(response.body)}');
+      final m1 = jsonDecode(response.body);
+      String code = m1['message'];
+      print(
+          'Send APIName : login || statusCode : ${response.statusCode.toString()} || Msg : ${jsonDecode(response.body)}');
+      return code;
     }
   }
 
@@ -113,6 +107,7 @@ class _SigninState extends State<Signin> {
         padding: const EdgeInsets.all(10),
         child: SingleChildScrollView(
           child: Form(
+            key: formKey,
             child: Column(children: <Widget>[
               Container(
                 padding: const EdgeInsets.fromLTRB(10, 100, 10, 0),
@@ -129,8 +124,9 @@ class _SigninState extends State<Signin> {
               Container(
                 padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
                 margin: const EdgeInsets.all(15),
-                child: TextField(
+                child: TextFormField(
                   controller: _controllerPhone,
+                  validator: RequiredValidator(errorText: "กรุณากรอกเบอร์"),
                   decoration: const InputDecoration(
                     labelText: 'Phone number',
                     labelStyle: TextStyle(color: Colors.white),
@@ -142,6 +138,7 @@ class _SigninState extends State<Signin> {
                     focusedBorder: UnderlineInputBorder(
                       borderSide: BorderSide(width: 3, color: Colors.white),
                     ),
+                    errorStyle: TextStyle(color: Colors.white, fontSize: 14),
                   ),
                   keyboardType: TextInputType.phone,
                   style: const TextStyle(color: Colors.white),
@@ -150,13 +147,14 @@ class _SigninState extends State<Signin> {
               Container(
                 padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                 margin: const EdgeInsets.all(15),
-                child: TextField(
+                child: TextFormField(
+                  validator: RequiredValidator(errorText: "กรุณาใส่รหัสผ่าน"),
                   controller: _controllerPass,
                   decoration: InputDecoration(
                     suffixIcon: IconButton(
                         icon: Icons_remove_red_eye != "Close"
                             ? const Icon(
-                                Icons. visibility_off,
+                                Icons.visibility_off,
                                 color: Colors.white,
                               )
                             : const Icon(
@@ -180,6 +178,8 @@ class _SigninState extends State<Signin> {
                     focusedBorder: const UnderlineInputBorder(
                       borderSide: BorderSide(width: 3, color: Colors.white),
                     ),
+                    errorStyle:
+                        const TextStyle(color: Colors.white, fontSize: 14),
                   ),
                   keyboardType: Icons_remove_red_eye == "Close"
                       ? TextInputType.visiblePassword
@@ -204,8 +204,52 @@ class _SigninState extends State<Signin> {
                             borderRadius: BorderRadius.circular(15.29),
                             side: const BorderSide(
                                 width: 3, color: Colors.white)))),
-                    onPressed: () {
-                      login(_controllerPhone.text, _controllerPass.text);
+                    onPressed: () async {
+                      String msg = await login(
+                          _controllerPhone.text, _controllerPass.text);
+                      if (msg == '0') {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          snackBarSos(
+                            context,
+                           const Text(
+                              'Login Success',
+                              style: TextStyle(
+                                color: Colors.black,
+                              ),
+                            ),
+                            Colors.white,
+                            115,
+                          ),
+                        );
+                        // ignore: use_build_context_synchronously
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return const MyApp();
+                            },
+                          ),
+                        );
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          snackBarSos(
+                            context,
+                            Text(
+                              msg,
+                              style: TextStyle(
+                                color: Colors.black,
+                              ),
+                            ),
+                            Colors.white,
+                            115,
+                          ),
+                        );
+                        // Fluttertoast.showToast(
+                        //   msg: msg,
+                        //   gravity: ToastGravity.TOP_RIGHT,
+                        //   //backgroundColor: Colors.red,
+                        // );
+                      }
                     },
                     child: const Text("Login",
                         style: TextStyle(color: Colors.black, fontSize: 24)),

@@ -123,7 +123,7 @@ class _UpDataProfilePageState extends State<UpDataProfilePage> {
         birthday: _dateTime.toString(),
         gender: selectGroupSex.toString(),
         imageProfile: _deforeImage,
-        pathImage: iDCard,
+        pathImage: _deforeIDCard,
         textIDCard: _textIDCard == '' ? _deforetextIDCard : _textIDCard,
         address: _address == '' ? _deforeaddress : _address,
         subDistrict: _subDistrict == '' ? _deforesubDistrict : _subDistrict,
@@ -168,41 +168,6 @@ class _UpDataProfilePageState extends State<UpDataProfilePage> {
     }
   }
 
-  // upload Image to base64
-  final ImagePicker imgpicker = ImagePicker();
-  String imagepath = "";
-  String imageProfile = '';
-  String iDCard = '';
-
-  openImage(String type) async {
-    try {
-      var pickedFile = await imgpicker.pickImage(source: ImageSource.gallery);
-
-      if (pickedFile != null) {
-        imagepath = pickedFile.path;
-        File imagefile = File(imagepath);
-        Uint8List imagebytes = await imagefile.readAsBytes();
-        String base64string = base64.encode(imagebytes);
-
-        Uint8List decodedbytes = base64.decode(base64string);
-
-        String tobase64 = base64Encode(decodedbytes);
-        if (type == 'Profile') {
-          setState(() {
-            imageProfile = tobase64;
-          });
-        } else {
-          setState(() {
-            iDCard = tobase64;
-          });
-        }
-      } else {
-        print("No image is selected.");
-      }
-    } catch (e) {
-      print("error while picking file.");
-    }
-  }
 
   var newFormat = DateFormat("dd-MM-yyyy");
 
@@ -389,6 +354,7 @@ class _UpDataProfilePageState extends State<UpDataProfilePage> {
                             Container(
                               padding: const EdgeInsets.fromLTRB(15, 15, 15, 0),
                               child: TextFormField(
+                                enabled : false,
                                 decoration: InputDecoration(
                                   labelText: _deforetextIDCard,
                                   hintText: 'ID Card *',
@@ -418,47 +384,6 @@ class _UpDataProfilePageState extends State<UpDataProfilePage> {
                               ),
                             ),
                           ],
-                        ),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.fromLTRB(15, 10, 0, 0),
-                        margin: const EdgeInsets.fromLTRB(15, 0, 0, 0),
-                        child: InkWell(
-                          onTap: () => {openImage('iDCard')},
-                          child: iDCard == ''
-                              ? const Text(
-                                  'กรุณา แนบรูปภาพบัตรประจำตัวประชาชน ***',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.transparent,
-                                    // Step 2 SEE HERE
-                                    shadows: [
-                                      Shadow(
-                                          offset: Offset(0, -5),
-                                          color: Colors.black)
-                                    ],
-                                    decoration: TextDecoration.underline,
-                                    decorationColor:
-                                        Color.fromARGB(255, 177, 0, 0),
-                                  ),
-                                )
-                              : const Text(
-                                  'แนบรูปภาพบัตรประจำตัวประชาชน สำเร็จ',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    // fontWeight: FontWeight.bold,
-                                    color: Colors.transparent,
-                                    // Step 2 SEE HERE
-                                    shadows: [
-                                      Shadow(
-                                          offset: Offset(0, -5),
-                                          color: Colors.black)
-                                    ],
-                                    decoration: TextDecoration.underline,
-                                    decorationColor:
-                                        Color.fromARGB(255, 34, 172, 0),
-                                  ),
-                                ),
                         ),
                       ),
                       Container(

@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:sos/main.dart';
 import 'package:sos/src/provider/config.dart';
 
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import 'package:sos/src/screen/common/snack_bar_sos.dart';
 import 'package:sos/src/screen/user/signupPhoneNumber.dart';
 import 'dart:developer' as developer;
 
@@ -26,37 +28,24 @@ class _OTPState extends State<OTP> {
   final TextEditingController _controllerBox2 = TextEditingController();
   final TextEditingController _controllerBox3 = TextEditingController();
   final TextEditingController _controllerBox4 = TextEditingController();
-
-  Future<Data>? _futureOTP;
-  String _Box1 = '';
-  String _Box2 = '';
-  String _Box3 = '';
-  String _Box4 = '';
+  late String otpValue = '';
+  late String verifyCode = '';
+  late String phone = widget.data.phone;
 
   @override
   void initState() {
     super.initState();
     _controllerBox1.addListener(() {
-      setState(() {
-        _Box1 = _controllerBox1.text;
-      });
     });
     _controllerBox2.addListener(() {
-      setState(() {
-        _Box2 = _controllerBox2.text;
-      });
     });
-
     _controllerBox3.addListener(() {
-      setState(() {
-        _Box3 = _controllerBox3.text;
-      });
+    });
+    _controllerBox4.addListener(() {
     });
 
-    _controllerBox4.addListener(() {
-      setState(() {
-        _Box4 = _controllerBox4.text;
-      });
+    setState(() {
+      verifyCode = widget.data.verifyCode['verifyCode'].toString();
     });
   }
 
@@ -71,9 +60,11 @@ class _OTPState extends State<OTP> {
     super.dispose();
   }
 
+
+
   Future<Data> verifyOTP(
       String box1, String box2, String box3, String box4) async {
-    final otpValue =
+     otpValue =
         box1.toString() + box2.toString() + box3.toString() + box4.toString();
     final response = await http.post(
       Uri.parse('${urlAccount}verifyOTP'),
@@ -82,8 +73,8 @@ class _OTPState extends State<OTP> {
       },
       body: jsonEncode(<String, dynamic>{
         'otp': otpValue,
-        'phoneNumber': widget.data.phone,
-        'verifyCode': widget.data.verifyCode['verifyCode'].toString(),
+        'phoneNumber': phone,
+        'verifyCode': verifyCode,
       }),
     );
 
@@ -107,7 +98,7 @@ class _OTPState extends State<OTP> {
       province: '',
       subDistrict: '',
       otp: otpValue,
-      verifyCode: widget.data.verifyCode['verifyCode'].toString(),
+      verifyCode: verifyCode,
     );
 
     if (response.statusCode == 200) {
@@ -123,6 +114,51 @@ class _OTPState extends State<OTP> {
       return Data.fromJson(jsonDecode(response.body));
     } else {
       throw Exception('Send APIName : verifyOTP || statusCode : ${response.statusCode.toString()} || Msg : ${jsonDecode(response.body)}');
+    }
+  }
+
+  Future<void> _showNotification(String otp, verifyCode) async {
+    const AndroidNotificationDetails androidNotificationDetails =
+    AndroidNotificationDetails(
+      'nextflow_noti_001',
+      'แจ้งเตือน',
+      channelDescription: 'OTP',
+      importance: Importance.max,
+      priority: Priority.high,
+      ticker: 'ticker',
+    );
+
+    const NotificationDetails platformChannelDetails = NotificationDetails(
+      android: androidNotificationDetails,
+    );
+
+    await ShowflutterLocalNoificationPlugin.show(
+        1,
+        'OTP',
+        'OTP=${otp} [รหัสอ้างอิง:${verifyCode}] เพื่อใช้งานระบบ SOS',
+        platformChannelDetails);
+  }
+
+  _sendOTP() async {
+    final response = await http.post(
+      Uri.parse('${urlAccount}sendOTP'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'phoneNumber': phone,
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      final vf = json.decode(response.body);
+
+      String otp = vf["data"]['otp'];
+      setState(() {
+        verifyCode = vf["data"]['verifyCode'];
+      });
+      // ignore: use_build_context_synchronously
+      _showNotification(otp, verifyCode);
     }
   }
 
@@ -192,7 +228,7 @@ class _OTPState extends State<OTP> {
                                   FocusScope.of(context).nextFocus();
                                 }
                               },
-                              style: Theme.of(context).textTheme.headline4,
+                              style: Theme.of(context).textTheme.headlineLarge,
                               keyboardType: TextInputType.number,
                               textAlign: TextAlign.center,
                               inputFormatters: [
@@ -221,7 +257,7 @@ class _OTPState extends State<OTP> {
                                   FocusScope.of(context).nextFocus();
                                 }
                               },
-                              style: Theme.of(context).textTheme.headline4,
+                              style: Theme.of(context).textTheme.headlineLarge,
                               keyboardType: TextInputType.number,
                               textAlign: TextAlign.center,
                               inputFormatters: [
@@ -250,7 +286,7 @@ class _OTPState extends State<OTP> {
                                   FocusScope.of(context).nextFocus();
                                 }
                               },
-                              style: Theme.of(context).textTheme.headline4,
+                              style: Theme.of(context).textTheme.headlineLarge,
                               keyboardType: TextInputType.number,
                               textAlign: TextAlign.center,
                               inputFormatters: [
@@ -279,7 +315,7 @@ class _OTPState extends State<OTP> {
                                           255, 255, 255, 255)), //<-- SEE HERE
                                 ),
                               ),
-                              style: Theme.of(context).textTheme.headline4,
+                              style: Theme.of(context).textTheme.headlineLarge,
                               keyboardType: TextInputType.number,
                               textAlign: TextAlign.center,
                               inputFormatters: [
@@ -305,13 +341,32 @@ class _OTPState extends State<OTP> {
                                     side: const BorderSide(
                                         width: 3, color: Colors.black)))),
                         onPressed: () {
-                          setState(() {
-                            _futureOTP = verifyOTP(
+
+                          if (_controllerBox1.text.length == 1 &&
+                              _controllerBox2.text.length == 1 &&
+                              _controllerBox3.text.length == 1 &&
+                              _controllerBox4.text.length == 1
+                          ){
+                            verifyOTP(
                                 _controllerBox1.text,
                                 _controllerBox2.text,
                                 _controllerBox3.text,
                                 _controllerBox4.text);
-                          });
+                          }else{
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              snackBarSos(
+                                context,
+                                const Text(
+                                  'กรุณากรอก OTP ให้ครบ',
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                Colors.white,
+                                115
+                              ),
+                            );
+                          }
                         },
                         child: const Text(
                           "Continue",
@@ -336,7 +391,9 @@ class _OTPState extends State<OTP> {
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            onPressed: () {},
+                            onPressed: () {
+                              _sendOTP();
+                            },
                           ),
                         ]),
                   ),
@@ -347,6 +404,7 @@ class _OTPState extends State<OTP> {
     );
   }
 }
+
 
 class Data {
   final String data;

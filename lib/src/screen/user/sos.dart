@@ -46,7 +46,7 @@ class NSosPageState extends State<SosPage> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration(milliseconds: 500), ()  {
+    Future.delayed(Duration(milliseconds: 500), () {
       setState(() {
         isLoading = true;
       });
@@ -284,6 +284,12 @@ class NSosPageState extends State<SosPage> {
                             ),
                             onPressed: () {
                               if (onSelect == 0 || _textArea == '') {
+                                String msg = '';
+                                if (onSelect == 0) {
+                                  msg = 'กรุณาเลือกประเภทของการแจ้งเหตุ';
+                                } else if (_textArea == '') {
+                                  msg = 'กรุณาเพิ่มคำอธิบาย';
+                                }
                                 showCupertinoModalPopup<void>(
                                   context: context,
                                   builder: (BuildContext context) {
@@ -307,10 +313,9 @@ class NSosPageState extends State<SosPage> {
                                                   alignment: Alignment.center,
                                                   padding:
                                                       const EdgeInsets.all(5),
-                                                  child: const Text(
-                                                    'กรุณาเลือกประเภทของการแจ้งเหตุ หรือ '
-                                                    'เพิ่มคำอธิบาย',
-                                                    style: TextStyle(
+                                                  child: Text(
+                                                    msg,
+                                                    style: const TextStyle(
                                                       fontSize: 20,
                                                       color: Colors.black,
                                                       decoration:
@@ -437,8 +442,6 @@ class _SosPage1State extends State<SosPage1> {
       setState(() {
         isLoading = true;
       });
-
-
     });
   }
 

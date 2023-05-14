@@ -8,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sos/src/model/accounts/response.dart';
 import 'package:sos/src/model/accounts/signup.dart';
 import 'package:sos/src/provider/config.dart';
+import 'package:sos/src/screen/common/snack_bar_sos.dart';
 import 'package:sos/src/screen/user/signin.dart';
 import 'package:sos/src/sharedInfo/user.dart';
 
@@ -17,9 +18,11 @@ import 'home.dart';
 
 class Signup extends StatefulWidget {
   Signup({Key? key, required this.userInfo}) : super(key: key);
+
   // const Signup({Key? key}) : super(key: key);
 
   UserInfo userInfo;
+
   @override
   State<Signup> createState() => _SignupState();
 }
@@ -42,17 +45,50 @@ class _SignupState extends State<Signup> {
   String _postalCode = '';
   late UserInfo userInfoRes;
   bool isPasswordError = true;
+
   void setDataUserInfo() {
+    bool check = true;
+
     if (_password != _confirmPassword) {
-      setState(() {
-        isPasswordError = false;
-      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        snackBarSos(
+          context,
+          Text(
+            "รหัสผ่านไม่ตรงกัน",
+            style: TextStyle(
+              color: Colors.black,
+            ),
+          ),
+          Colors.white,
+          115
+        ),
+      );
     } else {
       setState(() {
         isPasswordError = true;
       });
-      var user = widget.userInfo;
+    }
 
+    if (iDCard == ''){
+      check = false;
+      String msg = "กรุณาแนบรูปภาพบัตรประจำตัวประชาชนเพื่อสำหรับตรวจสอบ";
+      ScaffoldMessenger.of(context).showSnackBar(
+        snackBarSos(
+          context,
+          Text(
+            msg,
+            style: TextStyle(
+              color: Colors.black,
+            ),
+          ),
+          Colors.white,
+          130
+        ),
+      );
+    }
+
+    if (check) {
+      var user = widget.userInfo;
       setState(() {
         userInfoRes = UserInfo(
           phoneNumber: user.phoneNumber,
@@ -91,8 +127,6 @@ class _SignupState extends State<Signup> {
       body: jsonEncode(userInfoRes),
     );
 
-
-
     if (response.statusCode == 200) {
       Navigator.push(
         context,
@@ -103,7 +137,23 @@ class _SignupState extends State<Signup> {
 
       return ReturnResponse.fromJson(jsonDecode(response.body));
     } else {
-      throw Exception('Send APIName : createUserInfo || statusCode : ${response.statusCode.toString()} || Msg : ${jsonDecode(response.body)}');
+      final m1 = jsonDecode(response.body);
+      String code = m1['message'];
+      ScaffoldMessenger.of(context).showSnackBar(
+        snackBarSos(
+          context,
+          Text(
+            code,
+            style: TextStyle(
+              color: Colors.black,
+            ),
+          ),
+          Colors.white,
+          115
+        ),
+      );
+      throw Exception(
+          'Send APIName : createUserInfo || statusCode : ${response.statusCode.toString()} || Msg : ${jsonDecode(response.body)}');
     }
   }
 
@@ -112,6 +162,7 @@ class _SignupState extends State<Signup> {
   String imagepath = "";
   String imageProfile = '';
   String iDCard = '';
+
   openImage(String type) async {
     try {
       var pickedFile = await imgpicker.pickImage(source: ImageSource.gallery);
@@ -155,7 +206,8 @@ class _SignupState extends State<Signup> {
     });
   }
 
-  String selectGroupSex = '';
+  String selectGroupSex = 'M';
+
   void _selectGroupSex(String value) {
     setState(() {
       selectGroupSex = value;
@@ -274,8 +326,11 @@ class _SignupState extends State<Signup> {
                           padding: const EdgeInsets.fromLTRB(15, 15, 15, 0),
                           child: TextFormField(
                             validator: (value) {
+                              String msg = 'Please enter First Name';
                               if (value == null || value.isEmpty) {
-                                return 'Please enter First Name*';
+                                return msg;
+                              }else if (value.length < 3){
+                                return 'First Name must be longer than 3 characters.';
                               }
                             },
                             decoration: const InputDecoration(
@@ -309,7 +364,9 @@ class _SignupState extends State<Signup> {
                           child: TextFormField(
                             validator: (value) {
                               if (value == null || value.isEmpty) {
-                                return 'Please enter Last Name *';
+                                return 'Please enter Last Name';
+                              }else if (value.length < 3){
+                                return 'Last Name must be longer than 3 characters.';
                               }
                             },
                             decoration: const InputDecoration(
@@ -372,7 +429,9 @@ class _SignupState extends State<Signup> {
                           child: TextFormField(
                             validator: (value) {
                               if (value == null || value.isEmpty) {
-                                return 'Please enter ID Card *';
+                                return 'Please enter ID Card';
+                              }else if (value.length != 13){
+                                return 'The ID card number must contain 13 characters.';
                               }
                             },
                             decoration: const InputDecoration(
@@ -408,13 +467,16 @@ class _SignupState extends State<Signup> {
                     padding: const EdgeInsets.fromLTRB(15, 10, 0, 0),
                     margin: const EdgeInsets.fromLTRB(15, 0, 0, 0),
                     child: InkWell(
-                      onTap: () => {openImage('iDCard')},
+                      onTap: () => {
+                        openImage('iDCard'),
+                      },
                       child: iDCard == ''
                           ? const Text(
                               'กรุณา แนบรูปภาพบัตรประจำตัวประชาชน ***',
                               style: TextStyle(
                                 fontSize: 16,
-                                color: Colors.transparent, // Step 2 SEE HERE
+                                color: Colors.transparent,
+                                // Step 2 SEE HERE
                                 shadows: [
                                   Shadow(
                                       offset: Offset(0, -5),
@@ -429,7 +491,8 @@ class _SignupState extends State<Signup> {
                               style: TextStyle(
                                 fontSize: 16,
                                 // fontWeight: FontWeight.bold,
-                                color: Colors.transparent, // Step 2 SEE HERE
+                                color: Colors.transparent,
+                                // Step 2 SEE HERE
                                 shadows: [
                                   Shadow(
                                       offset: Offset(0, -5),
@@ -449,7 +512,7 @@ class _SignupState extends State<Signup> {
                         Container(
                           padding: const EdgeInsets.fromLTRB(17, 10, 20, 0),
                           child: const Text(
-                            'Birthday * :',
+                            'Birthday :',
                             style: TextStyle(
                               fontSize: 16,
                             ),
@@ -530,7 +593,7 @@ class _SignupState extends State<Signup> {
                       children: [
                         Container(
                           padding: const EdgeInsets.fromLTRB(17, 0, 60, 0),
-                          child: const Text('Sex *  : '),
+                          child: const Text('Sex : '),
                         ),
                         Container(
                           padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
@@ -570,7 +633,7 @@ class _SignupState extends State<Signup> {
                     child: TextFormField(
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please enter House No *';
+                          return 'Please enter House No.';
                         }
                       },
                       decoration: const InputDecoration(
@@ -603,7 +666,7 @@ class _SignupState extends State<Signup> {
                     child: TextFormField(
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please enter Sub-district *';
+                          return 'Please enter Sub-district.';
                         }
                       },
                       decoration: const InputDecoration(
@@ -636,7 +699,7 @@ class _SignupState extends State<Signup> {
                     child: TextFormField(
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please enter district *';
+                          return 'Please enter district.';
                         }
                       },
                       decoration: const InputDecoration(
@@ -669,7 +732,7 @@ class _SignupState extends State<Signup> {
                     child: TextFormField(
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please enter Province *';
+                          return 'Please enter Province.';
                         }
                       },
                       decoration: const InputDecoration(
@@ -702,7 +765,9 @@ class _SignupState extends State<Signup> {
                     child: TextFormField(
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please enter Postal Code *';
+                          return 'Please enter Postal Code.';
+                        }else if (value.length != 5){
+                          return 'The Postal Code number must contain 5 characters.';
                         }
                       },
                       decoration: const InputDecoration(
@@ -732,30 +797,23 @@ class _SignupState extends State<Signup> {
                   ),
                   Container(
                     padding: const EdgeInsets.fromLTRB(30, 15, 30, 0),
-                    child: isPasswordError == false
-                        ? const Text(
-                            "*** Password and Confirm Password do not match.",
-                            style: TextStyle(
-                              color: Color.fromARGB(255, 245, 18, 18),
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          )
-                        : const Text(
-                            "Set Password.",
-                            style: TextStyle(
-                              color: Color.fromARGB(255, 0, 0, 0),
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
+                    child: const Text(
+                      "Set Password.",
+                      style: TextStyle(
+                        color: Color.fromARGB(255, 0, 0, 0),
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ),
                   Container(
                     padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
                     child: TextFormField(
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please enter Password *';
+                          return 'Please enter Password.';
+                        }else if (value.length < 6){
+                          return 'Password must be longer than 6 characters.';
                         }
                       },
                       decoration: const InputDecoration(
@@ -791,7 +849,9 @@ class _SignupState extends State<Signup> {
                     child: TextFormField(
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please enter Confirm Password *';
+                          return 'Please enter Confirm Password.';
+                        }else if (value.length < 6){
+                          return 'Confirm Password must be longer than 6 characters.';
                         }
                       },
                       decoration: const InputDecoration(

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:form_field_validator/form_field_validator.dart';
 import 'package:sos/main.dart';
 import 'package:sos/src/provider/config.dart';
+import 'package:sos/src/screen/common/snack_bar_sos.dart';
 import 'package:sos/src/screen/user/otp.dart';
 
 import 'dart:convert';
@@ -19,19 +22,12 @@ class SignupPhoneNumber extends StatefulWidget {
 
 class _SignupPhoneNumberState extends State<SignupPhoneNumber> {
   final TextEditingController _controllerPhone = TextEditingController();
-
-  Future<Data>? _futureOTP;
-
-  String _phone = '';
+  final formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
     super.initState();
-    _controllerPhone.addListener(() {
-      setState(() {
-        _phone = _controllerPhone.text;
-      });
-    });
+    _controllerPhone.addListener(() {});
   }
 
   @override
@@ -97,7 +93,8 @@ class _SignupPhoneNumberState extends State<SignupPhoneNumber> {
 
       return Data.fromJson(jsonDecode(response.body));
     } else {
-      throw Exception('Send APIName : Singupwithphone || statusCode : ${response.statusCode.toString()} || Msg : ${jsonDecode(response.body)}');
+      throw Exception(
+          'Send APIName : Singupwithphone || statusCode : ${response.statusCode.toString()} || Msg : ${jsonDecode(response.body)}');
     }
   }
 
@@ -114,6 +111,7 @@ class _SignupPhoneNumberState extends State<SignupPhoneNumber> {
         padding: const EdgeInsets.all(10),
         child: SingleChildScrollView(
           child: Form(
+            key: formKey,
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 textDirection: TextDirection.ltr,
@@ -143,7 +141,8 @@ class _SignupPhoneNumberState extends State<SignupPhoneNumber> {
                   Container(
                     padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
                     margin: const EdgeInsets.all(15),
-                    child: TextField(
+                    child: TextFormField(
+                      validator: RequiredValidator(errorText: "กรุณากรอกเบอร์"),
                       controller: _controllerPhone,
                       decoration: const InputDecoration(
                         labelText: 'Phone number',
@@ -180,9 +179,23 @@ class _SignupPhoneNumberState extends State<SignupPhoneNumber> {
                                     side: const BorderSide(
                                         width: 3, color: Colors.black)))),
                         onPressed: () {
-                          setState(() {
-                            _futureOTP = Singupwithphone(_controllerPhone.text);
-                          });
+                          if (_controllerPhone.text.trim().length == 10) {
+                            Singupwithphone(_controllerPhone.text.trim());
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              snackBarSos(
+                                context,
+                                const Text(
+                                  'กรุณากรอกเบอร์โทรให้ถูกต้อง',
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                Colors.white,
+                                115
+                              ),
+                            );
+                          }
                         },
                         child: const Text(
                           "Request OTP",
@@ -201,12 +214,15 @@ class _SignupPhoneNumberState extends State<SignupPhoneNumber> {
 
 class Data {
   Data(this.otp, this.verifyCode);
+
   final Null otp;
   final Null verifyCode;
+
   // named constructor
   Data.fromJson(Map<String, dynamic> json)
       : otp = json['otp'],
         verifyCode = json['verifyCode'];
+
   // method
   Map<String, dynamic> toJson() {
     return {

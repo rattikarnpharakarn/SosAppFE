@@ -8,6 +8,7 @@ import 'package:sos/src/model/accounts/user.dart';
 import 'package:sos/src/model/messenger/response.dart';
 import 'package:sos/src/provider/accounts/userService.dart';
 import 'package:sos/src/provider/messenger/messengerService.dart';
+import 'package:sos/src/screen/common/snack_bar_sos.dart';
 
 import '../../common/LoadingPage.dart';
 
@@ -78,13 +79,19 @@ class _MembersScreenState extends State<MembersPage> {
 
   List<GetUserList> _getUserList = [];
   late List<bool> _isChecked;
-  List<int> _userIdList = [];
+  late List<int> _userIdList = [];
+  late bool _isCheckSearch = false;
 
   _searchUser(value) async {
     await GetSearchUser(value).then(
       (value) {
         if (value.code == "0") {
           _getUserList = [];
+          print(2);
+          print(2);
+          print(2);
+          print(2);
+
           setState(
             () {
               Future.forEach(value.list, (data) async {
@@ -114,6 +121,15 @@ class _MembersScreenState extends State<MembersPage> {
               });
             },
           );
+
+          if (_getUserList.isEmpty) {
+            print(1);
+            print(1);
+            print(1);
+            setState(() {
+              _isCheckSearch = true;
+            });
+          }
         }
         setState(() {
           _isChecked = List<bool>.filled(_getUserList.length + 1, false);
@@ -122,10 +138,10 @@ class _MembersScreenState extends State<MembersPage> {
       },
     ).onError((error, stackTrace) {
       // todo ต้องเพิ่ม popup
-      // print("======== error ========");
-      // print(error);
-      // print(stackTrace);
-      // print("======== error ========");
+      print("======== error ========");
+      print(error);
+      print(stackTrace);
+      print("======== error ========");
 
       setState(() {
         isLoading = true;
@@ -234,10 +250,45 @@ class _MembersScreenState extends State<MembersPage> {
                                   ),
                                   IconButton(
                                     onPressed: () async {
-                                      _joinRoomChat(widget.getChat.roomChatID);
-                                      Navigator.pop(
-                                        context,
-                                      );
+                                      String msg = '';
+                                      if (_userIdList.length == 0) {
+                                        msg =
+                                            'กรุณาค้นหาผู้ใช้งานก่อนที่จะเพิ่มเข้าห้องแชท';
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          snackBarSos(
+                                              context,
+                                              Text(
+                                                msg,
+                                                style: const TextStyle(
+                                                  color: Colors.black,
+                                                ),
+                                              ),
+                                              Colors.white,
+                                              170),
+                                        );
+                                      } else {
+                                        _joinRoomChat(
+                                            widget.getChat.roomChatID);
+                                        msg =
+                                            'เพิ่มผู้ใช้งานเข้าในห้องแชทเรียบร้อนแล้ว';
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          snackBarSos(
+                                              context,
+                                              Text(
+                                                msg,
+                                                style: const TextStyle(
+                                                  color: Colors.black,
+                                                ),
+                                              ),
+                                              Colors.white,
+                                              170),
+                                        );
+                                        Navigator.pop(
+                                          context,
+                                        );
+                                      }
                                     },
                                     icon: const Icon(
                                       Icons.group_add_outlined,
@@ -280,14 +331,51 @@ class _MembersScreenState extends State<MembersPage> {
                                     ),
                                   ),
                                   IconButton(
-                                    onPressed: () {
+                                    onPressed: () async {
                                       if (_valueSearchUserInputController.text
                                           .trim()
                                           .isNotEmpty) {
-                                        _searchUser(
+                                        await _searchUser(
                                             _valueSearchUserInputController.text
                                                 .trim());
-                                        _valueSearchUserInputController.clear();
+                                        if (_isCheckSearch) {
+                                          String msg =
+                                              'ไม่พบผู้ใช้งานคนนี้';
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                            snackBarSos(
+                                                context,
+                                                Text(
+                                                  msg,
+                                                  style: const TextStyle(
+                                                    color: Colors.black,
+                                                  ),
+                                                ),
+                                                Colors.white,
+                                                500),
+                                          );
+                                        } else {
+                                          _valueSearchUserInputController
+                                              .clear();
+                                        }
+                                      } else if (_valueSearchUserInputController
+                                              .text.length <
+                                          3) {
+                                        String msg =
+                                            'ตัวอักษรต้องไม่ต่ำกว่า 3 ตัวขึ้นไป';
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          snackBarSos(
+                                              context,
+                                              Text(
+                                                msg,
+                                                style: const TextStyle(
+                                                  color: Colors.black,
+                                                ),
+                                              ),
+                                              Colors.white,
+                                              500),
+                                        );
                                       }
                                     },
                                     icon: const Icon(
