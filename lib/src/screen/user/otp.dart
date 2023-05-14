@@ -359,11 +359,11 @@ class _OTPState extends State<OTP> {
                                 const Text(
                                   'กรุณากรอก OTP ให้ครบ',
                                   style: TextStyle(
-                                    color: Colors.black,
+                                    color: Colors.white,
+                                      fontSize: 16
                                   ),
                                 ),
-                                Colors.white,
-                                115
+                                Colors.white
                               ),
                             );
                           }

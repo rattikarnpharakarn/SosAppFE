@@ -87,11 +87,6 @@ class _MembersScreenState extends State<MembersPage> {
       (value) {
         if (value.code == "0") {
           _getUserList = [];
-          print(2);
-          print(2);
-          print(2);
-          print(2);
-
           setState(
             () {
               Future.forEach(value.list, (data) async {
@@ -123,9 +118,6 @@ class _MembersScreenState extends State<MembersPage> {
           );
 
           if (_getUserList.isEmpty) {
-            print(1);
-            print(1);
-            print(1);
             setState(() {
               _isCheckSearch = true;
             });
@@ -257,15 +249,16 @@ class _MembersScreenState extends State<MembersPage> {
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(
                                           snackBarSos(
-                                              context,
-                                              Text(
-                                                msg,
-                                                style: const TextStyle(
-                                                  color: Colors.black,
-                                                ),
+                                            context,
+                                            Text(
+                                              msg,
+                                              style: const TextStyle(
+                                                color: Colors.white,
+                                                  fontSize: 16
                                               ),
-                                              Colors.white,
-                                              170),
+                                            ),
+                                            Colors.white,
+                                          ),
                                         );
                                       } else {
                                         _joinRoomChat(
@@ -275,15 +268,16 @@ class _MembersScreenState extends State<MembersPage> {
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(
                                           snackBarSos(
-                                              context,
-                                              Text(
-                                                msg,
-                                                style: const TextStyle(
-                                                  color: Colors.black,
-                                                ),
+                                            context,
+                                            Text(
+                                              msg,
+                                              style: const TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 16
                                               ),
-                                              Colors.white,
-                                              170),
+                                            ),
+                                            Colors.white,
+                                          ),
                                         );
                                         Navigator.pop(
                                           context,
@@ -339,20 +333,20 @@ class _MembersScreenState extends State<MembersPage> {
                                             _valueSearchUserInputController.text
                                                 .trim());
                                         if (_isCheckSearch) {
-                                          String msg =
-                                              'ไม่พบผู้ใช้งานคนนี้';
+                                          String msg = 'ไม่พบผู้ใช้งานคนนี้';
                                           ScaffoldMessenger.of(context)
                                               .showSnackBar(
                                             snackBarSos(
-                                                context,
-                                                Text(
-                                                  msg,
-                                                  style: const TextStyle(
-                                                    color: Colors.black,
-                                                  ),
+                                              context,
+                                              Text(
+                                                msg,
+                                                style: const TextStyle(
+                                                  color: Colors.white,
+                                                    fontSize: 16
                                                 ),
-                                                Colors.white,
-                                                500),
+                                              ),
+                                              Colors.white,
+                                            ),
                                           );
                                         } else {
                                           _valueSearchUserInputController
@@ -366,15 +360,16 @@ class _MembersScreenState extends State<MembersPage> {
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(
                                           snackBarSos(
-                                              context,
-                                              Text(
-                                                msg,
-                                                style: const TextStyle(
-                                                  color: Colors.black,
-                                                ),
+                                            context,
+                                            Text(
+                                              msg,
+                                              style: const TextStyle(
+                                                color: Colors.white,
+                                                  fontSize: 16
                                               ),
-                                              Colors.white,
-                                              500),
+                                            ),
+                                            Colors.white,
+                                          ),
                                         );
                                       }
                                     },

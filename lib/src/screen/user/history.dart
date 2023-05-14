@@ -8,8 +8,7 @@ import 'package:sos/src/component/image_navBer.dart';
 import 'package:sos/src/model/emergency/response.dart';
 import 'package:sos/src/provider/emergency/inform.dart';
 import 'package:sos/src/screen/common/LoadingPage.dart';
-import 'package:sos/src/screen/user/sos.dart';
-
+import 'package:sos/src/screen/common/detailImage.dart';
 import '../../component/bottom_bar.dart';
 
 class HistoryPage extends StatefulWidget {

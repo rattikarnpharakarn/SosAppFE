@@ -231,11 +231,11 @@ class _AddRoomChatPageState extends State<AddRoomChatPage> {
                                             Text(
                                               msg,
                                               style: const TextStyle(
-                                                color: Colors.black,
+                                                color: Colors.white,
+                                                  fontSize: 16
                                               ),
                                             ),
-                                            Colors.white,
-                                            170
+                                            Colors.white
                                         ),
                                       );
                                     }
@@ -322,11 +322,11 @@ class _AddRoomChatPageState extends State<AddRoomChatPage> {
                                             Text(
                                               msg,
                                               style: const TextStyle(
-                                                color: Colors.black,
+                                                color: Colors.white,
+                                                  fontSize: 16
                                               ),
                                             ),
-                                            Colors.white,
-                                              170
+                                            Colors.white
                                           ),
                                         );
                                       }

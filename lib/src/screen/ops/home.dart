@@ -1,11 +1,13 @@
 import 'dart:convert';
 import 'dart:ui';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:sos/src/component/button_bar_ops.dart';
 import 'package:sos/src/model/emergency/request.dart';
 import 'package:sos/src/model/emergency/response.dart';
 import 'package:sos/src/provider/emergency/inform.dart';
+import 'package:sos/src/screen/common/detailImage.dart';
 import 'package:sos/src/screen/ops/history.dart';
 import 'package:sos/src/screen/user/home.dart';
 import 'package:sos/src/screen/user/sos.dart';
@@ -552,14 +554,114 @@ class _HistoryPageByIdState extends State<HistoryPageById> {
                                   ),
                                 ),
                                 onPressed: () async {
-                                 await _updateInform();
-                                 Navigator.pushReplacement(
-                                   context,
-                                   MaterialPageRoute(
-                                     builder: (context) =>
-                                         HistoryPage(),
-                                   ),
-                                 );
+                                  showCupertinoModalPopup<void>(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return Container(
+                                        padding: const EdgeInsets.all(1),
+                                        child: Center(
+                                          child: Card(
+                                            color: Colors.white,
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                              BorderRadius.circular(8.0),
+                                            ),
+                                            child: Container(
+                                              margin: const EdgeInsets.all(10),
+                                              child: Column(
+                                                mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: <Widget>[
+                                                  Container(
+                                                    padding:
+                                                    const EdgeInsets.all(5),
+                                                    child: const Text(
+                                                      'คุณต้องการที่จะรับการแจ้งเหตุนี้ ใช่หรือไม่',
+                                                      style: TextStyle(
+                                                        fontSize: 20,
+                                                        color: Colors.black,
+                                                        decoration:
+                                                        TextDecoration.none,
+                                                        decorationStyle:
+                                                        TextDecorationStyle
+                                                            .double,
+                                                        fontWeight:
+                                                        FontWeight.w300,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                    mainAxisSize:
+                                                    MainAxisSize.min,
+                                                    children: [
+                                                      Container(
+                                                        padding:
+                                                        const EdgeInsets.all(
+                                                            1),
+                                                        child: ElevatedButton(
+                                                          style: const ButtonStyle(
+                                                              backgroundColor:
+                                                              MaterialStatePropertyAll<
+                                                                  Color>(
+                                                                  Colors
+                                                                      .red)),
+                                                          child: const Text(
+                                                            'ไม่',
+                                                            style: TextStyle(
+                                                                fontSize: 16),
+                                                          ),
+                                                          onPressed: () =>
+                                                              Navigator.pop(
+                                                                  context),
+                                                        ),
+                                                      ),
+                                                      Container(
+                                                        padding:
+                                                        const EdgeInsets.all(
+                                                            10),
+                                                      ),
+                                                      Container(
+                                                        padding:
+                                                        const EdgeInsets.all(
+                                                            1),
+                                                        child: ElevatedButton(
+                                                          style:
+                                                          const ButtonStyle(
+                                                            backgroundColor:
+                                                            MaterialStatePropertyAll<
+                                                                Color>(
+                                                                Colors.green),
+                                                          ),
+                                                          child: const Text(
+                                                            'ใช่',
+                                                            style: TextStyle(
+                                                                fontSize: 16),
+                                                          ),
+                                                          onPressed: () async {
+                                                            await _updateInform();
+                                                            Navigator.pushReplacement(
+                                                              context,
+                                                              MaterialPageRoute(
+                                                                builder: (context) =>
+                                                                    HistoryPage(),
+                                                              ),
+                                                            );
+                                                          },
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  );
                                 },
                                 child: const Text(
                                   'รับการแจ้งเหตุ',

@@ -47,21 +47,7 @@ class HotlinePageState extends State<HotlinePage> {
       userProfile = data;
     });
   }
-  //
-  // _socker() {
-  //   _socket = IO.io(
-  //     urlWsMessenger,
-  //     IO.OptionBuilder().setTransports(['websocket']).setQuery({
-  //       'username': userProfile.firstName + " " + userProfile.lastName,
-  //     }).build(),
-  //   );
-  //   for (var i = 0; i <= 5; i++) {
-  //     _socket.emit('emergency', {
-  //       'message': i,
-  //       'sender': userProfile.firstName + " " + userProfile.lastName,
-  //     });
-  //   }
-  // }
+
 
   callAPIHotline() async {
     await GetHotlineList().then((value) {

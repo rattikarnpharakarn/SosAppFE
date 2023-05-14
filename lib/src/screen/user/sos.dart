@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:sos/src/component/bottom_bar.dart';
 import 'package:sos/src/component/endDrawer.dart';
@@ -14,6 +13,7 @@ import 'package:sos/src/model/emergency/request.dart';
 import 'package:sos/src/provider/accounts/userService.dart';
 import 'package:sos/src/provider/config.dart';
 import 'package:sos/src/provider/emergency/inform.dart';
+import 'package:sos/src/screen/common/detailImage.dart';
 
 import 'dart:convert';
 import 'dart:io';
@@ -1199,35 +1199,4 @@ class _SosPage1State extends State<SosPage1> {
             ),
           ),
         );
-}
-
-class DetailScreen extends StatefulWidget {
-  String images;
-
-  DetailScreen({Key? key, required this.images}) : super(key: key);
-
-  @override
-  State<DetailScreen> createState() => _DetailScreenState();
-}
-
-class _DetailScreenState extends State<DetailScreen> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: GestureDetector(
-        child: Center(
-          child: Hero(
-            tag: 'imageHero',
-            child: Image.memory(
-              base64Decode(widget.images),
-              fit: BoxFit.fitHeight,
-            ),
-          ),
-        ),
-        onTap: () {
-          Navigator.pop(context);
-        },
-      ),
-    );
-  }
 }

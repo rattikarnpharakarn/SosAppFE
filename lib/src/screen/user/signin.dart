@@ -82,8 +82,6 @@ class _SigninState extends State<Signin> {
       }),
     );
     if (response.statusCode == 200) {
-      print(2);
-
       final m1 = jsonDecode(response.body);
       await addStringToSF(m1['token']);
       return '0';
@@ -214,11 +212,11 @@ class _SigninState extends State<Signin> {
                            const Text(
                               'Login Success',
                               style: TextStyle(
-                                color: Colors.black,
+                                color: Colors.white,
+                                  fontSize: 16
                               ),
                             ),
-                            Colors.white,
-                            115,
+                            Colors.white
                           ),
                         );
                         // ignore: use_build_context_synchronously
@@ -237,11 +235,11 @@ class _SigninState extends State<Signin> {
                             Text(
                               msg,
                               style: TextStyle(
-                                color: Colors.black,
+                                color: Colors.white,
+                                  fontSize: 16
                               ),
                             ),
-                            Colors.white,
-                            115,
+                            Colors.white
                           ),
                         );
                         // Fluttertoast.showToast(

@@ -56,11 +56,11 @@ class _SignupState extends State<Signup> {
           Text(
             "รหัสผ่านไม่ตรงกัน",
             style: TextStyle(
-              color: Colors.black,
+              color: Colors.white,
+                fontSize: 16
             ),
           ),
-          Colors.white,
-          115
+          Colors.white
         ),
       );
     } else {
@@ -78,11 +78,11 @@ class _SignupState extends State<Signup> {
           Text(
             msg,
             style: TextStyle(
-              color: Colors.black,
+              color: Colors.white,
+                fontSize: 14
             ),
           ),
-          Colors.white,
-          130
+          Colors.white
         ),
       );
     }
@@ -145,11 +145,11 @@ class _SignupState extends State<Signup> {
           Text(
             code,
             style: TextStyle(
-              color: Colors.black,
+              color: Colors.white,
+                fontSize: 14
             ),
           ),
-          Colors.white,
-          115
+          Colors.white
         ),
       );
       throw Exception(

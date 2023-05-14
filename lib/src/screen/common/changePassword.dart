@@ -10,7 +10,7 @@ import 'package:sos/src/provider/config.dart';
 import 'package:sos/src/sharedInfo/user.dart';
 
 import 'LoadingPage.dart';
-
+import 'snack_bar_sos.dart';
 
 class ChangePasswordPage extends StatefulWidget {
   const ChangePasswordPage({Key? key}) : super(key: key);
@@ -50,10 +50,19 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
   bool isPasswordError = true;
 
   void setDataUserInfo() {
-    if (_NewPassword != _confirmPassword || _NewPassword == '' || _confirmPassword == '') {
-      setState(() {
-        isPasswordError = false;
-      });
+    if (_NewPassword != _confirmPassword) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        snackBarSos(
+            context,
+            Text(
+              "รหัสผ่านไม่ตรงกัน",
+              style: TextStyle(
+                color: Colors.white,
+                  fontSize: 16
+              ),
+            ),
+            Colors.white),
+      );
     } else {
       setState(() {
         isPasswordError = true;
@@ -94,7 +103,25 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
 
       return ReturnResponse.fromJson(jsonDecode(response.body));
     } else {
-      throw Exception('Send APIName : changePasswordInfo || statusCode : ${response.statusCode.toString()} || Msg : ${jsonDecode(response.body)}');
+      final m1 = jsonDecode(response.body);
+      String code = m1['message'];
+      print(code);
+      ScaffoldMessenger.of(context).showSnackBar(
+        snackBarSos(
+          context,
+          Text(
+            "msg",
+            style: const TextStyle(
+              color: Colors.white,
+                fontSize: 16
+            ),
+          ),
+          Colors.white,
+        ),
+      );
+
+      throw Exception(
+          'Send APIName : changePasswordInfo || statusCode : ${response.statusCode.toString()} || Msg : ${jsonDecode(response.body)}');
     }
   }
 
@@ -170,23 +197,14 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                     children: <Widget>[
                       Container(
                         padding: const EdgeInsets.fromLTRB(30, 15, 30, 0),
-                        child: isPasswordError == false
-                            ? const Text(
-                                "*** Password and Confirm Password do not match.",
-                                style: TextStyle(
-                                  color: Color.fromARGB(255, 245, 18, 18),
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              )
-                            : const Text(
-                                "Set Password.",
-                                style: TextStyle(
-                                  color: Color.fromARGB(255, 0, 0, 0),
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
+                        child: const Text(
+                          "Set Password.",
+                          style: TextStyle(
+                            color: Color.fromARGB(255, 0, 0, 0),
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ),
                       Container(
                         padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
@@ -231,6 +249,8 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Please enter NewPassword *';
+                            } else if (value.length < 6) {
+                              return 'NewPassword must be longer than 6 characters.';
                             }
                           },
                           decoration: const InputDecoration(
@@ -268,6 +288,8 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Please enter Password *';
+                            } else if (value.length < 6) {
+                              return 'Confirm Password must be longer than 6 characters.';
                             }
                           },
                           decoration: const InputDecoration(

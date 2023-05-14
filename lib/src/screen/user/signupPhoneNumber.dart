@@ -188,11 +188,11 @@ class _SignupPhoneNumberState extends State<SignupPhoneNumber> {
                                 const Text(
                                   'กรุณากรอกเบอร์โทรให้ถูกต้อง',
                                   style: TextStyle(
-                                    color: Colors.black,
+                                    color: Colors.white,
+                                      fontSize: 16
                                   ),
                                 ),
-                                Colors.white,
-                                115
+                                Colors.white
                               ),
                             );
                           }
