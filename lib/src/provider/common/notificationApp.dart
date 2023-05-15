@@ -61,8 +61,6 @@ Future<void> notificationEmergency(res) async {
     liveLocation();
   });
 
-
-
   double unit = await getDistanceBetweenPoints(
       latitude, longitude, currentLatitude, currentLongitude, "kilometers");
   unit += 2;

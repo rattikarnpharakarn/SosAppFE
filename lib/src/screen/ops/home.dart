@@ -43,7 +43,6 @@ class _HomeOpsState extends State<HomeOps> {
   @override
   void initState() {
     super.initState();
-    initializeService();
     Future.delayed(Duration(milliseconds: 500), () {
       _getCurrentLocation ();
       _getNameProfile();

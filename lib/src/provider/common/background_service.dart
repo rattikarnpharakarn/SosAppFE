@@ -16,6 +16,7 @@ import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:sos/src/model/accounts/user.dart';
 import 'package:sos/src/provider/accounts/userService.dart';
 import 'package:sos/src/provider/common/getCurrentLocation.dart';
+import 'package:sos/src/provider/common/getDistanceBetweenPoints.dart';
 import 'package:sos/src/provider/common/model.dart';
 import 'package:sos/src/provider/common/notificationApp.dart';
 
@@ -67,9 +68,11 @@ void onStart(ServiceInstance service) async {
   late IO.Socket _socket;
   if (data.roleId == "3") {
     _socket = await connectSocket(data);
-    // todo Check location
-    _socket.on('0', (data) {
-      notificationEmergency(data);
+
+    _socket.on('0', (m1) async {
+      if (await checkDistanceBetweenPoints(m1)) {
+        notificationEmergency(m1);
+      }
     });
   }
 

@@ -26,6 +26,7 @@ Future<void> main() async {
   );
   await ShowflutterLocalNoificationPlugin.initialize(initializationSettings);
 
+  initializeService();
 
   runApp(const MyApp());
 }

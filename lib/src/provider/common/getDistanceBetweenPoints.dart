@@ -1,5 +1,8 @@
 import 'dart:math' as math;
 
+import 'package:sos/src/provider/common/getCurrentLocation.dart';
+import 'package:sos/src/provider/common/model.dart';
+
 Future<double> getDistanceBetweenPoints(
     double latitude1,double longitude1,double latitude2,double longitude2,String unit) async {
 
@@ -19,6 +22,35 @@ Future<double> getDistanceBetweenPoints(
   } else if (unit == 'kilometers') {
     res = distance * 1.609344;
     return res;
+  }
+  return res;
+}
+
+
+Future<bool> checkDistanceBetweenPoints(data) async{
+  bool res = false;
+
+  var resp = NotificationModel.fromJson(data);
+  // todo CurrentLocation
+  late double currentLatitude =0.0;
+  late double currentLongitude =0.0;
+
+  // todo Destination Location
+  final double latitude =double.parse(resp.latitude);
+  final double longitude = double.parse(resp.longitude);
+
+  await getCurrentLocation().then((value) async {
+    currentLatitude = value.latitude;
+    currentLongitude = value.longitude;
+    liveLocation();
+  });
+
+  double unit = await getDistanceBetweenPoints(
+      latitude, longitude, currentLatitude, currentLongitude, "kilometers");
+  unit += 2;
+
+  if (unit <= 9){
+    res = true;
   }
   return res;
 }

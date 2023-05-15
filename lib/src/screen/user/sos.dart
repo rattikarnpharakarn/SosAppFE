@@ -653,7 +653,6 @@ class _SosPage1State extends State<SosPage1> {
         "phoneNumberCallBack" : _textPhoneNumber,
         "latitude" : latitude,
         "longitude" : longitude,
-        "username" : data.firstName + " " +data.lastName,
         "type": widget.onSelectName,
       });
 
