@@ -11,6 +11,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:sos/src/model/accounts/user.dart';
 import 'package:sos/src/model/emergency/request.dart';
 import 'package:sos/src/provider/accounts/userService.dart';
+import 'package:sos/src/provider/common/socketConnectNotification.dart';
 import 'package:sos/src/provider/config.dart';
 import 'package:sos/src/provider/emergency/inform.dart';
 import 'package:sos/src/screen/common/detailImage.dart';
@@ -54,344 +55,347 @@ class NSosPageState extends State<SosPage> {
   }
 
   @override
-  Widget build(BuildContext context) => isLoading == false
-      ? const LoadingPage()
-      : Scaffold(
-          key: _formKey,
-          bottomNavigationBar: Bottombar(pageNumber: _pageNumber),
-          // appBar: NavbarPages(),
-          appBar: AppBar(
-            // toolbarHeight: 0,
-            backgroundColor: const Color.fromARGB(255, 248, 0, 0),
-            elevation: 0,
-            // centerTitle: false,
-            title: Container(
+  Widget build(BuildContext context) =>
+      isLoading == false
+          ? const LoadingPage()
+          : Scaffold(
+        key: _formKey,
+        bottomNavigationBar: Bottombar(pageNumber: _pageNumber),
+        // appBar: NavbarPages(),
+        appBar: AppBar(
+          // toolbarHeight: 0,
+          backgroundColor: const Color.fromARGB(255, 248, 0, 0),
+          elevation: 0,
+          // centerTitle: false,
+          title: Container(
+            padding: const EdgeInsets.all(10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  alignment: Alignment.center,
+                  padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+                  child: const Text(
+                    "แจ้งเหตุ",
+                    style: TextStyle(
+                      color: Color.fromARGB(255, 255, 255, 255),
+                      fontSize: 22,
+                      decorationStyle: TextDecorationStyle.solid,
+                    ),
+                  ),
+                ),
+                const Spacer(),
+                Container(
+                  padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      shape: const CircleBorder(),
+                      backgroundColor:
+                      const Color.fromARGB(255, 255, 255, 255),
+                    ),
+                    child: Image_NavBer(height: 40, width: 40),
+                    onPressed: () {
+                      _formKey.currentState!.openEndDrawer();
+                    },
+                  ),
+                )
+              ],
+            ),
+          ),
+          automaticallyImplyLeading: false,
+          titleSpacing: 0,
+          actions: [
+            Container(),
+          ],
+        ),
+        endDrawer: const EndDrawer(),
+        endDrawerEnableOpenDragGesture: false,
+        body: SingleChildScrollView(
+          child: Form(
+            child: Container(
+              alignment: Alignment.center,
               padding: const EdgeInsets.all(10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                textDirection: TextDirection.ltr,
+                children: <Widget>[
                   Container(
-                    alignment: Alignment.center,
-                    padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
-                    child: const Text(
-                      "แจ้งเหตุ",
-                      style: TextStyle(
-                        color: Color.fromARGB(255, 255, 255, 255),
-                        fontSize: 22,
-                        decorationStyle: TextDecorationStyle.solid,
+                    padding: EdgeInsets.zero,
+                    height: 380,
+                    width: 400,
+                    child: GridView.count(
+                      primary: true,
+                      padding: const EdgeInsets.all(20),
+                      crossAxisSpacing: 10,
+                      mainAxisSpacing: 10,
+                      crossAxisCount: 2,
+                      children: [
+                        TextButton(
+                          autofocus: false,
+                          style: TextButton.styleFrom(
+                            foregroundColor: Colors.white,
+                            shape: const CircleBorder(),
+                          ),
+                          child: onSelect == 1 || onSelect == 0
+                              ? SosComponent(
+                            images: 'assets/images/sick.png',
+                            title: 'เจ็บป่วย',
+                            isDisabledButton: true,
+                          )
+                              : SosComponent(
+                            images: 'assets/images/sick.png',
+                            title: 'เจ็บป่วย',
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              if (onSelect == 1) {
+                                onSelect = 0;
+                              } else {
+                                _onSelectName = 'เจ็บป่วย';
+                                onSelect = 1;
+                              }
+                            });
+                          },
+                        ),
+                        TextButton(
+                          autofocus: false,
+                          style: TextButton.styleFrom(
+                            foregroundColor: Colors.white,
+                            shape: const CircleBorder(),
+                          ),
+                          child: onSelect == 2 || onSelect == 0
+                              ? SosComponent(
+                            images: 'assets/images/accident.png',
+                            title: 'อุบัติเหตุ',
+                            isDisabledButton: true,
+                          )
+                              : SosComponent(
+                            images: 'assets/images/accident.png',
+                            title: 'อุบัติเหตุ',
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              if (onSelect == 2) {
+                                onSelect = 0;
+                              } else {
+                                _onSelectName = 'อุบัติเหตุ';
+                                onSelect = 2;
+                              }
+                            });
+                          },
+                        ),
+                        TextButton(
+                          autofocus: false,
+                          style: TextButton.styleFrom(
+                            foregroundColor: Colors.white,
+                            shape: const CircleBorder(),
+                          ),
+                          child: onSelect == 3 || onSelect == 0
+                              ? SosComponent(
+                            images: 'assets/images/building.png',
+                            title: 'อาคาร/สถานที่',
+                            isDisabledButton: true,
+                          )
+                              : SosComponent(
+                            images: 'assets/images/building.png',
+                            title: 'อาคาร/สถานที่',
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              if (onSelect == 3) {
+                                onSelect = 0;
+                              } else {
+                                _onSelectName = 'อาคาร/สถานที่';
+                                onSelect = 3;
+                              }
+                            });
+                          },
+                        ),
+                        TextButton(
+                          autofocus: false,
+                          style: TextButton.styleFrom(
+                            foregroundColor: Colors.white,
+                            shape: const CircleBorder(),
+                          ),
+                          child: onSelect == 4 || onSelect == 0
+                              ? SosComponent(
+                            images: 'assets/images/others.png',
+                            title: 'อื่นๆ',
+                            isDisabledButton: true,
+                          )
+                              : SosComponent(
+                            images: 'assets/images/others.png',
+                            title: 'อื่นๆ',
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              if (onSelect == 4) {
+                                onSelect = 0;
+                              } else {
+                                _onSelectName = 'อื่นๆ';
+                                onSelect = 4;
+                              }
+                            });
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                    child: Card(
+                      shape: RoundedRectangleBorder(
+                        side: const BorderSide(
+                          color: Color.fromARGB(255, 51, 51, 51),
+                        ),
+                        borderRadius:
+                        BorderRadius.circular(20), //<-- SEE HERE
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8),
+                        child: TextFormField(
+                          onChanged: (value) =>
+                              setState(() {
+                                _textArea = value;
+                              }),
+                          maxLines: 6,
+                          maxLength: 1000, //or null
+                          decoration: const InputDecoration.collapsed(
+                            hintText: "คำอธิบายเพิ่มเติม",
+                          ),
+                        ),
                       ),
                     ),
                   ),
-                  const Spacer(),
-                  Container(
-                    padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        shape: const CircleBorder(),
-                        backgroundColor:
-                            const Color.fromARGB(255, 255, 255, 255),
-                      ),
-                      child: Image_NavBer(height: 40, width: 40),
-                      onPressed: () {
-                        _formKey.currentState!.openEndDrawer();
-                      },
-                    ),
-                  )
-                ],
-              ),
-            ),
-            automaticallyImplyLeading: false,
-            titleSpacing: 0,
-            actions: [
-              Container(),
-            ],
-          ),
-          endDrawer: const EndDrawer(),
-          endDrawerEnableOpenDragGesture: false,
-          body: SingleChildScrollView(
-            child: Form(
-              child: Container(
-                alignment: Alignment.center,
-                padding: const EdgeInsets.all(10),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  textDirection: TextDirection.ltr,
-                  children: <Widget>[
-                    Container(
-                      padding: EdgeInsets.zero,
-                      height: 380,
-                      width: 400,
-                      child: GridView.count(
-                        primary: true,
-                        padding: const EdgeInsets.all(20),
-                        crossAxisSpacing: 10,
-                        mainAxisSpacing: 10,
-                        crossAxisCount: 2,
-                        children: [
-                          TextButton(
-                            autofocus: false,
-                            style: TextButton.styleFrom(
-                              foregroundColor: Colors.white,
-                              shape: const CircleBorder(),
-                            ),
-                            child: onSelect == 1 || onSelect == 0
-                                ? SosComponent(
-                                    images: 'assets/images/sick.png',
-                                    title: 'เจ็บป่วย',
-                                    isDisabledButton: true,
-                                  )
-                                : SosComponent(
-                                    images: 'assets/images/sick.png',
-                                    title: 'เจ็บป่วย',
-                                  ),
-                            onPressed: () {
-                              setState(() {
-                                if (onSelect == 1) {
-                                  onSelect = 0;
-                                } else {
-                                  _onSelectName = 'เจ็บป่วย';
-                                  onSelect = 1;
-                                }
-                              });
-                            },
-                          ),
-                          TextButton(
-                            autofocus: false,
-                            style: TextButton.styleFrom(
-                              foregroundColor: Colors.white,
-                              shape: const CircleBorder(),
-                            ),
-                            child: onSelect == 2 || onSelect == 0
-                                ? SosComponent(
-                                    images: 'assets/images/accident.png',
-                                    title: 'อุบัติเหตุ',
-                                    isDisabledButton: true,
-                                  )
-                                : SosComponent(
-                                    images: 'assets/images/accident.png',
-                                    title: 'อุบัติเหตุ',
-                                  ),
-                            onPressed: () {
-                              setState(() {
-                                if (onSelect == 2) {
-                                  onSelect = 0;
-                                } else {
-                                  _onSelectName = 'อุบัติเหตุ';
-                                  onSelect = 2;
-                                }
-                              });
-                            },
-                          ),
-                          TextButton(
-                            autofocus: false,
-                            style: TextButton.styleFrom(
-                              foregroundColor: Colors.white,
-                              shape: const CircleBorder(),
-                            ),
-                            child: onSelect == 3 || onSelect == 0
-                                ? SosComponent(
-                                    images: 'assets/images/building.png',
-                                    title: 'อาคาร/สถานที่',
-                                    isDisabledButton: true,
-                                  )
-                                : SosComponent(
-                                    images: 'assets/images/building.png',
-                                    title: 'อาคาร/สถานที่',
-                                  ),
-                            onPressed: () {
-                              setState(() {
-                                if (onSelect == 3) {
-                                  onSelect = 0;
-                                } else {
-                                  _onSelectName = 'อาคาร/สถานที่';
-                                  onSelect = 3;
-                                }
-                              });
-                            },
-                          ),
-                          TextButton(
-                            autofocus: false,
-                            style: TextButton.styleFrom(
-                              foregroundColor: Colors.white,
-                              shape: const CircleBorder(),
-                            ),
-                            child: onSelect == 4 || onSelect == 0
-                                ? SosComponent(
-                                    images: 'assets/images/others.png',
-                                    title: 'อื่นๆ',
-                                    isDisabledButton: true,
-                                  )
-                                : SosComponent(
-                                    images: 'assets/images/others.png',
-                                    title: 'อื่นๆ',
-                                  ),
-                            onPressed: () {
-                              setState(() {
-                                if (onSelect == 4) {
-                                  onSelect = 0;
-                                } else {
-                                  _onSelectName = 'อื่นๆ';
-                                  onSelect = 4;
-                                }
-                              });
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                      child: Card(
-                        shape: RoundedRectangleBorder(
-                          side: const BorderSide(
-                            color: Color.fromARGB(255, 51, 51, 51),
-                          ),
-                          borderRadius:
-                              BorderRadius.circular(20), //<-- SEE HERE
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8),
-                          child: TextFormField(
-                            onChanged: (value) => setState(() {
-                              _textArea = value;
-                            }),
-                            maxLines: 6,
-                            maxLength: 1000, //or null
-                            decoration: const InputDecoration.collapsed(
-                              hintText: "คำอธิบายเพิ่มเติม",
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Center(
-                      child: Container(
-                        padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
-                        child: SizedBox(
-                          width: 312.48,
-                          height: 63.4,
-                          child: ElevatedButton(
-                            style: ButtonStyle(
-                              backgroundColor:
-                                  MaterialStateProperty.all(Colors.black),
-                              shape: MaterialStateProperty.all(
-                                RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(15.29),
-                                  side: const BorderSide(
-                                      width: 3, color: Colors.black),
-                                ),
+                  Center(
+                    child: Container(
+                      padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
+                      child: SizedBox(
+                        width: 312.48,
+                        height: 63.4,
+                        child: ElevatedButton(
+                          style: ButtonStyle(
+                            backgroundColor:
+                            MaterialStateProperty.all(Colors.black),
+                            shape: MaterialStateProperty.all(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15.29),
+                                side: const BorderSide(
+                                    width: 3, color: Colors.black),
                               ),
                             ),
-                            onPressed: () {
-                              if (onSelect == 0 || _textArea == '') {
-                                String msg = '';
-                                if (onSelect == 0) {
-                                  msg = 'กรุณาเลือกประเภทของการแจ้งเหตุ';
-                                } else if (_textArea == '') {
-                                  msg = 'กรุณาเพิ่มคำอธิบาย';
-                                }
-                                showCupertinoModalPopup<void>(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return Container(
-                                      padding: const EdgeInsets.all(1),
-                                      child: Center(
-                                        child: Card(
-                                          color: Colors.white,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(8.0),
-                                          ),
-                                          child: Container(
-                                            margin: const EdgeInsets.all(10),
-                                            child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: <Widget>[
-                                                Container(
-                                                  alignment: Alignment.center,
-                                                  padding:
-                                                      const EdgeInsets.all(5),
-                                                  child: Text(
-                                                    msg,
-                                                    style: const TextStyle(
-                                                      fontSize: 20,
-                                                      color: Colors.black,
-                                                      decoration:
-                                                          TextDecoration.none,
-                                                      decorationStyle:
-                                                          TextDecorationStyle
-                                                              .double,
-                                                      fontWeight:
-                                                          FontWeight.w300,
-                                                    ),
+                          ),
+                          onPressed: () {
+                            if (onSelect == 0 || _textArea == '') {
+                              String msg = '';
+                              if (onSelect == 0) {
+                                msg = 'กรุณาเลือกประเภทของการแจ้งเหตุ';
+                              } else if (_textArea == '') {
+                                msg = 'กรุณาเพิ่มคำอธิบาย';
+                              }
+                              showCupertinoModalPopup<void>(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return Container(
+                                    padding: const EdgeInsets.all(1),
+                                    child: Center(
+                                      child: Card(
+                                        color: Colors.white,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                          BorderRadius.circular(8.0),
+                                        ),
+                                        child: Container(
+                                          margin: const EdgeInsets.all(10),
+                                          child: Column(
+                                            mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: <Widget>[
+                                              Container(
+                                                alignment: Alignment.center,
+                                                padding:
+                                                const EdgeInsets.all(5),
+                                                child: Text(
+                                                  msg,
+                                                  style: const TextStyle(
+                                                    fontSize: 20,
+                                                    color: Colors.black,
+                                                    decoration:
+                                                    TextDecoration.none,
+                                                    decorationStyle:
+                                                    TextDecorationStyle
+                                                        .double,
+                                                    fontWeight:
+                                                    FontWeight.w300,
                                                   ),
                                                 ),
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  mainAxisSize:
-                                                      MainAxisSize.min,
-                                                  children: [
-                                                    Container(
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              1),
-                                                      child: ElevatedButton(
-                                                        style: const ButtonStyle(
-                                                            backgroundColor:
-                                                                MaterialStatePropertyAll<
-                                                                        Color>(
-                                                                    Colors
-                                                                        .red)),
-                                                        child: const Text(
-                                                          'ok',
-                                                          style: TextStyle(
-                                                              fontSize: 16),
-                                                        ),
-                                                        onPressed: () =>
-                                                            Navigator.pop(
-                                                                context),
+                                              ),
+                                              Row(
+                                                mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                                mainAxisSize:
+                                                MainAxisSize.min,
+                                                children: [
+                                                  Container(
+                                                    padding:
+                                                    const EdgeInsets.all(
+                                                        1),
+                                                    child: ElevatedButton(
+                                                      style: const ButtonStyle(
+                                                          backgroundColor:
+                                                          MaterialStatePropertyAll<
+                                                              Color>(
+                                                              Colors
+                                                                  .red)),
+                                                      child: const Text(
+                                                        'ok',
+                                                        style: TextStyle(
+                                                            fontSize: 16),
                                                       ),
+                                                      onPressed: () =>
+                                                          Navigator.pop(
+                                                              context),
                                                     ),
-                                                  ],
-                                                ),
-                                              ],
-                                            ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
                                           ),
                                         ),
                                       ),
-                                    );
-                                  },
-                                );
-                              } else {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => SosPage1(
-                                      onSelectSubTypeId: onSelect,
-                                      onSelectName: _onSelectName,
-                                      textArea: _textArea,
                                     ),
-                                  ),
-                                );
-                              }
-                            },
-                            child: const Text(
-                              "ถัดไป",
-                              style: TextStyle(fontSize: 24),
-                            ),
+                                  );
+                                },
+                              );
+                            } else {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      SosPage1(
+                                        onSelectSubTypeId: onSelect,
+                                        onSelectName: _onSelectName,
+                                        textArea: _textArea,
+                                      ),
+                                ),
+                              );
+                            }
+                          },
+                          child: const Text(
+                            "ถัดไป",
+                            style: TextStyle(fontSize: 24),
                           ),
                         ),
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),
-        );
+        ),
+      );
 
   @override
   void dispose() {
@@ -430,24 +434,25 @@ class _SosPage1State extends State<SosPage1> {
   void initState() {
     super.initState();
     Future.delayed(Duration(milliseconds: 500), () async {
-      UserInfo data = await GetUserProfile();
-      _socket = IO.io(
-        urlWsMessenger,
-        IO.OptionBuilder().setTransports(['websocket']).setQuery({
-          'username': data.firstName + " " + data.lastName,
-        }).build(),
-      );
-
-      _socket.connect();
+      _connectSocket();
       setState(() {
         isLoading = true;
       });
     });
   }
 
+  _connectSocket() async {
+    UserInfo data = await GetUserProfile();
+    _socket = await connectSocket(data);
+    // todo Check location
+    // _socket.on('0', (data) {
+    //   // notificationEmergency(data);
+    // });
+  }
+
+
   @override
   void dispose() {
-    _socket.onDisconnect((data) => print('Socket.IO server disconnected'));
     _socket.dispose();
     super.dispose();
   }
@@ -548,21 +553,21 @@ class _SosPage1State extends State<SosPage1> {
     });
   }
 
-  Future<void> _openMap(String lat, String long) async {
-    setState(() {
-      latitude = lat;
-      longitude = long;
-    });
-    String googleURL =
-        'https://www.google.com/maps/search/?api=1&query=$lat,$long';
-
-    await launchUrlString(googleURL);
-    // if (await canLaunchUrlString(googleURL)) {
-    //   await launchUrlString(googleURL);
-    // } else {
-    //   throw 'Could not launch $googleURL';
-    // }
-  }
+  // Future<void> _openMap(String lat, String long) async {
+  //   setState(() {
+  //     latitude = lat;
+  //     longitude = long;
+  //   });
+  //   String googleURL =
+  //       'https://www.google.com/maps/search/?api=1&query=$lat,$long';
+  //
+  //   await launchUrlString(googleURL);
+  //   // if (await canLaunchUrlString(googleURL)) {
+  //   //   await launchUrlString(googleURL);
+  //   // } else {
+  //   //   throw 'Could not launch $googleURL';
+  //   // }
+  // }
 
   Future<void> _callAPIInform() async {
     UserInfo data = await GetUserProfile();
@@ -620,8 +625,8 @@ class _SosPage1State extends State<SosPage1> {
                             child: ElevatedButton(
                               style: const ButtonStyle(
                                   backgroundColor:
-                                      MaterialStatePropertyAll<Color>(
-                                          Colors.red)),
+                                  MaterialStatePropertyAll<Color>(
+                                      Colors.red)),
                               child: const Text(
                                 'ok',
                                 style: TextStyle(fontSize: 16),
@@ -643,9 +648,13 @@ class _SosPage1State extends State<SosPage1> {
         },
       );
     } else {
-      _socket.emit("emergency", {
-        'message': data.firstName + " " + data.lastName,
-        'sender': data.firstName + " " + data.lastName,
+      _socket.emit("0", {
+        "description" : widget.textArea,
+        "phoneNumberCallBack" : _textPhoneNumber,
+        "latitude" : latitude,
+        "longitude" : longitude,
+        "username" : data.firstName + " " +data.lastName,
+        "type": widget.onSelectName,
       });
 
       // ignore: use_build_context_synchronously
@@ -689,13 +698,14 @@ class _SosPage1State extends State<SosPage1> {
                             child: ElevatedButton(
                               style: const ButtonStyle(
                                   backgroundColor:
-                                      MaterialStatePropertyAll<Color>(
-                                          Colors.red)),
+                                  MaterialStatePropertyAll<Color>(
+                                      Colors.red)),
                               child: const Text(
                                 'ok',
                                 style: TextStyle(fontSize: 16),
                               ),
-                              onPressed: () => {
+                              onPressed: () =>
+                              {
                                 _socket.ondisconnect(),
                                 Navigator.push(
                                   context,
@@ -721,482 +731,484 @@ class _SosPage1State extends State<SosPage1> {
   }
 
   @override
-  Widget build(BuildContext context) => isLoading == false
-      ? const LoadingPage()
-      : Scaffold(
-          key: _key,
-          bottomNavigationBar: Bottombar(pageNumber: _pageNumber),
-          // appBar: NavbarPages(),
-          appBar: AppBar(
-            // toolbarHeight: 0,
-            backgroundColor: const Color.fromARGB(255, 248, 0, 0),
-            elevation: 0,
-            centerTitle: false,
-            title: Container(
-              padding: const EdgeInsets.all(10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+  Widget build(BuildContext context) =>
+      isLoading == false
+          ? const LoadingPage()
+          : Scaffold(
+        key: _key,
+        bottomNavigationBar: Bottombar(pageNumber: _pageNumber),
+        // appBar: NavbarPages(),
+        appBar: AppBar(
+          // toolbarHeight: 0,
+          backgroundColor: const Color.fromARGB(255, 248, 0, 0),
+          elevation: 0,
+          centerTitle: false,
+          title: Container(
+            padding: const EdgeInsets.all(10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  alignment: Alignment.center,
+                  padding: const EdgeInsets.fromLTRB(0, 10, 20, 10),
+                  child: const Text(
+                    "แจ้งเหตุ",
+                    style: TextStyle(
+                      color: Color.fromARGB(255, 255, 255, 255),
+                      fontSize: 22,
+                      decorationStyle: TextDecorationStyle.solid,
+                    ),
+                  ),
+                ),
+                const Spacer(),
+                Container(
+                  padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      shape: const CircleBorder(),
+                      backgroundColor:
+                      const Color.fromARGB(255, 255, 255, 255),
+                    ),
+                    child: Image_NavBer(height: 40, width: 40),
+                    onPressed: () {
+                      _key.currentState!.openEndDrawer();
+                    },
+                  ),
+                )
+              ],
+            ),
+          ),
+          automaticallyImplyLeading: true,
+          titleSpacing: 0,
+          actions: [
+            Container(),
+          ],
+        ),
+        endDrawer: const EndDrawer(),
+        endDrawerEnableOpenDragGesture: false,
+        body: SingleChildScrollView(
+          child: Container(
+            padding: const EdgeInsets.all(25),
+            child: Form(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                textDirection: TextDirection.ltr,
                 children: [
+                  Row(
+                    children: [
+                      Container(
+                        padding: EdgeInsets.zero,
+                        child: const Text(
+                          'ประเภทของการแจ้งเหต :  ',
+                          style: TextStyle(fontSize: 18),
+                        ),
+                      ),
+                      Container(
+                        padding: EdgeInsets.zero,
+                        child: Text(
+                          widget.onSelectName,
+                          style: const TextStyle(
+                              fontSize: 18, color: Colors.red),
+                        ),
+                      )
+                    ],
+                  ),
                   Container(
-                    alignment: Alignment.center,
-                    padding: const EdgeInsets.fromLTRB(0, 10, 20, 10),
+                    padding: const EdgeInsets.fromLTRB(0, 15, 0, 15),
+                  ),
+                  const Text(
+                    'รายละเอียด',
+                    style: TextStyle(fontSize: 18),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.fromLTRB(0, 5, 0, 0),
+                  ),
+                  SizedBox(
+                    child: Text(
+                      widget.textArea,
+                      style: const TextStyle(fontSize: 18, color: Colors.red),
+                    ),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.fromLTRB(5, 35, 10, 5),
                     child: const Text(
-                      "แจ้งเหตุ",
-                      style: TextStyle(
-                        color: Color.fromARGB(255, 255, 255, 255),
-                        fontSize: 22,
-                        decorationStyle: TextDecorationStyle.solid,
+                      'เบอร์โทรศัพท์สำหรับติดต่อกลับ',
+                      style: TextStyle(fontSize: 16),
+                    ),
+                  ),
+                  Container(
+                    padding: EdgeInsets.zero,
+                    child: Card(
+                      shape: RoundedRectangleBorder(
+                        side: const BorderSide(
+                          color: Color.fromARGB(255, 51, 51, 51),
+                        ),
+                        borderRadius: BorderRadius.circular(3), //<-- SEE HERE
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8),
+                        child: TextFormField(
+                          onChanged: (value) =>
+                              setState(() {
+                                _textPhoneNumber = value;
+                              }),
+                          maxLines: 3,
+                          maxLength: null, //or null
+                          decoration: const InputDecoration.collapsed(
+                            hintText: "",
+                          ),
+                        ),
                       ),
                     ),
                   ),
-                  const Spacer(),
                   Container(
-                    padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        shape: const CircleBorder(),
-                        backgroundColor:
-                            const Color.fromARGB(255, 255, 255, 255),
-                      ),
-                      child: Image_NavBer(height: 40, width: 40),
-                      onPressed: () {
-                        _key.currentState!.openEndDrawer();
-                      },
+                    padding: const EdgeInsets.fromLTRB(5, 10, 10, 5),
+                    child: location_on != '' && imagepages != ''
+                        ? const Text(
+                      'เพิ่มรูปภาพและเลือกที่อยู่สำเร็จ',
+                      style:
+                      TextStyle(fontSize: 16, color: Colors.green),
+                    )
+                        : const Text(
+                      '** กรุณาเลือกที่อยู่ และ เพิ่มรูปภาพเพื่อทำให้ข้อมูลครบถ้วนในการแจ้งเหตุ',
+                      style: TextStyle(fontSize: 16, color: Colors.red),
                     ),
-                  )
-                ],
-              ),
-            ),
-            automaticallyImplyLeading: true,
-            titleSpacing: 0,
-            actions: [
-              Container(),
-            ],
-          ),
-          endDrawer: const EndDrawer(),
-          endDrawerEnableOpenDragGesture: false,
-          body: SingleChildScrollView(
-            child: Container(
-              padding: const EdgeInsets.all(25),
-              child: Form(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  textDirection: TextDirection.ltr,
-                  children: [
-                    Row(
+                  ),
+                  Container(
+                    padding: const EdgeInsets.fromLTRB(0, 15, 15, 0),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
-                          padding: EdgeInsets.zero,
-                          child: const Text(
-                            'ประเภทของการแจ้งเหต :  ',
-                            style: TextStyle(fontSize: 18),
+                          // todo ยังไม่ได้เพิ่มในส่วนของ Location ให้สามารถเลือกได้
+                          padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+                          child: PopupMenuButton<String>(
+                            initialValue: selected_location,
+                            child: Icon(
+                              color: location_on == ''
+                                  ? Colors.red
+                                  : Colors.green,
+                              Icons.location_on,
+                              size: 40.0,
+                            ),
+                            // Callback that sets the selected popup menu item.
+                            onSelected: (String item) {
+                              setState(() {
+                                location_on = item;
+                              });
+                            },
+                            itemBuilder: (BuildContext context) =>
+                            <PopupMenuEntry<String>>[
+                              PopupMenuItem<String>(
+                                value: 'newAddress',
+                                child: Text('เลือกที่อยู่'),
+                                onTap: () {
+                                  print('เลือกที่อยู่');
+                                },
+                              ),
+                              PopupMenuItem<String>(
+                                value: 'currentAddress',
+                                child: const Text('ที่อยู่ปัจจุบัน'),
+                                onTap: () {
+                                  _getCurrentLocation().then((value) async {
+                                    lat = '${value.latitude}';
+                                    long = '${value.longitude}';
+
+                                    _liveLocation();
+                                    setState(() {
+                                      latitude = lat;
+                                      longitude = long;
+                                    });
+                                    // await _openMap(lat, long);
+                                  });
+                                },
+                              ),
+                            ],
                           ),
                         ),
                         Container(
-                          padding: EdgeInsets.zero,
-                          child: Text(
-                            widget.onSelectName,
-                            style: const TextStyle(
-                                fontSize: 18, color: Colors.red),
+                          padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+                          child: PopupMenuButton<String>(
+                            initialValue: selected_camera_or_image,
+                            child: Icon(
+                              color: imagepages.length <= 0
+                                  ? Colors.red
+                                  : Colors.green,
+                              Icons.camera_alt,
+                              size: 40.0,
+                            ),
+                            // Callback that sets the selected popup menu item.
+                            onSelected: (String item) {
+                              setState(() {
+                                selected_camera_or_image = item;
+                                openImage(selected_camera_or_image);
+                              });
+                            },
+                            itemBuilder: (BuildContext context) =>
+                            <PopupMenuEntry<String>>[
+                              const PopupMenuItem<String>(
+                                value: 'camera',
+                                child: Text('เปิดกล้อง'),
+                              ),
+                              const PopupMenuItem<String>(
+                                value: 'gallery',
+                                child: Text('เลือกไฟล์'),
+                              ),
+                            ],
                           ),
-                        )
+                        ),
                       ],
                     ),
-                    Container(
-                      padding: const EdgeInsets.fromLTRB(0, 15, 0, 15),
-                    ),
-                    const Text(
-                      'รายละเอียด',
-                      style: TextStyle(fontSize: 18),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.fromLTRB(0, 5, 0, 0),
-                    ),
-                    SizedBox(
-                      child: Text(
-                        widget.textArea,
-                        style: const TextStyle(fontSize: 18, color: Colors.red),
-                      ),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.fromLTRB(5, 35, 10, 5),
-                      child: const Text(
-                        'เบอร์โทรศัพท์สำหรับติดต่อกลับ',
-                        style: TextStyle(fontSize: 16),
-                      ),
-                    ),
-                    Container(
-                      padding: EdgeInsets.zero,
-                      child: Card(
-                        shape: RoundedRectangleBorder(
-                          side: const BorderSide(
-                            color: Color.fromARGB(255, 51, 51, 51),
-                          ),
-                          borderRadius: BorderRadius.circular(3), //<-- SEE HERE
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8),
-                          child: TextFormField(
-                            onChanged: (value) => setState(() {
-                              _textPhoneNumber = value;
-                            }),
-                            maxLines: 3,
-                            maxLength: null, //or null
-                            decoration: const InputDecoration.collapsed(
-                              hintText: "",
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.fromLTRB(5, 10, 10, 5),
-                      child: location_on != '' && imagepages != ''
-                          ? const Text(
-                              'เพิ่มรูปภาพและเลือกที่อยู่สำเร็จ',
-                              style:
-                                  TextStyle(fontSize: 16, color: Colors.green),
-                            )
-                          : const Text(
-                              '** กรุณาเลือกที่อยู่ และ เพิ่มรูปภาพเพื่อทำให้ข้อมูลครบถ้วนในการแจ้งเหตุ',
-                              style: TextStyle(fontSize: 16, color: Colors.red),
-                            ),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.fromLTRB(0, 15, 15, 0),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            // todo ยังไม่ได้เพิ่มในส่วนของ Location ให้สามารถเลือกได้
-                            padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
-                            child: PopupMenuButton<String>(
-                              initialValue: selected_location,
-                              child: Icon(
-                                color: location_on == ''
-                                    ? Colors.red
-                                    : Colors.green,
-                                Icons.location_on,
-                                size: 40.0,
-                              ),
-                              // Callback that sets the selected popup menu item.
-                              onSelected: (String item) {
-                                setState(() {
-                                  location_on = item;
-                                });
+                  ),
+                  Center(
+                    child: imagepages == []
+                        ? null
+                        : Wrap(
+                      children: imagepages.map(
+                            (imageone) {
+                          return Container(
+                            padding: const EdgeInsets.all(1.0),
+                            child: TextButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        DetailScreen(images: imageone),
+                                  ),
+                                );
                               },
-                              itemBuilder: (BuildContext context) =>
-                                  <PopupMenuEntry<String>>[
-                                PopupMenuItem<String>(
-                                  value: 'newAddress',
-                                  child: Text('เลือกที่อยู่'),
-                                  onTap: () {
-                                    print('เลือกที่อยู่');
-                                  },
+                              child: Card(
+                                child: ClipRRect(
+                                  borderRadius:
+                                  BorderRadius.circular(10),
+                                  child: Image.memory(
+                                    base64Decode(imageone),
+                                    width: 55,
+                                    height: 55,
+                                    fit: BoxFit.cover,
+                                  ),
                                 ),
-                                PopupMenuItem<String>(
-                                  value: 'currentAddress',
-                                  child: const Text('ที่อยู่ปัจจุบัน'),
-                                  onTap: () {
-                                    _getCurrentLocation().then((value) async {
-                                      lat = '${value.latitude}';
-                                      long = '${value.longitude}';
-
-                                      _liveLocation();
-                                      setState(() {
-                                        latitude = lat;
-                                        longitude = long;
-                                      });
-                                      // await _openMap(lat, long);
-                                    });
-                                  },
-                                ),
-                              ],
-                            ),
-                          ),
-                          Container(
-                            padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
-                            child: PopupMenuButton<String>(
-                              initialValue: selected_camera_or_image,
-                              child: Icon(
-                                color: imagepages.length <= 0
-                                    ? Colors.red
-                                    : Colors.green,
-                                Icons.camera_alt,
-                                size: 40.0,
                               ),
-                              // Callback that sets the selected popup menu item.
-                              onSelected: (String item) {
-                                setState(() {
-                                  selected_camera_or_image = item;
-                                  openImage(selected_camera_or_image);
-                                });
-                              },
-                              itemBuilder: (BuildContext context) =>
-                                  <PopupMenuEntry<String>>[
-                                const PopupMenuItem<String>(
-                                  value: 'camera',
-                                  child: Text('เปิดกล้อง'),
-                                ),
-                                const PopupMenuItem<String>(
-                                  value: 'gallery',
-                                  child: Text('เลือกไฟล์'),
-                                ),
-                              ],
+                            ),
+                          );
+                        },
+                      ).toList(),
+                    ),
+                  ),
+                  Center(
+                    child: Container(
+                      padding: const EdgeInsets.fromLTRB(0, 30, 0, 10),
+                      child: SizedBox(
+                        width: 330.48,
+                        height: 63.4,
+                        child: ElevatedButton(
+                          style: ButtonStyle(
+                            backgroundColor:
+                            MaterialStateProperty.all(Colors.black),
+                            shape: MaterialStateProperty.all(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15.29),
+                                side: const BorderSide(
+                                    width: 3, color: Colors.black),
+                              ),
                             ),
                           ),
-                        ],
-                      ),
-                    ),
-                    Center(
-                      child: imagepages == []
-                          ? null
-                          : Wrap(
-                              children: imagepages.map(
-                                (imageone) {
+                          child: const Text(
+                            "แจ้งเหตุ",
+                            style: TextStyle(fontSize: 24),
+                          ),
+                          onPressed: () {
+                            if (location_on == '') {
+                              showCupertinoModalPopup<void>(
+                                context: context,
+                                builder: (BuildContext context) {
                                   return Container(
-                                    padding: const EdgeInsets.all(1.0),
-                                    child: TextButton(
-                                      onPressed: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                DetailScreen(images: imageone),
-                                          ),
-                                        );
-                                      },
+                                    padding: const EdgeInsets.all(1),
+                                    child: Center(
                                       child: Card(
-                                        child: ClipRRect(
+                                        color: Colors.white,
+                                        shape: RoundedRectangleBorder(
                                           borderRadius:
-                                              BorderRadius.circular(10),
-                                          child: Image.memory(
-                                            base64Decode(imageone),
-                                            width: 55,
-                                            height: 55,
-                                            fit: BoxFit.cover,
+                                          BorderRadius.circular(8.0),
+                                        ),
+                                        child: Container(
+                                          margin: const EdgeInsets.all(10),
+                                          child: Column(
+                                            mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: <Widget>[
+                                              Container(
+                                                alignment: Alignment.center,
+                                                padding:
+                                                const EdgeInsets.all(5),
+                                                child: const Text(
+                                                  'กรุณาเลือกที่อยู่',
+                                                  style: TextStyle(
+                                                    fontSize: 20,
+                                                    color: Colors.black,
+                                                    decoration:
+                                                    TextDecoration.none,
+                                                    decorationStyle:
+                                                    TextDecorationStyle
+                                                        .double,
+                                                    fontWeight:
+                                                    FontWeight.w300,
+                                                  ),
+                                                ),
+                                              ),
+                                              Row(
+                                                mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                                mainAxisSize:
+                                                MainAxisSize.min,
+                                                children: [
+                                                  Container(
+                                                    padding:
+                                                    const EdgeInsets.all(
+                                                        1),
+                                                    child: ElevatedButton(
+                                                      style: const ButtonStyle(
+                                                          backgroundColor:
+                                                          MaterialStatePropertyAll<
+                                                              Color>(
+                                                              Colors
+                                                                  .red)),
+                                                      child: const Text(
+                                                        'ok',
+                                                        style: TextStyle(
+                                                            fontSize: 16),
+                                                      ),
+                                                      onPressed: () {
+                                                        Navigator.pop(
+                                                            context);
+                                                      },
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
                                           ),
                                         ),
                                       ),
                                     ),
                                   );
                                 },
-                              ).toList(),
-                            ),
-                    ),
-                    Center(
-                      child: Container(
-                        padding: const EdgeInsets.fromLTRB(0, 30, 0, 10),
-                        child: SizedBox(
-                          width: 330.48,
-                          height: 63.4,
-                          child: ElevatedButton(
-                            style: ButtonStyle(
-                              backgroundColor:
-                                  MaterialStateProperty.all(Colors.black),
-                              shape: MaterialStateProperty.all(
-                                RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(15.29),
-                                  side: const BorderSide(
-                                      width: 3, color: Colors.black),
-                                ),
-                              ),
-                            ),
-                            child: const Text(
-                              "แจ้งเหตุ",
-                              style: TextStyle(fontSize: 24),
-                            ),
-                            onPressed: () {
-                              if (location_on == '') {
-                                showCupertinoModalPopup<void>(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return Container(
-                                      padding: const EdgeInsets.all(1),
-                                      child: Center(
-                                        child: Card(
-                                          color: Colors.white,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(8.0),
-                                          ),
-                                          child: Container(
-                                            margin: const EdgeInsets.all(10),
-                                            child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: <Widget>[
-                                                Container(
-                                                  alignment: Alignment.center,
-                                                  padding:
-                                                      const EdgeInsets.all(5),
-                                                  child: const Text(
-                                                    'กรุณาเลือกที่อยู่',
-                                                    style: TextStyle(
-                                                      fontSize: 20,
-                                                      color: Colors.black,
-                                                      decoration:
-                                                          TextDecoration.none,
-                                                      decorationStyle:
-                                                          TextDecorationStyle
-                                                              .double,
-                                                      fontWeight:
-                                                          FontWeight.w300,
-                                                    ),
-                                                  ),
-                                                ),
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  mainAxisSize:
-                                                      MainAxisSize.min,
-                                                  children: [
-                                                    Container(
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              1),
-                                                      child: ElevatedButton(
-                                                        style: const ButtonStyle(
-                                                            backgroundColor:
-                                                                MaterialStatePropertyAll<
-                                                                        Color>(
-                                                                    Colors
-                                                                        .red)),
-                                                        child: const Text(
-                                                          'ok',
-                                                          style: TextStyle(
-                                                              fontSize: 16),
-                                                        ),
-                                                        onPressed: () {
-                                                          Navigator.pop(
-                                                              context);
-                                                        },
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ],
-                                            ),
-                                          ),
+                              );
+                            } else {
+                              showCupertinoModalPopup<void>(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return Container(
+                                    padding: const EdgeInsets.all(1),
+                                    child: Center(
+                                      child: Card(
+                                        color: Colors.white,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                          BorderRadius.circular(8.0),
                                         ),
-                                      ),
-                                    );
-                                  },
-                                );
-                              } else {
-                                showCupertinoModalPopup<void>(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return Container(
-                                      padding: const EdgeInsets.all(1),
-                                      child: Center(
-                                        child: Card(
-                                          color: Colors.white,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(8.0),
-                                          ),
-                                          child: Container(
-                                            margin: const EdgeInsets.all(10),
-                                            child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: <Widget>[
-                                                Container(
-                                                  padding:
-                                                      const EdgeInsets.all(5),
-                                                  child: const Text(
-                                                    'คุณต้องการที่แจ้งเหตุ ใช่หรือไม่',
-                                                    style: TextStyle(
-                                                      fontSize: 20,
-                                                      color: Colors.black,
-                                                      decoration:
-                                                          TextDecoration.none,
-                                                      decorationStyle:
-                                                          TextDecorationStyle
-                                                              .double,
-                                                      fontWeight:
-                                                          FontWeight.w300,
-                                                    ),
+                                        child: Container(
+                                          margin: const EdgeInsets.all(10),
+                                          child: Column(
+                                            mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: <Widget>[
+                                              Container(
+                                                padding:
+                                                const EdgeInsets.all(5),
+                                                child: const Text(
+                                                  'คุณต้องการที่แจ้งเหตุ ใช่หรือไม่',
+                                                  style: TextStyle(
+                                                    fontSize: 20,
+                                                    color: Colors.black,
+                                                    decoration:
+                                                    TextDecoration.none,
+                                                    decorationStyle:
+                                                    TextDecorationStyle
+                                                        .double,
+                                                    fontWeight:
+                                                    FontWeight.w300,
                                                   ),
                                                 ),
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  mainAxisSize:
-                                                      MainAxisSize.min,
-                                                  children: [
-                                                    Container(
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              1),
-                                                      child: ElevatedButton(
-                                                        style: const ButtonStyle(
-                                                            backgroundColor:
-                                                                MaterialStatePropertyAll<
-                                                                        Color>(
-                                                                    Colors
-                                                                        .red)),
-                                                        child: const Text(
-                                                          'ยกเลิกการแจ้งเหตุ',
-                                                          style: TextStyle(
-                                                              fontSize: 16),
-                                                        ),
-                                                        onPressed: () =>
-                                                            Navigator.pop(
-                                                                context),
-                                                      ),
-                                                    ),
-                                                    Container(
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              10),
-                                                    ),
-                                                    Container(
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              1),
-                                                      child: ElevatedButton(
-                                                        style:
-                                                            const ButtonStyle(
+                                              ),
+                                              Row(
+                                                mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                                mainAxisSize:
+                                                MainAxisSize.min,
+                                                children: [
+                                                  Container(
+                                                    padding:
+                                                    const EdgeInsets.all(
+                                                        1),
+                                                    child: ElevatedButton(
+                                                      style: const ButtonStyle(
                                                           backgroundColor:
-                                                              MaterialStatePropertyAll<
-                                                                      Color>(
-                                                                  Colors.green),
-                                                        ),
-                                                        child: const Text(
-                                                          'ยืนยันการแจ้งเหตุ',
-                                                          style: TextStyle(
-                                                              fontSize: 16),
-                                                        ),
-                                                        onPressed: () {
-                                                          _callAPIInform();
-                                                        },
+                                                          MaterialStatePropertyAll<
+                                                              Color>(
+                                                              Colors
+                                                                  .red)),
+                                                      child: const Text(
+                                                        'ยกเลิกการแจ้งเหตุ',
+                                                        style: TextStyle(
+                                                            fontSize: 16),
                                                       ),
+                                                      onPressed: () =>
+                                                          Navigator.pop(
+                                                              context),
                                                     ),
-                                                  ],
-                                                ),
-                                              ],
-                                            ),
+                                                  ),
+                                                  Container(
+                                                    padding:
+                                                    const EdgeInsets.all(
+                                                        10),
+                                                  ),
+                                                  Container(
+                                                    padding:
+                                                    const EdgeInsets.all(
+                                                        1),
+                                                    child: ElevatedButton(
+                                                      style:
+                                                      const ButtonStyle(
+                                                        backgroundColor:
+                                                        MaterialStatePropertyAll<
+                                                            Color>(
+                                                            Colors.green),
+                                                      ),
+                                                      child: const Text(
+                                                        'ยืนยันการแจ้งเหตุ',
+                                                        style: TextStyle(
+                                                            fontSize: 16),
+                                                      ),
+                                                      onPressed: () {
+                                                        _callAPIInform();
+                                                      },
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
                                           ),
                                         ),
                                       ),
-                                    );
-                                  },
-                                );
-                              }
-                            },
-                          ),
+                                    ),
+                                  );
+                                },
+                              );
+                            }
+                          },
                         ),
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),
-        );
+        ),
+      );
 }

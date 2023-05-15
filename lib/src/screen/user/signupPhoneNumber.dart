@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:sos/main.dart';
+import 'package:sos/src/provider/common/notificationApp.dart';
 import 'package:sos/src/provider/config.dart';
 import 'package:sos/src/screen/common/snack_bar_sos.dart';
 import 'package:sos/src/screen/user/otp.dart';
@@ -38,27 +39,7 @@ class _SignupPhoneNumberState extends State<SignupPhoneNumber> {
     super.dispose();
   }
 
-  Future<void> _showNotification(String otp, verifyCode) async {
-    const AndroidNotificationDetails androidNotificationDetails =
-        AndroidNotificationDetails(
-      'nextflow_noti_001',
-      'แจ้งเตือน',
-      channelDescription: 'OTP',
-      importance: Importance.max,
-      priority: Priority.high,
-      ticker: 'ticker',
-    );
 
-    const NotificationDetails platformChannelDetails = NotificationDetails(
-      android: androidNotificationDetails,
-    );
-
-    await ShowflutterLocalNoificationPlugin.show(
-        1,
-        'OTP',
-        'OTP=${otp} [รหัสอ้างอิง:${verifyCode}] เพื่อใช้งานระบบ SOS',
-        platformChannelDetails);
-  }
 
   Future<Data> Singupwithphone(String phoneNumber) async {
     final response = await http.post(
@@ -81,7 +62,7 @@ class _SignupPhoneNumberState extends State<SignupPhoneNumber> {
       String otp = vf["data"]['otp'];
       String verifyCode = vf["data"]['verifyCode'];
       // ignore: use_build_context_synchronously
-      _showNotification(otp, verifyCode);
+      await showNotificationOTP(otp, verifyCode);
 
       // ignore: use_build_context_synchronously
       Navigator.pushReplacement(

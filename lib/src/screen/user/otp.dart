@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:sos/main.dart';
+import 'package:sos/src/provider/common/notificationApp.dart';
 import 'package:sos/src/provider/config.dart';
 
 import 'dart:convert';
@@ -117,28 +118,6 @@ class _OTPState extends State<OTP> {
     }
   }
 
-  Future<void> _showNotification(String otp, verifyCode) async {
-    const AndroidNotificationDetails androidNotificationDetails =
-    AndroidNotificationDetails(
-      'nextflow_noti_001',
-      'แจ้งเตือน',
-      channelDescription: 'OTP',
-      importance: Importance.max,
-      priority: Priority.high,
-      ticker: 'ticker',
-    );
-
-    const NotificationDetails platformChannelDetails = NotificationDetails(
-      android: androidNotificationDetails,
-    );
-
-    await ShowflutterLocalNoificationPlugin.show(
-        1,
-        'OTP',
-        'OTP=${otp} [รหัสอ้างอิง:${verifyCode}] เพื่อใช้งานระบบ SOS',
-        platformChannelDetails);
-  }
-
   _sendOTP() async {
     final response = await http.post(
       Uri.parse('${urlAccount}sendOTP'),
@@ -158,7 +137,7 @@ class _OTPState extends State<OTP> {
         verifyCode = vf["data"]['verifyCode'];
       });
       // ignore: use_build_context_synchronously
-      _showNotification(otp, verifyCode);
+      await showNotificationOTP(otp, verifyCode);
     }
   }
 
