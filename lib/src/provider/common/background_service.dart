@@ -63,14 +63,24 @@ Future<void> initializeService() async {
 
 @pragma('vm:entry-point')
 void onStart(ServiceInstance service) async {
+
+  late double currentLatitude = 0.0;
+  late double currentLongitude = 0.0;
+
   DartPluginRegistrant.ensureInitialized();
   UserInfo data = await GetUserProfile();
   late IO.Socket _socket;
   if (data.roleId == "3") {
     _socket = await connectSocket(data);
-
     _socket.on('0', (m1) async {
-      if (await checkDistanceBetweenPoints(m1)) {
+      var resp = NotificationModel.fromJson(m1);
+      await getCurrentLocation().then((value) async {
+          currentLatitude = value.latitude;
+          currentLongitude = value.longitude;
+        liveLocation();
+      });
+
+      if (await checkDistanceBetweenPoints(currentLatitude,currentLongitude,resp.latitude, resp.longitude)) {
         notificationEmergency(m1);
       }
     });

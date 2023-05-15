@@ -43,6 +43,9 @@ class _HistoryPageState extends State<HistoryPage> {
                 DateTime dt2 = DateTime.parse(data.date);
                 final String date = newFormat.format(dt2);
 
+                DateTime dt = DateTime.parse(data.updateDate);
+                final String update = newFormat.format(dt);
+
                 GetInform getInform = GetInform(
                   id: data.id,
                   description: data.description,
@@ -54,6 +57,7 @@ class _HistoryPageState extends State<HistoryPage> {
                   workplace: data.workplace,
                   subTypeName: data.subTypeName,
                   date: date,
+                  updateDate: update,
                   status: data.status,
                 );
                 getInformList.add(getInform);
@@ -204,17 +208,17 @@ class _HistoryPageState extends State<HistoryPage> {
                               m1.date,
                               TextStyle(fontSize: 15.0, color: Colors.black54),
                             ),
-                            Container(
-                              alignment: Alignment.topLeft,
-                              padding: const EdgeInsets.all(2),
-                              child: const Text(
-                                'รายละเอียด',
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                            textRow(
+                              'รายละเอียด',
+                              const TextStyle(
+                                fontSize: 18,
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
                               ),
+                              '',
+                              const TextStyle(fontSize: 16, color: Colors.red),
+                              'อัพเดทเมื่อ : ${m1.updateDate}' ,
+                              TextStyle(fontSize: 15.0, color: Colors.black54),
                             ),
                             Container(
                               alignment: Alignment.topLeft,

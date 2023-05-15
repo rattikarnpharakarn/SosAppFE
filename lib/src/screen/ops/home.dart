@@ -1,26 +1,20 @@
 import 'dart:convert';
-import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:sos/src/component/button_bar_ops.dart';
 import 'package:sos/src/model/emergency/request.dart';
 import 'package:sos/src/model/emergency/response.dart';
-import 'package:sos/src/provider/common/background_service.dart';
 import 'package:sos/src/provider/common/getCurrentLocation.dart';
+import 'package:sos/src/provider/common/getDistanceBetweenPoints.dart';
 import 'package:sos/src/provider/emergency/inform.dart';
 import 'package:sos/src/screen/common/detailImage.dart';
 import 'package:sos/src/screen/ops/history.dart';
-import 'package:sos/src/screen/user/home.dart';
-import 'package:sos/src/screen/user/sos.dart';
 import 'package:url_launcher/url_launcher_string.dart';
-
-import '../../component/bottom_bar.dart';
 import '../../component/endDrawer.dart';
 import '../../component/image_navBer.dart';
 import '../../sharedInfo/user.dart';
 import '../common/LoadingPage.dart';
-import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class HomeOps extends StatefulWidget {
   const HomeOps({super.key});
@@ -32,6 +26,8 @@ class HomeOps extends StatefulWidget {
 class _HomeOpsState extends State<HomeOps> {
   final PageController controller = PageController();
   final GlobalKey<ScaffoldState> _key = GlobalKey();
+  late double currentLatitude = 0.0;
+  late double currentLongitude = 0.0;
 
   @override
   void dispose() {
@@ -43,11 +39,9 @@ class _HomeOpsState extends State<HomeOps> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration(milliseconds: 500), () {
-      _getCurrentLocation ();
+      _getCurrentLocation();
       _getNameProfile();
       callAPIGetInformList();
-    });
   }
 
   final int _pageNumber = 0;
@@ -60,14 +54,16 @@ class _HomeOpsState extends State<HomeOps> {
       _name = name;
     });
   }
-  _getCurrentLocation () async {
+
+  _getCurrentLocation() async {
     await getCurrentLocation().then((value) async {
+      setState(() {
+        currentLatitude = value.latitude;
+        currentLongitude = value.longitude;
+      });
       liveLocation();
     });
   }
-
-
-
 
   var newFormat = DateFormat("dd-MM-yyyy HH:mm น.");
   List<GetInform> getInformList = [];
@@ -78,27 +74,44 @@ class _HomeOpsState extends State<HomeOps> {
         if (value.code == "0") {
           setState(
             () {
-              for (var data in value.list) {
+              Future.forEach(value.list, (data) async {
                 DateTime dt2 = DateTime.parse(data.date);
                 final String date = newFormat.format(dt2);
 
-                GetInform getInform = GetInform(
-                  id: data.id,
-                  description: data.description,
-                  image: data.image,
-                  phoneNumberCallBack: data.phoneNumberCallBack,
-                  latitude: data.latitude,
-                  longitude: data.longitude,
-                  username: data.username,
-                  workplace: data.workplace,
-                  subTypeName: data.subTypeName,
-                  date: date,
-                  status: data.status,
+                DateTime dt = DateTime.parse(data.updateDate);
+                final String update = newFormat.format(dt);
+
+                bool check = await checkDistanceBetweenPoints(
+                  currentLatitude,
+                  currentLongitude,
+                  data.latitude,
+                  data.longitude,
                 );
-                getInformList.add(getInform);
-              }
+                if (check) {
+                  GetInform getInform = GetInform(
+                    id: data.id,
+                    description: data.description,
+                    image: data.image,
+                    phoneNumberCallBack: data.phoneNumberCallBack,
+                    latitude: data.latitude,
+                    longitude: data.longitude,
+                    username: data.username,
+                    workplace: data.workplace,
+                    subTypeName: data.subTypeName,
+                    date: date,
+                    updateDate: update,
+                    status: data.status,
+                  );
+                  getInformList.add(getInform);
+                }
+              });
+              isLoading = true;
             },
           );
+        }else{
+          setState(() {
+            isLoading = true;
+          });
         }
       },
     ).onError((error, stackTrace) {
@@ -554,12 +567,13 @@ class _HistoryPageByIdState extends State<HistoryPageById> {
                               alignment: Alignment.topLeft,
                               child: ElevatedButton(
                                 style: ButtonStyle(
-                                  backgroundColor:
-                                  MaterialStateProperty.all(Colors.green.shade400),
+                                  backgroundColor: MaterialStateProperty.all(
+                                      Colors.green.shade400),
                                   shape: MaterialStateProperty.all(
                                     RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(15.29),
-                                      side:  BorderSide(
+                                      borderRadius:
+                                          BorderRadius.circular(15.29),
+                                      side: BorderSide(
                                           width: 1, color: Colors.green),
                                     ),
                                   ),
@@ -575,50 +589,51 @@ class _HistoryPageByIdState extends State<HistoryPageById> {
                                             color: Colors.white,
                                             shape: RoundedRectangleBorder(
                                               borderRadius:
-                                              BorderRadius.circular(8.0),
+                                                  BorderRadius.circular(8.0),
                                             ),
                                             child: Container(
                                               margin: const EdgeInsets.all(10),
                                               child: Column(
                                                 mainAxisAlignment:
-                                                MainAxisAlignment.center,
+                                                    MainAxisAlignment.center,
                                                 mainAxisSize: MainAxisSize.min,
                                                 children: <Widget>[
                                                   Container(
                                                     padding:
-                                                    const EdgeInsets.all(5),
+                                                        const EdgeInsets.all(5),
                                                     child: const Text(
                                                       'คุณต้องการที่จะรับการแจ้งเหตุนี้ ใช่หรือไม่',
                                                       style: TextStyle(
                                                         fontSize: 20,
                                                         color: Colors.black,
                                                         decoration:
-                                                        TextDecoration.none,
+                                                            TextDecoration.none,
                                                         decorationStyle:
-                                                        TextDecorationStyle
-                                                            .double,
+                                                            TextDecorationStyle
+                                                                .double,
                                                         fontWeight:
-                                                        FontWeight.w300,
+                                                            FontWeight.w300,
                                                       ),
                                                     ),
                                                   ),
                                                   Row(
                                                     mainAxisAlignment:
-                                                    MainAxisAlignment.center,
+                                                        MainAxisAlignment
+                                                            .center,
                                                     mainAxisSize:
-                                                    MainAxisSize.min,
+                                                        MainAxisSize.min,
                                                     children: [
                                                       Container(
                                                         padding:
-                                                        const EdgeInsets.all(
-                                                            1),
+                                                            const EdgeInsets
+                                                                .all(1),
                                                         child: ElevatedButton(
                                                           style: const ButtonStyle(
                                                               backgroundColor:
-                                                              MaterialStatePropertyAll<
-                                                                  Color>(
-                                                                  Colors
-                                                                      .red)),
+                                                                  MaterialStatePropertyAll<
+                                                                          Color>(
+                                                                      Colors
+                                                                          .red)),
                                                           child: const Text(
                                                             'ไม่',
                                                             style: TextStyle(
@@ -631,20 +646,21 @@ class _HistoryPageByIdState extends State<HistoryPageById> {
                                                       ),
                                                       Container(
                                                         padding:
-                                                        const EdgeInsets.all(
-                                                            10),
+                                                            const EdgeInsets
+                                                                .all(10),
                                                       ),
                                                       Container(
                                                         padding:
-                                                        const EdgeInsets.all(
-                                                            1),
+                                                            const EdgeInsets
+                                                                .all(1),
                                                         child: ElevatedButton(
                                                           style:
-                                                          const ButtonStyle(
+                                                              const ButtonStyle(
                                                             backgroundColor:
-                                                            MaterialStatePropertyAll<
-                                                                Color>(
-                                                                Colors.green),
+                                                                MaterialStatePropertyAll<
+                                                                        Color>(
+                                                                    Colors
+                                                                        .green),
                                                           ),
                                                           child: const Text(
                                                             'ใช่',
@@ -653,11 +669,13 @@ class _HistoryPageByIdState extends State<HistoryPageById> {
                                                           ),
                                                           onPressed: () async {
                                                             await _updateInform();
-                                                            Navigator.pushReplacement(
+                                                            Navigator
+                                                                .pushReplacement(
                                                               context,
                                                               MaterialPageRoute(
-                                                                builder: (context) =>
-                                                                    HistoryPage(),
+                                                                builder:
+                                                                    (context) =>
+                                                                        HistoryPage(),
                                                               ),
                                                             );
                                                           },

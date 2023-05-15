@@ -186,17 +186,17 @@ class _HistoryPageByIdState extends State<HistoryPageById> {
                     widget.getInform.date,
                     TextStyle(fontSize: 15.0, color: Colors.black54),
                   ),
-                  Container(
-                    alignment: Alignment.topLeft,
-                    padding: const EdgeInsets.all(2),
-                    child: const Text(
-                      'รายละเอียด',
-                      style: TextStyle(
-                        fontSize: 18,
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                      ),
+                  textRow(
+                    'รายละเอียด',
+                    const TextStyle(
+                      fontSize: 18,
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
                     ),
+                    '',
+                    const TextStyle(fontSize: 16, color: Colors.red),
+                    'อัพเดทเมื่อ : ${widget.getInform.updateDate}' ,
+                    TextStyle(fontSize: 15.0, color: Colors.black54),
                   ),
                   Container(
                     alignment: Alignment.topLeft,

@@ -27,23 +27,12 @@ Future<double> getDistanceBetweenPoints(
 }
 
 
-Future<bool> checkDistanceBetweenPoints(data) async{
+Future<bool> checkDistanceBetweenPoints(double currentLatitude,double currentLongitude, String lat , String long) async{
   bool res = false;
 
-  var resp = NotificationModel.fromJson(data);
-  // todo CurrentLocation
-  late double currentLatitude =0.0;
-  late double currentLongitude =0.0;
-
   // todo Destination Location
-  final double latitude =double.parse(resp.latitude);
-  final double longitude = double.parse(resp.longitude);
-
-  await getCurrentLocation().then((value) async {
-    currentLatitude = value.latitude;
-    currentLongitude = value.longitude;
-    liveLocation();
-  });
+   double latitude = double.parse(lat);
+   double longitude = double.parse(long);
 
   double unit = await getDistanceBetweenPoints(
       latitude, longitude, currentLatitude, currentLongitude, "kilometers");

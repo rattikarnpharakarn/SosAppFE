@@ -45,6 +45,7 @@ class GetInformListModel {
         workplace: e['workplace'] ?? '',
         subTypeName: e['subTypeName'] ?? '',
         date: e['date'] ?? '',
+        updateDate: e['updateDate'],
         status: e['status'] ?? '',
       );
       list.add(arr);
@@ -69,6 +70,7 @@ class GetInform {
   String workplace = '';
   final String subTypeName;
   final String date;
+  final String updateDate;
   final String status;
 
   GetInform({
@@ -82,6 +84,7 @@ class GetInform {
     required this.workplace,
     required this.subTypeName,
     required this.date,
+    required this.updateDate,
     required this.status,
   });
 
@@ -97,6 +100,7 @@ class GetInform {
       workplace: json['workplace'],
       subTypeName: json['subTypeName'],
       date: json['date'],
+      updateDate: json['updateDate'],
       status: json['status'],
     );
   }

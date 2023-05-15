@@ -9,6 +9,7 @@ import 'package:sos/src/model/emergency/response.dart';
 import 'package:sos/src/provider/emergency/inform.dart';
 import 'package:sos/src/screen/common/LoadingPage.dart';
 import 'package:sos/src/screen/common/detailImage.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 import '../../component/bottom_bar.dart';
 
 class HistoryPage extends StatefulWidget {
@@ -42,6 +43,9 @@ class _HistoryPageState extends State<HistoryPage> {
                 DateTime dt2 = DateTime.parse(data.date);
                 final String date = newFormat.format(dt2);
 
+                DateTime dt  = DateTime.parse(data.updateDate);
+                final String update = newFormat.format(dt);
+
                 GetInform getInform = GetInform(
                   id: data.id,
                   description: data.description,
@@ -53,6 +57,7 @@ class _HistoryPageState extends State<HistoryPage> {
                   workplace: data.workplace,
                   subTypeName: data.subTypeName,
                   date: date,
+                  updateDate: update,
                   status: data.status,
                 );
                 getInformList.add(getInform);
@@ -201,18 +206,30 @@ class _HistoryPageState extends State<HistoryPage> {
                               m1.date,
                               TextStyle(fontSize: 15.0, color: Colors.black54),
                             ),
-                            Container(
-                              alignment: Alignment.topLeft,
-                              padding: const EdgeInsets.all(2),
-                              child: const Text(
-                                'รายละเอียด',
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                            textRow(
+                              'รายละเอียด',
+                              const TextStyle(
+                                fontSize: 18,
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
                               ),
+                              '',
+                              const TextStyle(fontSize: 16, color: Colors.red),
+                              'อัพเดทเมื่อ : ${m1.updateDate}' ,
+                              TextStyle(fontSize: 15.0, color: Colors.black54),
                             ),
+                            // Container(
+                            //   alignment: Alignment.topLeft,
+                            //   padding: const EdgeInsets.all(2),
+                            //   child: const Text(
+                            //     'รายละเอียด',
+                            //     style: TextStyle(
+                            //       fontSize: 18,
+                            //       color: Colors.black,
+                            //       fontWeight: FontWeight.bold,
+                            //     ),
+                            //   ),
+                            // ),
                             Container(
                               alignment: Alignment.topLeft,
                               padding: const EdgeInsets.all(2),
@@ -299,18 +316,17 @@ class _HistoryPageByIdState extends State<HistoryPageById> {
   var newFormat = DateFormat("dd-MM-yyyy HH:mm น.");
   late GetInformByIdModel getInformById;
   List<String> imagepages = [];
+
   _getInformById() async {
     GetInformByIdModel data = await GetInformListById(widget.getInform.id);
 
     setState(() {
-      for (var data in data.images!)  {
+      for (var data in data.images!) {
         imagepages.add(data.image);
       }
       getInformById = data;
       isLoading = true;
     });
-
-
   }
 
   final int _pageNumber = 3;
@@ -339,6 +355,13 @@ class _HistoryPageByIdState extends State<HistoryPageById> {
         ],
       ),
     );
+  }
+
+  Future<void> _openMap(String lat, String long) async {
+    String googleURL =
+        'https://www.google.com/maps/search/?api=1&query=$lat,$long';
+
+    await launchUrlString(googleURL);
   }
 
   @override
@@ -488,6 +511,31 @@ class _HistoryPageByIdState extends State<HistoryPageById> {
                           '',
                           TextStyle(fontSize: 15.0),
                         ),
+                        Row(
+                          children: [
+                            Container(
+                              alignment: Alignment.topLeft,
+                              child: TextButton(
+                                onPressed: () {
+                                  _openMap(widget.getInform.latitude,
+                                      widget.getInform.longitude);
+                                },
+                                child: const Text(
+                                  'OpenMap',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.blue,
+                                    decoration: TextDecoration.underline,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const Spacer(
+                              flex: 4,
+                            ),
+                          ],
+                        )
                       ],
                     ),
                   ),
@@ -496,37 +544,36 @@ class _HistoryPageByIdState extends State<HistoryPageById> {
                   child: imagepages == []
                       ? null
                       : Wrap(
-                    children: imagepages.map(
-                          (imageone) {
-                        return Container(
-                          padding: const EdgeInsets.all(1.0),
-                          child: TextButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      DetailScreen(images: imageone),
+                          children: imagepages.map(
+                            (imageone) {
+                              return Container(
+                                padding: const EdgeInsets.all(1.0),
+                                child: TextButton(
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            DetailScreen(images: imageone),
+                                      ),
+                                    );
+                                  },
+                                  child: Card(
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(10),
+                                      child: Image.memory(
+                                        base64Decode(imageone),
+                                        width: 150,
+                                        height: 150,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  ),
                                 ),
                               );
                             },
-                            child: Card(
-                              child: ClipRRect(
-                                borderRadius:
-                                BorderRadius.circular(10),
-                                child: Image.memory(
-                                  base64Decode(imageone),
-                                  width: 150,
-                                  height: 150,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            ),
-                          ),
-                        );
-                      },
-                    ).toList(),
-                  ),
+                          ).toList(),
+                        ),
                 ),
               ],
             ),
