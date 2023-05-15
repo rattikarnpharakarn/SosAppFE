@@ -20,3 +20,25 @@ Future<GetHotlineListModel> GetHotlineList() async {
     throw Exception('Send APIName : GetHotlineList || statusCode : ${response.statusCode.toString()} || Msg : ${jsonDecode(response.body)}');
   }
 }
+
+
+Future<ReturnResponse> postHotline(int hotlineId,int  userId) async {
+  final response = await http.post(
+    Uri.parse('${urlHotline}'),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: jsonEncode(<String, dynamic>{
+      'hotlineId': hotlineId,
+      'userId': userId
+    }),
+  );
+
+  if (response.statusCode == 200) {
+    final res = jsonDecode(response.body);
+    var resp = ReturnResponse.fromJson(res);
+    return resp;
+  } else {
+    throw Exception('Send APIName : PostMessage || statusCode : ${response.statusCode.toString()} || Msg : ${jsonDecode(response.body)}');
+  }
+}
