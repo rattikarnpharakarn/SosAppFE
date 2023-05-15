@@ -8,6 +8,7 @@ import 'package:sos/src/component/image_navBer.dart';
 import 'package:sos/src/model/accounts/user.dart';
 import 'package:sos/src/model/messenger/response.dart';
 import 'package:sos/src/provider/accounts/userService.dart';
+import 'package:sos/src/provider/common/notificationApp.dart';
 import 'package:sos/src/provider/config.dart';
 import 'package:sos/src/provider/messenger/messengerService.dart';
 import 'package:sos/src/screen/chats/model/message.dart';
@@ -54,11 +55,12 @@ class _HomeScreenState extends State<ChatsPage> {
   }
 
 
-  _connectSocket() {
+  _connectSocket() async {
     _socket.connect();
     _socket.on(widget.getChat.roomChatID, (data) {
       Provider.of<ChatsProvider>(context, listen: false)
           .addNewMessage(Message.fromJson(data));
+
     });
     _getGetMessageById(widget.getChat.roomChatID);
   }
