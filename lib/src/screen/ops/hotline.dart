@@ -65,6 +65,10 @@ class HotlinePageState extends State<HotlinePage> {
     });
   }
 
+  _logHotline(int  hotlineId ,int  userid) async {
+   await postHotline(hotlineId , userid);
+  }
+
   int _pageNumber = 1;
 
   @override
@@ -183,6 +187,7 @@ class HotlinePageState extends State<HotlinePage> {
                                       icon: const Icon(Icons.phone,
                                           size: 22.0, color: Colors.black),
                                       onPressed: () async {
+                                        _logHotline(m1.id,int.parse(userProfile.id));
                                         String telephoneNumber = m1.number;
                                         String telephoneUrl =
                                             "tel:$telephoneNumber";

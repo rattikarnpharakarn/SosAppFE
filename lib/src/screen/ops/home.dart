@@ -6,6 +6,8 @@ import 'package:intl/intl.dart';
 import 'package:sos/src/component/button_bar_ops.dart';
 import 'package:sos/src/model/emergency/request.dart';
 import 'package:sos/src/model/emergency/response.dart';
+import 'package:sos/src/provider/common/background_service.dart';
+import 'package:sos/src/provider/common/getCurrentLocation.dart';
 import 'package:sos/src/provider/emergency/inform.dart';
 import 'package:sos/src/screen/common/detailImage.dart';
 import 'package:sos/src/screen/ops/history.dart';
@@ -41,7 +43,9 @@ class _HomeOpsState extends State<HomeOps> {
   @override
   void initState() {
     super.initState();
+    initializeService();
     Future.delayed(Duration(milliseconds: 500), () {
+      _getCurrentLocation ();
       _getNameProfile();
       callAPIGetInformList();
     });
@@ -57,6 +61,14 @@ class _HomeOpsState extends State<HomeOps> {
       _name = name;
     });
   }
+  _getCurrentLocation () async {
+    await getCurrentLocation().then((value) async {
+      liveLocation();
+    });
+  }
+
+
+
 
   var newFormat = DateFormat("dd-MM-yyyy HH:mm น.");
   List<GetInform> getInformList = [];
