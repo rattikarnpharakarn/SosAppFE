@@ -17,13 +17,13 @@ import 'package:sos/src/screen/chats/screens/members.dart';
 
 import '../../common/LoadingPage.dart';
 
-class ChatsPage extends StatefulWidget {
+class MessengerPage extends StatefulWidget {
   final String username;
 
   final UserInfo userInfo;
   final GetChat getChat;
 
-  const ChatsPage({
+  const MessengerPage({
     Key? key,
     required this.username,
     required this.userInfo,
@@ -31,10 +31,10 @@ class ChatsPage extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<ChatsPage> createState() => _HomeScreenState();
+  State<MessengerPage> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<ChatsPage> {
+class _HomeScreenState extends State<MessengerPage> {
   final GlobalKey<ScaffoldState> _key = GlobalKey();
   late IO.Socket _socket;
 

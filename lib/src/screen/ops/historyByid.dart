@@ -9,6 +9,8 @@ import 'package:sos/src/component/image_navBer.dart';
 import 'package:sos/src/model/emergency/request.dart';
 import 'package:sos/src/model/emergency/response.dart';
 import 'package:sos/src/provider/emergency/inform.dart';
+import 'package:sos/src/provider/messenger/messengerService.dart';
+import 'package:sos/src/screen/chats/screens/chat.dart';
 import 'package:sos/src/screen/common/LoadingPage.dart';
 import 'package:sos/src/screen/common/detailImage.dart';
 import 'package:sos/src/screen/user/sos.dart';
@@ -52,6 +54,30 @@ class _HistoryPageByIdState extends State<HistoryPageById> {
       getInformById = data;
       isLoading = true;
     });
+  }
+
+  _createRoomChat() async {
+    String firstname = await getUserFirstNameSF();
+    String lastname = await getUserLastNameSF();
+
+    String roomName = "$firstname $lastname";
+
+    List<int> _userIdList = [];
+    _userIdList.add(int.parse(getInformById.userId!));
+
+    await CreateRoomChat(roomName, _userIdList);
+    _navigatorChatPage();
+  }
+
+
+
+  _navigatorChatPage (){
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const ChatPage(),
+      ),
+    );
   }
 
   final int _pageNumber = 2;
@@ -262,6 +288,21 @@ class _HistoryPageByIdState extends State<HistoryPageById> {
                                 style: TextStyle(
                                   fontSize: 15,
                                   color: Colors.blue,
+                                  decoration: TextDecoration.underline,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                            const Spacer(
+                              flex: 4,
+                            ),
+                            InkWell(
+                              onTap: () => _createRoomChat(),
+                              child: const Text(
+                                'สร้างห้องสนทนา',
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  color: Colors.green,
                                   decoration: TextDecoration.underline,
                                   fontWeight: FontWeight.bold,
                                 ),

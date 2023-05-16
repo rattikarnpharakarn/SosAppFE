@@ -169,7 +169,7 @@ class _ChatPageState extends State<ChatPage> {
                               MaterialPageRoute(
                                 builder: (_) => ChangeNotifierProvider(
                                   create: (context) => ChatsProvider(),
-                                  child: ChatsPage(
+                                  child: MessengerPage(
                                     username: userInfo.firstName +
                                         " " +
                                         userInfo.lastName,

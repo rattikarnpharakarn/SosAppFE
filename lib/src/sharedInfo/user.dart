@@ -1,104 +1,104 @@
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sos/src/provider/accounts/userService.dart';
 
-getUserIDSF() async {
+Future<String> getUserIDSF() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String id = prefs.getString('id') ?? '';
   return id;
 }
 
-getUserPhoneNumberSF() async {
+Future<String> getUserPhoneNumberSF() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String phoneNumber = prefs.getString('phoneNumber') ?? '';
   return phoneNumber;
 }
 
-getUserFirstNameSF() async {
+Future<String> getUserFirstNameSF() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String firstName = prefs.getString('firstName') ?? '';
   return firstName;
 }
 
-getUserLastNameSF() async {
+Future<String> getUserLastNameSF() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String lastName = prefs.getString('lastName') ?? '';
   return lastName;
 }
 
-getUserEmailSF() async {
+Future<String> getUserEmailSF() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String email = prefs.getString('email') ?? '';
   return email;
 }
 
-getUserBirthdaySF() async {
+Future<String> getUserBirthdaySF() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String birthday = prefs.getString('birthday') ?? '';
   return birthday;
 }
 
-getUserGenderSF() async {
+Future<String> getUserGenderSF() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String gender = prefs.getString('gender') ?? '';
   return gender;
 }
 
-getUserImageProfileSF() async {
+Future<String> getUserImageProfileSF() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String imageProfile = prefs.getString('imageProfile') ?? '';
   return imageProfile;
 }
 
-getUserTextIDCardSF() async {
+Future<String> getUserTextIDCardSF() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   //
   String textIDCard = prefs.getString('textIDCard') ?? '';
   return textIDCard;
 }
 
-getUserPathImageSF() async {
+Future<String> getUserPathImageSF() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String pathImage = prefs.getString('pathImage') ?? '';
   return pathImage;
 }
 
-getUserAddressSF() async {
+Future<String> getUserAddressSF() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String address = prefs.getString('address') ?? '';
   return address;
 }
 
-getUserSubDistrictSF() async {
+Future<String> getUserSubDistrictSF() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String subDistrict = prefs.getString('subDistrict') ?? '';
   return subDistrict;
 }
 
-getUserDistrictSF() async {
+Future<String> getUserDistrictSF() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String district = prefs.getString('district') ?? '';
   return district;
 }
 
-getUserProvinceSF() async {
+Future<String> getUserProvinceSF() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String province = prefs.getString('province') ?? '';
   return province;
 }
 
-getUserPostalCodeSF() async {
+Future<String> getUserPostalCodeSF() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String postalCode = prefs.getString('postalCode') ?? '';
   return postalCode;
 }
 
-getUserCountrySF() async {
+Future<String> getUserCountrySF() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String country = prefs.getString('country') ?? '';
   return country;
 }
 
-getUserTokenSf() async {
+Future<String> getUserTokenSf() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String stringValue = prefs.getString('token') ?? '';
   return stringValue;

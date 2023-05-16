@@ -40,7 +40,6 @@ Future<UserInfo> GetUserProfile() async {
     },
   );
 
-
   if (response.statusCode == 200) {
     final dataUser = jsonDecode(response.body);
     // ignore: use_build_context_synchronously
@@ -74,7 +73,8 @@ Future<UserInfo> GetUserProfile() async {
     );
     return userInfoRes;
   } else {
-    throw Exception('Send APIName : GetUserProfile || statusCode : ${response.statusCode.toString()} || Msg : ${jsonDecode(response.body)}');
+    throw Exception(
+        'Send APIName : GetUserProfile || statusCode : ${response.statusCode.toString()} || Msg : ${jsonDecode(response.body)}');
   }
 }
 
@@ -121,7 +121,8 @@ Future<UserInfo> GetUserProfileById(userId) async {
     );
     return userInfoRes;
   } else {
-    throw Exception('Send APIName : GetUserProfileById || statusCode : ${response.statusCode.toString()} || Msg : ${jsonDecode(response.body)}');
+    throw Exception(
+        'Send APIName : GetUserProfileById || statusCode : ${response.statusCode.toString()} || Msg : ${jsonDecode(response.body)}');
   }
 }
 
@@ -139,13 +140,19 @@ Future<UserImage> GetUserImageById(userId) async {
     final dataUser = jsonDecode(response.body);
     final data = dataUser['data'];
 
+    String image = '';
+    if (data['imageProfile'] != null) {
+      image = data['imageProfile'];
+    }
+
     UserImage userInfoRes = UserImage(
       id: data['id'],
-      imageProfile: data['imageProfile'],
+      imageProfile: image,
     );
     return userInfoRes;
   } else {
-    throw Exception('Send APIName : GetUserImageById || statusCode : ${response.statusCode.toString()} || Msg : ${jsonDecode(response.body)}');
+    throw Exception(
+        'Send APIName : GetUserImageById || statusCode : ${response.statusCode.toString()} || Msg : ${jsonDecode(response.body)}');
   }
 }
 

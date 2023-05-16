@@ -119,6 +119,7 @@ class GetInformByIdModel {
   String? phoneNumberCallBack;
   String? latitude;
   String? longitude;
+  String? userId;
   String? username;
   String? workplace;
   String? subTypeName;
@@ -134,6 +135,7 @@ class GetInformByIdModel {
     this.phoneNumberCallBack,
     this.latitude,
     this.longitude,
+    this.userId,
     this.username,
     this.workplace,
     this.subTypeName,
@@ -163,6 +165,7 @@ class GetInformByIdModel {
       phoneNumberCallBack: json['data']['phoneNumberCallBack'],
       latitude: json['data']['latitude'],
       longitude: json['data']['longitude'],
+      userId: json['data']['userId'],
       username: json['data']['username'],
       workplace: json['data']['workplace'],
       subTypeName: json['data']['subTypeName'],
