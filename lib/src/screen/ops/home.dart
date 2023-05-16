@@ -106,6 +106,7 @@ class _HomeOpsState extends State<HomeOps> {
                     date: date,
                     updateDate: update,
                     status: data.status,
+                    statusChat: data.statusChat,
                   );
                   getInformList.add(getInform);
                 }
@@ -398,6 +399,7 @@ class _HistoryPageByIdState extends State<HistoryPageById> {
     UpdateInform req = UpdateInform(
       opsID: opsId,
       status: status,
+      statusChat: false,
     );
 
     Future<ReturnResponse> res = UpdateInformOps(req, infomrId);

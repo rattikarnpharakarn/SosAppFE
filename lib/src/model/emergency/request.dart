@@ -33,13 +33,19 @@ class Inform {
 class UpdateInform {
   int opsID;
   int status;
+  bool statusChat;
 
   UpdateInform({
     required this.opsID,
     required this.status,
+    required this.statusChat,
   });
 
   Map toJson() {
-    return {'opsID': opsID, 'status': status};
+    return {
+      'opsID': opsID,
+      'status': status,
+      'statusChat': statusChat,
+    };
   }
 }

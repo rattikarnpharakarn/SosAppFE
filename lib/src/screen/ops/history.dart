@@ -27,7 +27,9 @@ class _HistoryPageState extends State<HistoryPage> {
   @override
   void initState() {
     super.initState();
-    callAPIGetInformList();
+    Future.delayed(Duration(milliseconds: 500), () async {
+      await callAPIGetInformList();
+    });
   }
 
   var newFormat = DateFormat("dd-MM-yyyy HH:mm น.");
@@ -60,22 +62,22 @@ class _HistoryPageState extends State<HistoryPage> {
                   date: date,
                   updateDate: update,
                   status: data.status,
+                  statusChat: data.statusChat,
                 );
                 getInformList.add(getInform);
               }
             },
           );
         }
+        setState(() {
+          isLoading = true;
+        });
       },
     ).onError((error, stackTrace) {
       // todo ต้องเพิ่ม popup
       setState(() {
         isLoading = true;
       });
-    });
-
-    setState(() {
-      isLoading = true;
     });
   }
 

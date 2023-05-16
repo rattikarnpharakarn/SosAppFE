@@ -48,6 +48,7 @@ class GetInformListModel {
         date: e['date'] ?? '',
         updateDate: e['updateDate'],
         status: e['status'] ?? '',
+        statusChat: e['statusChat'] ?? '',
       );
       list.add(arr);
     }
@@ -74,6 +75,7 @@ class GetInform {
   final String date;
   final String updateDate;
   final String status;
+  final bool statusChat;
 
   GetInform({
     required this.id,
@@ -89,6 +91,7 @@ class GetInform {
     required this.date,
     required this.updateDate,
     required this.status,
+    required this.statusChat,
   });
 
   factory GetInform.fromJson(Map<String, dynamic> json) {
@@ -106,6 +109,7 @@ class GetInform {
       date: json['date'],
       updateDate: json['updateDate'],
       status: json['status'],
+      statusChat: json['statusChat'],
     );
   }
 }
@@ -187,6 +191,7 @@ class GetInformById {
   final String subTypeName;
   final String date;
   final String status;
+  final bool statusChat;
 
   GetInformById({
     required this.id,
@@ -200,6 +205,7 @@ class GetInformById {
     required this.subTypeName,
     required this.date,
     required this.status,
+    required this.statusChat,
   });
 
   factory GetInformById.fromJson(Map<String, dynamic> json) {
@@ -224,6 +230,7 @@ class GetInformById {
       subTypeName: json['subTypeName'],
       date: json['date'],
       status: json['status'],
+      statusChat: json['statusChat'],
     );
   }
 }

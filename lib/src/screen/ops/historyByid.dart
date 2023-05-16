@@ -57,22 +57,26 @@ class _HistoryPageByIdState extends State<HistoryPageById> {
   }
 
   _createRoomChat() async {
-    String firstname = await getUserFirstNameSF();
-    String lastname = await getUserLastNameSF();
-
-    String roomName = "$firstname $lastname";
+    String roomName =
+        widget.getInform.subTypeName + " : " + widget.getInform.description;
 
     List<int> _userIdList = [];
     _userIdList.add(int.parse(getInformById.userId!));
 
+    if (getInformById.status == "รับเรื่องการแจ้งเหตุแล้ว") {
+      await _updateInform(2, "Y");
+    } else if (getInformById.status == "กำลังดำเนินงาน") {
+      await _updateInform(3, "Y");
+    } else if (getInformById.status == "ดำเนินงานเสร็จสิ้น") {
+      await _updateInform(4, "Y");
+    }
+
     await CreateRoomChat(roomName, _userIdList);
-    _navigatorChatPage();
+    await _navigatorChatPage();
   }
 
-
-
-  _navigatorChatPage (){
-    Navigator.push(
+  _navigatorChatPage() async {
+    Navigator.pushReplacement(
       context,
       MaterialPageRoute(
         builder: (context) => const ChatPage(),
@@ -115,16 +119,35 @@ class _HistoryPageByIdState extends State<HistoryPageById> {
     await launchUrlString(googleURL);
   }
 
-  Future<ReturnResponse> _updateInform(status) async {
+  _updateInform(status, statusChat) async {
+    bool statusChatUpdate = false;
+    if (statusChat == "Y") {
+      // เปลี่ยนเป็นสร้างห้องนี้แล้ว
+      statusChatUpdate = true;
+    } else if (statusChat == "D") {
+      // ค่าคงเดิม
+      statusChatUpdate = widget.getInform.statusChat;
+    }
+
     String opsIdStr = await getUserIDSF();
     var infomrId = widget.getInform.id;
     var opsId = int.parse(opsIdStr);
     UpdateInform req = UpdateInform(
       opsID: opsId,
       status: status,
+      statusChat: statusChatUpdate,
     );
-    Future<ReturnResponse> res = UpdateInformOps(req, infomrId);
-    return res;
+    await UpdateInformOps(req, infomrId);
+
+    if (statusChat == "D") {
+      // ignore: use_build_context_synchronously
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const HistoryPage(),
+        ),
+      );
+    }
   }
 
   @override
@@ -254,15 +277,15 @@ class _HistoryPageByIdState extends State<HistoryPageById> {
                             color: Colors.black,
                             fontWeight: FontWeight.bold,
                           ),
-                          widget.getInform.status,
+                          getInformById.status!,
                           TextStyle(
                             fontSize: 16,
-                            color: widget.getInform.status ==
+                            color: getInformById.status ==
                                     "รับเรื่องการแจ้งเหตุแล้ว"
                                 ? Colors.red
-                                : widget.getInform.status == "กำลังดำเนินงาน"
+                                : getInformById.status == "กำลังดำเนินงาน"
                                     ? Colors.orange
-                                    : widget.getInform.status ==
+                                    : getInformById.status ==
                                             "ดำเนินงานเสร็จสิ้น"
                                         ? Colors.green
                                         : null,
@@ -296,18 +319,22 @@ class _HistoryPageByIdState extends State<HistoryPageById> {
                             const Spacer(
                               flex: 4,
                             ),
-                            InkWell(
-                              onTap: () => _createRoomChat(),
-                              child: const Text(
-                                'สร้างห้องสนทนา',
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  color: Colors.green,
-                                  decoration: TextDecoration.underline,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
+                            !widget.getInform.statusChat
+                                ? InkWell(
+                                    onTap: () => _createRoomChat(),
+                                    child: const Text(
+                                      'สร้างห้องสนทนา',
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        color: Colors.green,
+                                        decoration: TextDecoration.underline,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  )
+                                : const Text('สร้างห้องสนทนาแล้ว',
+                                    style: TextStyle(
+                                        fontSize: 15.0, color: Colors.black54)),
                           ],
                         ),
                         Row(
@@ -335,7 +362,7 @@ class _HistoryPageByIdState extends State<HistoryPageById> {
                             Container(
                               alignment: Alignment.topLeft,
                               child:
-                                  widget.getInform.status ==
+                                  getInformById.status ==
                                           "รับเรื่องการแจ้งเหตุแล้ว"
                                       ? ElevatedButton(
                                           style: ButtonStyle(
@@ -459,15 +486,8 @@ class _HistoryPageByIdState extends State<HistoryPageById> {
                                                                     onPressed:
                                                                         () async {
                                                                       await _updateInform(
-                                                                          3);
-                                                                      Navigator
-                                                                          .pushReplacement(
-                                                                        context,
-                                                                        MaterialPageRoute(
-                                                                          builder: (context) =>
-                                                                              HistoryPage(),
-                                                                        ),
-                                                                      );
+                                                                          3,
+                                                                          "D");
                                                                     },
                                                                   ),
                                                                 ),
@@ -493,7 +513,7 @@ class _HistoryPageByIdState extends State<HistoryPageById> {
                                             ),
                                           ),
                                         )
-                                      : widget.getInform.status ==
+                                      : getInformById.status ==
                                               "ดำเนินงานเสร็จสิ้น"
                                           ? null
                                           : ElevatedButton(
@@ -620,18 +640,9 @@ class _HistoryPageByIdState extends State<HistoryPageById> {
                                                                           style:
                                                                               TextStyle(fontSize: 16),
                                                                         ),
-                                                                        onPressed:
-                                                                            () async {
-                                                                          await _updateInform(
-                                                                              4);
-                                                                          Navigator
-                                                                              .pushReplacement(
-                                                                            context,
-                                                                            MaterialPageRoute(
-                                                                              builder: (context) => HistoryPage(),
-                                                                            ),
-                                                                          );
-                                                                        },
+                                                                        onPressed: () async => await _updateInform(
+                                                                            4,
+                                                                            "D"),
                                                                       ),
                                                                     ),
                                                                   ],

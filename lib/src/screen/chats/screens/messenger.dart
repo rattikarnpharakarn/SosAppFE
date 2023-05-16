@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:provider/provider.dart';
 import 'package:sos/src/component/bottom_bar.dart';
+import 'package:sos/src/component/button_bar_ops.dart';
 import 'package:sos/src/component/endDrawer.dart';
 import 'package:sos/src/component/image_navBer.dart';
 import 'package:sos/src/model/accounts/user.dart';
@@ -41,7 +42,6 @@ class _HomeScreenState extends State<MessengerPage> {
   final TextEditingController _messageInputController = TextEditingController();
   bool isLoading = false;
 
-
   @override
   void initState() {
     super.initState();
@@ -54,17 +54,14 @@ class _HomeScreenState extends State<MessengerPage> {
     _connectSocket();
   }
 
-
   _connectSocket() async {
     _socket.connect();
     _socket.on(widget.getChat.roomChatID, (data) {
       Provider.of<ChatsProvider>(context, listen: false)
           .addNewMessage(Message.fromJson(data));
-
     });
     _getGetMessageById(widget.getChat.roomChatID);
   }
-
 
   _sendMessage() async {
     _socket.emit(widget.getChat.roomChatID, {
@@ -80,6 +77,7 @@ class _HomeScreenState extends State<MessengerPage> {
   List<GetMessageList> geMessageList = [];
 
   _getGetMessageById(roomChatId) async {
+    await _getUserProfile();
     await GetMessageById(roomChatId).then(
       (value) {
         if (value.code == "0") {
@@ -131,14 +129,37 @@ class _HomeScreenState extends State<MessengerPage> {
     });
   }
 
+  late UserInfo userInfo;
+  late String id;
+
   int _pageNumber = 4;
+
+  _getUserProfile() async {
+    UserInfo data = await GetUserProfile();
+    setState(() {
+      if (data.roleId == "2") {
+        _pageNumber = 4;
+      } else if (data.roleId == "3") {
+        _pageNumber = 3;
+      }
+
+      userInfo = data;
+      isLoading = true;
+    });
+  }
 
   @override
   Widget build(BuildContext context) => isLoading == false
       ? const LoadingPage()
       : Scaffold(
           key: _key,
-          bottomNavigationBar: Bottombar(pageNumber: _pageNumber),
+          bottomNavigationBar: userInfo.roleId == "2"
+              ? Bottombar(pageNumber: _pageNumber)
+              : userInfo.roleId == "3"
+                  ? ButtonBarOps(
+                      pageNumber: _pageNumber,
+                    )
+                  : null,
           appBar: AppBar(
             // toolbarHeight: 0,
             backgroundColor: const Color.fromARGB(255, 248, 0, 0),
@@ -172,15 +193,6 @@ class _HomeScreenState extends State<MessengerPage> {
                         );
                       },
                     ),
-                    // Text(
-                    //   widget.getChat.roomName,
-                    //   overflow: TextOverflow.clip,
-                    //   style: const TextStyle(
-                    //     color: Color.fromARGB(255, 255, 255, 255),
-                    //     fontSize: 22,
-                    //     decorationStyle: TextDecorationStyle.solid,
-                    //   ),
-                    // ),
                   ),
                   const Spacer(),
                   Container(

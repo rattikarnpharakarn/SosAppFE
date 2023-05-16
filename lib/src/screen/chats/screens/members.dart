@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:sos/src/component/bottom_bar.dart';
+import 'package:sos/src/component/button_bar_ops.dart';
 import 'package:sos/src/component/endDrawer.dart';
 import 'package:sos/src/component/imageProfile.dart';
 import 'package:sos/src/component/image_navBer.dart';
@@ -30,6 +31,11 @@ class _MembersScreenState extends State<MembersPage> {
       TextEditingController();
 
   var newFormat = DateFormat("dd-MM-yyyy HH:mm น.");
+  List<GetUserList> _getUserList = [];
+  late List<bool> _isChecked;
+  late List<int> _userIdList = [];
+  late bool _isCheckSearch = false;
+  late UserInfo userInfo;
 
   @override
   void initState() {
@@ -40,6 +46,7 @@ class _MembersScreenState extends State<MembersPage> {
   List<GetMemberRoomChatShow> _getMemberRoomChatShow = [];
 
   _getMembersRoomChat(roomChatId) async {
+    await _getUserProfile();
     await GetMembersRoomChat(roomChatId).then(
       (value) {
         if (value.code == "0") {
@@ -76,11 +83,6 @@ class _MembersScreenState extends State<MembersPage> {
       });
     });
   }
-
-  List<GetUserList> _getUserList = [];
-  late List<bool> _isChecked;
-  late List<int> _userIdList = [];
-  late bool _isCheckSearch = false;
 
   _searchUser(value) async {
     await GetSearchUser(value).then(
@@ -141,11 +143,25 @@ class _MembersScreenState extends State<MembersPage> {
     });
   }
 
+  _getUserProfile() async {
+    UserInfo data = await GetUserProfile();
+    setState(() {
+      if (data.roleId == "2") {
+        _pageNumber = 4;
+      } else if (data.roleId == "3") {
+        _pageNumber = 3;
+      }
+
+      userInfo = data;
+      isLoading = true;
+    });
+  }
+
   _joinRoomChat(roomChatID) async {
     JoinRoomChat(roomChatID, _userIdList);
   }
 
-  final int _pageNumber = 4;
+  int _pageNumber = 0;
   bool isLoading = false;
 
   @override
@@ -153,7 +169,13 @@ class _MembersScreenState extends State<MembersPage> {
       ? const LoadingPage()
       : Scaffold(
           key: _key,
-          bottomNavigationBar: Bottombar(pageNumber: _pageNumber),
+          bottomNavigationBar: userInfo.roleId == "2"
+              ? Bottombar(pageNumber: _pageNumber)
+              : userInfo.roleId == "3"
+                  ? ButtonBarOps(
+                      pageNumber: _pageNumber,
+                    )
+                  : null,
           appBar: AppBar(
             // toolbarHeight: 0,
             backgroundColor: const Color.fromARGB(255, 248, 0, 0),
@@ -253,9 +275,8 @@ class _MembersScreenState extends State<MembersPage> {
                                             Text(
                                               msg,
                                               style: const TextStyle(
-                                                color: Colors.white,
-                                                  fontSize: 16
-                                              ),
+                                                  color: Colors.white,
+                                                  fontSize: 16),
                                             ),
                                             Colors.white,
                                           ),
@@ -272,9 +293,8 @@ class _MembersScreenState extends State<MembersPage> {
                                             Text(
                                               msg,
                                               style: const TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 16
-                                              ),
+                                                  color: Colors.white,
+                                                  fontSize: 16),
                                             ),
                                             Colors.white,
                                           ),
@@ -341,9 +361,8 @@ class _MembersScreenState extends State<MembersPage> {
                                               Text(
                                                 msg,
                                                 style: const TextStyle(
-                                                  color: Colors.white,
-                                                    fontSize: 16
-                                                ),
+                                                    color: Colors.white,
+                                                    fontSize: 16),
                                               ),
                                               Colors.white,
                                             ),
@@ -364,9 +383,8 @@ class _MembersScreenState extends State<MembersPage> {
                                             Text(
                                               msg,
                                               style: const TextStyle(
-                                                color: Colors.white,
-                                                  fontSize: 16
-                                              ),
+                                                  color: Colors.white,
+                                                  fontSize: 16),
                                             ),
                                             Colors.white,
                                           ),

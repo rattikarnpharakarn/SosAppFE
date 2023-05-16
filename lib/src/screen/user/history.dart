@@ -60,6 +60,7 @@ class _HistoryPageState extends State<HistoryPage> {
                   date: date,
                   updateDate: update,
                   status: data.status,
+                  statusChat: data.statusChat,
                 );
                 getInformList.add(getInform);
               }
