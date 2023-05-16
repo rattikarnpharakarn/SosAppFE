@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:sos/src/component/button_bar_ops.dart';
 import 'package:sos/src/model/emergency/request.dart';
 import 'package:sos/src/model/emergency/response.dart';
+import 'package:sos/src/provider/common/background_service.dart';
 import 'package:sos/src/provider/common/getCurrentLocation.dart';
 import 'package:sos/src/provider/common/getDistanceBetweenPoints.dart';
 import 'package:sos/src/provider/emergency/inform.dart';
@@ -39,9 +40,7 @@ class _HomeOpsState extends State<HomeOps> {
   @override
   void initState() {
     super.initState();
-      _getCurrentLocation();
-      _getNameProfile();
-      callAPIGetInformList();
+    _getCurrentLocation();
   }
 
   final int _pageNumber = 0;
@@ -63,6 +62,11 @@ class _HomeOpsState extends State<HomeOps> {
       });
       liveLocation();
     });
+
+    await initializeService();
+    await _getNameProfile();
+    await callAPIGetInformList();
+
   }
 
   var newFormat = DateFormat("dd-MM-yyyy HH:mm น.");
@@ -96,6 +100,7 @@ class _HomeOpsState extends State<HomeOps> {
                     latitude: data.latitude,
                     longitude: data.longitude,
                     username: data.username,
+                    phoneNumber: data.phoneNumber,
                     workplace: data.workplace,
                     subTypeName: data.subTypeName,
                     date: date,
@@ -105,13 +110,8 @@ class _HomeOpsState extends State<HomeOps> {
                   getInformList.add(getInform);
                 }
               });
-              isLoading = true;
             },
           );
-        }else{
-          setState(() {
-            isLoading = true;
-          });
         }
       },
     ).onError((error, stackTrace) {
@@ -542,13 +542,36 @@ class _HistoryPageByIdState extends State<HistoryPageById> {
                         ),
                         Row(
                           children: [
+                            const Text(
+                              'ติดต่อ : ',
+                              style: TextStyle(
+                                fontSize: 18,
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            InkWell(
+                              onTap: () async => await launchUrlString(
+                                  'tel:${widget.getInform.phoneNumberCallBack}'),
+                              child: const Text(
+                                'เบอร์โทรศัพท์',
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  color: Colors.blue,
+                                  decoration: TextDecoration.underline,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
                             Container(
                               alignment: Alignment.topLeft,
                               child: TextButton(
-                                onPressed: () {
-                                  _openMap(widget.getInform.latitude,
-                                      widget.getInform.longitude);
-                                },
+                                onPressed: () => _openMap(widget.getInform.latitude,
+                                    widget.getInform.longitude),
                                 child: const Text(
                                   'OpenMap',
                                   style: TextStyle(

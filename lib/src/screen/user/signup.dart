@@ -56,7 +56,7 @@ class _SignupState extends State<Signup> {
           Text(
             "รหัสผ่านไม่ตรงกัน",
             style: TextStyle(
-              color: Colors.white,
+              color: Colors.red,
                 fontSize: 16
             ),
           ),
@@ -71,15 +71,15 @@ class _SignupState extends State<Signup> {
 
     if (iDCard == ''){
       check = false;
-      String msg = "กรุณาแนบรูปภาพบัตรประจำตัวประชาชนเพื่อสำหรับตรวจสอบ";
+      String msg = "กรุณาแนบรูปภาพบัตรประจำตัวประชาชนเพื่อทำการตรวจสอบ";
       ScaffoldMessenger.of(context).showSnackBar(
         snackBarSos(
           context,
           Text(
             msg,
             style: TextStyle(
-              color: Colors.white,
-                fontSize: 14
+              color: Colors.red,
+                fontSize: 16
             ),
           ),
           Colors.white
@@ -145,8 +145,8 @@ class _SignupState extends State<Signup> {
           Text(
             code,
             style: TextStyle(
-              color: Colors.white,
-                fontSize: 14
+              color: Colors.red,
+                fontSize: 16
             ),
           ),
           Colors.white

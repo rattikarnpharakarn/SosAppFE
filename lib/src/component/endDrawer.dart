@@ -7,6 +7,7 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sos/main.dart';
 import 'package:sos/src/component/image_navBer.dart';
 import 'package:sos/src/provider/config.dart';
 import 'package:http/http.dart' as http;
@@ -130,7 +131,7 @@ class _EndDrawerState extends State<EndDrawer> {
 
       // ignore: use_build_context_synchronously
       Navigator.push(context, MaterialPageRoute(builder: (context) {
-        return const Home();
+        return const MyApp();
       }));
 
       return ReturnResponse.fromJson(jsonDecode(response.body));

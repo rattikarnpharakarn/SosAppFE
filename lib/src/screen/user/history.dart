@@ -54,6 +54,7 @@ class _HistoryPageState extends State<HistoryPage> {
                   latitude: data.latitude,
                   longitude: data.longitude,
                   username: data.username,
+                  phoneNumber: data.phoneNumber,
                   workplace: data.workplace,
                   subTypeName: data.subTypeName,
                   date: date,
@@ -170,7 +171,7 @@ class _HistoryPageState extends State<HistoryPage> {
           endDrawer: const EndDrawer(),
           endDrawerEnableOpenDragGesture: false,
           body: SingleChildScrollView(
-            padding: const EdgeInsets.all(10),
+            padding: const EdgeInsets.all(8),
             child: Column(
               children: [
                 for (GetInform m1 in getInformList) ...[
@@ -423,7 +424,7 @@ class _HistoryPageByIdState extends State<HistoryPageById> {
           endDrawer: const EndDrawer(),
           endDrawerEnableOpenDragGesture: false,
           body: SingleChildScrollView(
-            padding: const EdgeInsets.all(10),
+            padding: const EdgeInsets.all(8),
             child: Column(
               children: [
                 Card(
@@ -513,26 +514,45 @@ class _HistoryPageByIdState extends State<HistoryPageById> {
                         ),
                         Row(
                           children: [
+                            const Text(
+                              'ติดต่อ : ',
+                              style: TextStyle(
+                                fontSize: 18,
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            widget.getInform.phoneNumber != "" ? InkWell(
+                              onTap: () async => await launchUrlString(
+                                  'tel:${widget.getInform.phoneNumber}'),
+                              child: const Text(
+                                'เบอร์โทรศัพท์',
+                                style: TextStyle(
+                                  fontSize: 17,
+                                  color: Colors.blue,
+                                  decoration: TextDecoration.underline,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ): const Text(''),
+                            const Spacer(
+                              flex: 4,
+                            ),
                             Container(
                               alignment: Alignment.topLeft,
-                              child: TextButton(
-                                onPressed: () {
-                                  _openMap(widget.getInform.latitude,
-                                      widget.getInform.longitude);
-                                },
+                              child: InkWell(
+                                onTap: () => _openMap(widget.getInform.latitude,
+                                    widget.getInform.longitude),
                                 child: const Text(
                                   'OpenMap',
                                   style: TextStyle(
-                                    fontSize: 16,
+                                    fontSize: 17,
                                     color: Colors.blue,
                                     decoration: TextDecoration.underline,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
                               ),
-                            ),
-                            const Spacer(
-                              flex: 4,
                             ),
                           ],
                         )

@@ -169,7 +169,7 @@ class _SignupPhoneNumberState extends State<SignupPhoneNumber> {
                                 const Text(
                                   'กรุณากรอกเบอร์โทรให้ถูกต้อง',
                                   style: TextStyle(
-                                    color: Colors.white,
+                                    color: Colors.red,
                                       fontSize: 16
                                   ),
                                 ),

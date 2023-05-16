@@ -18,7 +18,6 @@ import 'package:url_launcher/url_launcher_string.dart';
 import '../../component/button_bar_ops.dart';
 import 'history.dart';
 
-
 class HistoryPageById extends StatefulWidget {
   GetInform getInform;
 
@@ -106,474 +105,560 @@ class _HistoryPageByIdState extends State<HistoryPageById> {
   Widget build(BuildContext context) => isLoading == false
       ? const LoadingPage()
       : Scaffold(
-    key: _key,
-    bottomNavigationBar: ButtonBarOps(pageNumber: _pageNumber),
-    // appBar: NavbarPages(),
-    appBar: AppBar(
-      // toolbarHeight: 0,
-      backgroundColor: const Color.fromARGB(255, 248, 0, 0),
-      elevation: 0,
-      // centerTitle: false,
-      title: Container(
-        padding: const EdgeInsets.all(10),
-        child: Row(
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(1),
-                  child: const Text(
-                    "ประวัติการแจ้งเหตุ",
-                    style: TextStyle(
-                      color: Color.fromARGB(255, 255, 255, 255),
-                      fontSize: 20,
-                      decorationStyle: TextDecorationStyle.solid,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            const Spacer(),
-            Container(
-              padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  shape: const CircleBorder(),
-                  backgroundColor:
-                  const Color.fromARGB(255, 255, 255, 255),
-                ),
-                child: Image_NavBer(height: 40, width: 40),
-                onPressed: () {
-                  _key.currentState!.openEndDrawer();
-                },
-              ),
-            )
-          ],
-        ),
-      ),
-      automaticallyImplyLeading: true,
-      titleSpacing: 0,
-      actions: [
-        Container(),
-      ],
-    ),
-    endDrawer: const EndDrawer(),
-    endDrawerEnableOpenDragGesture: false,
-    body: SingleChildScrollView(
-      padding: const EdgeInsets.all(10),
-      child: Column(
-        children: [
-          Card(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(15.0),
-            ),
-            elevation: 10,
-            child: Container(
+          key: _key,
+          bottomNavigationBar: ButtonBarOps(pageNumber: _pageNumber),
+          // appBar: NavbarPages(),
+          appBar: AppBar(
+            // toolbarHeight: 0,
+            backgroundColor: const Color.fromARGB(255, 248, 0, 0),
+            elevation: 0,
+            // centerTitle: false,
+            title: Container(
               padding: const EdgeInsets.all(10),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  textRow(
-                    'ประเภท : ',
-                    const TextStyle(
-                      fontSize: 18,
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    widget.getInform.subTypeName,
-                    const TextStyle(fontSize: 16, color: Colors.red),
-                    widget.getInform.date,
-                    TextStyle(fontSize: 15.0, color: Colors.black54),
-                  ),
-                  textRow(
-                    'รายละเอียด',
-                    const TextStyle(
-                      fontSize: 18,
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    '',
-                    const TextStyle(fontSize: 16, color: Colors.red),
-                    'อัพเดทเมื่อ : ${widget.getInform.updateDate}' ,
-                    TextStyle(fontSize: 15.0, color: Colors.black54),
-                  ),
-                  Container(
-                    alignment: Alignment.topLeft,
-                    padding: const EdgeInsets.all(2),
-                    child: Text(
-                      widget.getInform.description,
-                      style: const TextStyle(
-                          fontSize: 16, color: Colors.red),
-                    ),
-                  ),
-                  textRow(
-                    'ผู้แจ้งเหตุ : ',
-                    const TextStyle(
-                      fontSize: 18,
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    widget.getInform.username,
-                    const TextStyle(
-                      fontSize: 16,
-                      color: Colors.blue,
-                    ),
-                    '',
-                    TextStyle(fontSize: 15.0),
-                  ),
-                  textRow(
-                    'สถานะ : ',
-                    const TextStyle(
-                      fontSize: 18,
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    widget.getInform.status,
-                    TextStyle(
-                      fontSize: 16,
-                      color: widget.getInform.status == "รับเรื่องการแจ้งเหตุแล้ว" ? Colors.red :
-                      widget.getInform.status == "กำลังดำเนินงาน" ? Colors.orange :
-                      widget.getInform.status == "ดำเนินงานเสร็จสิ้น" ? Colors.green : null,
-                    ),
-                    '',
-                    TextStyle(fontSize: 15.0),
-                  ),
-                  Row(
+              child: Row(
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Container(
-                        alignment: Alignment.topLeft,
-                        child: TextButton(
-                          onPressed: () {
-                            _openMap(widget.getInform.latitude,
-                                widget.getInform.longitude);
-                          },
-                          child: const Text(
-                            'OpenMap',
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.blue,
-                              decoration: TextDecoration.underline,
-                              fontWeight: FontWeight.bold,
-                            ),
+                        padding: const EdgeInsets.all(1),
+                        child: const Text(
+                          "ประวัติการแจ้งเหตุ",
+                          style: TextStyle(
+                            color: Color.fromARGB(255, 255, 255, 255),
+                            fontSize: 20,
+                            decorationStyle: TextDecorationStyle.solid,
                           ),
                         ),
                       ),
-                      const Spacer(
-                        flex: 4,
-                      ),
-                      Container(
-                        alignment: Alignment.topLeft,
-                        child: widget.getInform.status == "รับเรื่องการแจ้งเหตุแล้ว" ?
-                        ElevatedButton(
-                          style: ButtonStyle(
-                            backgroundColor:
-                            MaterialStateProperty.all(Colors.red.shade400),
-                            shape: MaterialStateProperty.all(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(15.29),
-                                side:  BorderSide(
-                                    width: 1, color: Colors.red),
-                              ),
-                            ),
-                          ),
-                          onPressed: () async {
-                            showCupertinoModalPopup<void>(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return Container(
-                                  padding: const EdgeInsets.all(1),
-                                  child: Center(
-                                    child: Card(
-                                      color: Colors.white,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                        BorderRadius.circular(8.0),
-                                      ),
-                                      child: Container(
-                                        margin: const EdgeInsets.all(10),
-                                        child: Column(
-                                          mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: <Widget>[
-                                            Container(
-                                              padding:
-                                              const EdgeInsets.all(5),
-                                              child: const Text(
-                                                'คุณต้องการที่จะอัพเดทสถานะ ใช่หรือไม่',
-                                                style: TextStyle(
-                                                  fontSize: 20,
-                                                  color: Colors.black,
-                                                  decoration:
-                                                  TextDecoration.none,
-                                                  decorationStyle:
-                                                  TextDecorationStyle
-                                                      .double,
-                                                  fontWeight:
-                                                  FontWeight.w300,
-                                                ),
-                                              ),
-                                            ),
-                                            Row(
-                                              mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                              mainAxisSize:
-                                              MainAxisSize.min,
-                                              children: [
-                                                Container(
-                                                  padding:
-                                                  const EdgeInsets.all(
-                                                      1),
-                                                  child: ElevatedButton(
-                                                    style: const ButtonStyle(
-                                                        backgroundColor:
-                                                        MaterialStatePropertyAll<
-                                                            Color>(
-                                                            Colors
-                                                                .red)),
-                                                    child: const Text(
-                                                      'ไม่',
-                                                      style: TextStyle(
-                                                          fontSize: 16),
-                                                    ),
-                                                    onPressed: () =>
-                                                        Navigator.pop(
-                                                            context),
-                                                  ),
-                                                ),
-                                                Container(
-                                                  padding:
-                                                  const EdgeInsets.all(
-                                                      10),
-                                                ),
-                                                Container(
-                                                  padding:
-                                                  const EdgeInsets.all(
-                                                      1),
-                                                  child: ElevatedButton(
-                                                    style:
-                                                    const ButtonStyle(
-                                                      backgroundColor:
-                                                      MaterialStatePropertyAll<
-                                                          Color>(
-                                                          Colors.green),
-                                                    ),
-                                                    child: const Text(
-                                                      'ใช่',
-                                                      style: TextStyle(
-                                                          fontSize: 16),
-                                                    ),
-                                                    onPressed: () async {
-                                                      await _updateInform(3);
-                                                      Navigator.pushReplacement(
-                                                        context,
-                                                        MaterialPageRoute(
-                                                          builder: (context) =>
-                                                              HistoryPage(),
-                                                        ),
-                                                      );
-                                                    },
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              },
-                            );
-                          },
-                          child: const Text(
-                            'อัพเดทสถานะ ดำเนินงาน',
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.white,
-                              decoration: TextDecoration.underline,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ) : widget.getInform.status == "ดำเนินงานเสร็จสิ้น" ?
-                        null:
-                        ElevatedButton(
-                          style: ButtonStyle(
-                            backgroundColor:
-                            MaterialStateProperty.all(Colors.orange.shade400),
-                            shape: MaterialStateProperty.all(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(15.29),
-                                side: const BorderSide(
-                                    width: 1, color: Colors.orange),
-                              ),
-                            ),
-                          ),
-                          onPressed: () async {
-                            showCupertinoModalPopup<void>(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return Container(
-                                  padding: const EdgeInsets.all(1),
-                                  child: Center(
-                                    child: Card(
-                                      color: Colors.white,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                        BorderRadius.circular(8.0),
-                                      ),
-                                      child: Container(
-                                        margin: const EdgeInsets.all(10),
-                                        child: Column(
-                                          mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: <Widget>[
-                                            Container(
-                                              padding:
-                                              const EdgeInsets.all(5),
-                                              child: const Text(
-                                                'คุณต้องการที่จะอัพเดทสถานะ ใช่หรือไม่',
-                                                style: TextStyle(
-                                                  fontSize: 20,
-                                                  color: Colors.black,
-                                                  decoration:
-                                                  TextDecoration.none,
-                                                  decorationStyle:
-                                                  TextDecorationStyle
-                                                      .double,
-                                                  fontWeight:
-                                                  FontWeight.w300,
-                                                ),
-                                              ),
-                                            ),
-                                            Row(
-                                              mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                              mainAxisSize:
-                                              MainAxisSize.min,
-                                              children: [
-                                                Container(
-                                                  padding:
-                                                  const EdgeInsets.all(
-                                                      1),
-                                                  child: ElevatedButton(
-                                                    style: const ButtonStyle(
-                                                        backgroundColor:
-                                                        MaterialStatePropertyAll<
-                                                            Color>(
-                                                            Colors
-                                                                .red)),
-                                                    child: const Text(
-                                                      'ไม่',
-                                                      style: TextStyle(
-                                                          fontSize: 16),
-                                                    ),
-                                                    onPressed: () =>
-                                                        Navigator.pop(
-                                                            context),
-                                                  ),
-                                                ),
-                                                Container(
-                                                  padding:
-                                                  const EdgeInsets.all(
-                                                      10),
-                                                ),
-                                                Container(
-                                                  padding:
-                                                  const EdgeInsets.all(
-                                                      1),
-                                                  child: ElevatedButton(
-                                                    style:
-                                                    const ButtonStyle(
-                                                      backgroundColor:
-                                                      MaterialStatePropertyAll<
-                                                          Color>(
-                                                          Colors.green),
-                                                    ),
-                                                    child: const Text(
-                                                      'ใช่',
-                                                      style: TextStyle(
-                                                          fontSize: 16),
-                                                    ),
-                                                    onPressed: () async {
-                                                      await _updateInform(4);
-                                                      Navigator.pushReplacement(
-                                                        context,
-                                                        MaterialPageRoute(
-                                                          builder: (context) =>
-                                                              HistoryPage(),
-                                                        ),
-                                                      );
-                                                    },
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              },
-                            );
-                          },
-                          child: const Text(
-                            'อัพเดทสถานะ จบการทำงาน',
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.white,
-                              decoration: TextDecoration.underline,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ) ,
-                      ),
                     ],
+                  ),
+                  const Spacer(),
+                  Container(
+                    padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        shape: const CircleBorder(),
+                        backgroundColor:
+                            const Color.fromARGB(255, 255, 255, 255),
+                      ),
+                      child: Image_NavBer(height: 40, width: 40),
+                      onPressed: () {
+                        _key.currentState!.openEndDrawer();
+                      },
+                    ),
                   )
                 ],
               ),
             ),
+            automaticallyImplyLeading: true,
+            titleSpacing: 0,
+            actions: [
+              Container(),
+            ],
           ),
-          Center(
-            child: imagepages == []
-                ? null
-                : Wrap(
-              children: imagepages.map(
-                    (imageone) {
-                  return Container(
-                    padding: const EdgeInsets.all(1.0),
-                    child: TextButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                DetailScreen(images: imageone),
+          endDrawer: const EndDrawer(),
+          endDrawerEnableOpenDragGesture: false,
+          body: SingleChildScrollView(
+            padding: const EdgeInsets.all(8),
+            child: Column(
+              children: [
+                Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15.0),
+                  ),
+                  elevation: 10,
+                  child: Container(
+                    padding: const EdgeInsets.all(10),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        textRow(
+                          'ประเภท : ',
+                          const TextStyle(
+                            fontSize: 18,
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
                           ),
-                        );
-                      },
-                      child: Card(
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: Image.memory(
-                            base64Decode(imageone),
-                            width: 150,
-                            height: 150,
-                            fit: BoxFit.cover,
+                          widget.getInform.subTypeName,
+                          const TextStyle(fontSize: 16, color: Colors.red),
+                          widget.getInform.date,
+                          TextStyle(fontSize: 15.0, color: Colors.black54),
+                        ),
+                        textRow(
+                          'รายละเอียด',
+                          const TextStyle(
+                            fontSize: 18,
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          '',
+                          const TextStyle(fontSize: 16, color: Colors.red),
+                          'อัพเดทเมื่อ : ${widget.getInform.updateDate}',
+                          TextStyle(fontSize: 15.0, color: Colors.black54),
+                        ),
+                        Container(
+                          alignment: Alignment.topLeft,
+                          padding: const EdgeInsets.all(2),
+                          child: Text(
+                            widget.getInform.description,
+                            style: const TextStyle(
+                                fontSize: 16, color: Colors.red),
                           ),
                         ),
-                      ),
+                        textRow(
+                          'ผู้แจ้งเหตุ : ',
+                          const TextStyle(
+                            fontSize: 18,
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          widget.getInform.username,
+                          const TextStyle(
+                            fontSize: 16,
+                            color: Colors.blue,
+                          ),
+                          '',
+                          TextStyle(fontSize: 15.0),
+                        ),
+                        textRow(
+                          'สถานะ : ',
+                          const TextStyle(
+                            fontSize: 18,
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          widget.getInform.status,
+                          TextStyle(
+                            fontSize: 16,
+                            color: widget.getInform.status ==
+                                    "รับเรื่องการแจ้งเหตุแล้ว"
+                                ? Colors.red
+                                : widget.getInform.status == "กำลังดำเนินงาน"
+                                    ? Colors.orange
+                                    : widget.getInform.status ==
+                                            "ดำเนินงานเสร็จสิ้น"
+                                        ? Colors.green
+                                        : null,
+                          ),
+                          '',
+                          TextStyle(fontSize: 15.0),
+                        ),
+                        Row(
+                          children: [
+                            const Text(
+                              'ติดต่อ : ',
+                              style: TextStyle(
+                                fontSize: 18,
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            InkWell(
+                              onTap: () async => await launchUrlString(
+                                  'tel:${widget.getInform.phoneNumberCallBack}'),
+                              child: const Text(
+                                'เบอร์โทรศัพท์',
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  color: Colors.blue,
+                                  decoration: TextDecoration.underline,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Container(
+                              alignment: Alignment.topLeft,
+                              child: TextButton(
+                                onPressed: () => _openMap(
+                                    widget.getInform.latitude,
+                                    widget.getInform.longitude),
+                                child: const Text(
+                                  'OpenMap',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.blue,
+                                    decoration: TextDecoration.underline,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const Spacer(
+                              flex: 4,
+                            ),
+                            Container(
+                              alignment: Alignment.topLeft,
+                              child:
+                                  widget.getInform.status ==
+                                          "รับเรื่องการแจ้งเหตุแล้ว"
+                                      ? ElevatedButton(
+                                          style: ButtonStyle(
+                                            backgroundColor:
+                                                MaterialStateProperty.all(
+                                                    Colors.red.shade400),
+                                            shape: MaterialStateProperty.all(
+                                              RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        15.29),
+                                                side: BorderSide(
+                                                    width: 1,
+                                                    color: Colors.red),
+                                              ),
+                                            ),
+                                          ),
+                                          onPressed: () async {
+                                            showCupertinoModalPopup<void>(
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                return Container(
+                                                  padding:
+                                                      const EdgeInsets.all(1),
+                                                  child: Center(
+                                                    child: Card(
+                                                      color: Colors.white,
+                                                      shape:
+                                                          RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(8.0),
+                                                      ),
+                                                      child: Container(
+                                                        margin: const EdgeInsets
+                                                            .all(10),
+                                                        child: Column(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .center,
+                                                          mainAxisSize:
+                                                              MainAxisSize.min,
+                                                          children: <Widget>[
+                                                            Container(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .all(5),
+                                                              child: const Text(
+                                                                'คุณต้องการที่จะอัพเดทสถานะ ใช่หรือไม่',
+                                                                style:
+                                                                    TextStyle(
+                                                                  fontSize: 20,
+                                                                  color: Colors
+                                                                      .black,
+                                                                  decoration:
+                                                                      TextDecoration
+                                                                          .none,
+                                                                  decorationStyle:
+                                                                      TextDecorationStyle
+                                                                          .double,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w300,
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            Row(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .center,
+                                                              mainAxisSize:
+                                                                  MainAxisSize
+                                                                      .min,
+                                                              children: [
+                                                                Container(
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                          .all(1),
+                                                                  child:
+                                                                      ElevatedButton(
+                                                                    style: const ButtonStyle(
+                                                                        backgroundColor:
+                                                                            MaterialStatePropertyAll<Color>(Colors.red)),
+                                                                    child:
+                                                                        const Text(
+                                                                      'ไม่',
+                                                                      style: TextStyle(
+                                                                          fontSize:
+                                                                              16),
+                                                                    ),
+                                                                    onPressed: () =>
+                                                                        Navigator.pop(
+                                                                            context),
+                                                                  ),
+                                                                ),
+                                                                Container(
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                          .all(10),
+                                                                ),
+                                                                Container(
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                          .all(1),
+                                                                  child:
+                                                                      ElevatedButton(
+                                                                    style:
+                                                                        const ButtonStyle(
+                                                                      backgroundColor: MaterialStatePropertyAll<
+                                                                              Color>(
+                                                                          Colors
+                                                                              .green),
+                                                                    ),
+                                                                    child:
+                                                                        const Text(
+                                                                      'ใช่',
+                                                                      style: TextStyle(
+                                                                          fontSize:
+                                                                              16),
+                                                                    ),
+                                                                    onPressed:
+                                                                        () async {
+                                                                      await _updateInform(
+                                                                          3);
+                                                                      Navigator
+                                                                          .pushReplacement(
+                                                                        context,
+                                                                        MaterialPageRoute(
+                                                                          builder: (context) =>
+                                                                              HistoryPage(),
+                                                                        ),
+                                                                      );
+                                                                    },
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                );
+                                              },
+                                            );
+                                          },
+                                          child: const Text(
+                                            'อัพเดทสถานะ ดำเนินงาน',
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              color: Colors.white,
+                                              decoration:
+                                                  TextDecoration.underline,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        )
+                                      : widget.getInform.status ==
+                                              "ดำเนินงานเสร็จสิ้น"
+                                          ? null
+                                          : ElevatedButton(
+                                              style: ButtonStyle(
+                                                backgroundColor:
+                                                    MaterialStateProperty.all(
+                                                        Colors.orange.shade400),
+                                                shape:
+                                                    MaterialStateProperty.all(
+                                                  RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            15.29),
+                                                    side: const BorderSide(
+                                                        width: 1,
+                                                        color: Colors.orange),
+                                                  ),
+                                                ),
+                                              ),
+                                              onPressed: () async {
+                                                showCupertinoModalPopup<void>(
+                                                  context: context,
+                                                  builder:
+                                                      (BuildContext context) {
+                                                    return Container(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              1),
+                                                      child: Center(
+                                                        child: Card(
+                                                          color: Colors.white,
+                                                          shape:
+                                                              RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        8.0),
+                                                          ),
+                                                          child: Container(
+                                                            margin:
+                                                                const EdgeInsets
+                                                                    .all(10),
+                                                            child: Column(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .center,
+                                                              mainAxisSize:
+                                                                  MainAxisSize
+                                                                      .min,
+                                                              children: <
+                                                                  Widget>[
+                                                                Container(
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                          .all(5),
+                                                                  child:
+                                                                      const Text(
+                                                                    'คุณต้องการที่จะอัพเดทสถานะ ใช่หรือไม่',
+                                                                    style:
+                                                                        TextStyle(
+                                                                      fontSize:
+                                                                          20,
+                                                                      color: Colors
+                                                                          .black,
+                                                                      decoration:
+                                                                          TextDecoration
+                                                                              .none,
+                                                                      decorationStyle:
+                                                                          TextDecorationStyle
+                                                                              .double,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w300,
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                                Row(
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .center,
+                                                                  mainAxisSize:
+                                                                      MainAxisSize
+                                                                          .min,
+                                                                  children: [
+                                                                    Container(
+                                                                      padding:
+                                                                          const EdgeInsets.all(
+                                                                              1),
+                                                                      child:
+                                                                          ElevatedButton(
+                                                                        style: const ButtonStyle(
+                                                                            backgroundColor:
+                                                                                MaterialStatePropertyAll<Color>(Colors.red)),
+                                                                        child:
+                                                                            const Text(
+                                                                          'ไม่',
+                                                                          style:
+                                                                              TextStyle(fontSize: 16),
+                                                                        ),
+                                                                        onPressed:
+                                                                            () =>
+                                                                                Navigator.pop(context),
+                                                                      ),
+                                                                    ),
+                                                                    Container(
+                                                                      padding:
+                                                                          const EdgeInsets.all(
+                                                                              10),
+                                                                    ),
+                                                                    Container(
+                                                                      padding:
+                                                                          const EdgeInsets.all(
+                                                                              1),
+                                                                      child:
+                                                                          ElevatedButton(
+                                                                        style:
+                                                                            const ButtonStyle(
+                                                                          backgroundColor:
+                                                                              MaterialStatePropertyAll<Color>(Colors.green),
+                                                                        ),
+                                                                        child:
+                                                                            const Text(
+                                                                          'ใช่',
+                                                                          style:
+                                                                              TextStyle(fontSize: 16),
+                                                                        ),
+                                                                        onPressed:
+                                                                            () async {
+                                                                          await _updateInform(
+                                                                              4);
+                                                                          Navigator
+                                                                              .pushReplacement(
+                                                                            context,
+                                                                            MaterialPageRoute(
+                                                                              builder: (context) => HistoryPage(),
+                                                                            ),
+                                                                          );
+                                                                        },
+                                                                      ),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    );
+                                                  },
+                                                );
+                                              },
+                                              child: const Text(
+                                                'อัพเดทสถานะ จบการทำงาน',
+                                                style: TextStyle(
+                                                  fontSize: 16,
+                                                  color: Colors.white,
+                                                  decoration:
+                                                      TextDecoration.underline,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                            ),
+                            ),
+                          ],
+                        )
+                      ],
                     ),
-                  );
-                },
-              ).toList(),
+                  ),
+                ),
+                Center(
+                  child: imagepages == []
+                      ? null
+                      : Wrap(
+                          children: imagepages.map(
+                            (imageone) {
+                              return Container(
+                                padding: const EdgeInsets.all(1.0),
+                                child: TextButton(
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            DetailScreen(images: imageone),
+                                      ),
+                                    );
+                                  },
+                                  child: Card(
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(10),
+                                      child: Image.memory(
+                                        base64Decode(imageone),
+                                        width: 150,
+                                        height: 150,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                          ).toList(),
+                        ),
+                ),
+              ],
             ),
           ),
-        ],
-      ),
-    ),
-  );
+        );
 }

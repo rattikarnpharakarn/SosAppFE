@@ -42,6 +42,7 @@ class GetInformListModel {
         latitude: e['latitude'] ?? '',
         longitude: e['longitude'] ?? '',
         username: e['username'] ?? '',
+        phoneNumber: e['phoneNumber'] ?? '',
         workplace: e['workplace'] ?? '',
         subTypeName: e['subTypeName'] ?? '',
         date: e['date'] ?? '',
@@ -67,6 +68,7 @@ class GetInform {
   final String latitude;
   final String longitude;
   String username = '';
+  String phoneNumber = '';
   String workplace = '';
   final String subTypeName;
   final String date;
@@ -82,6 +84,7 @@ class GetInform {
     required this.longitude,
     required this.username,
     required this.workplace,
+    required this.phoneNumber,
     required this.subTypeName,
     required this.date,
     required this.updateDate,
@@ -97,6 +100,7 @@ class GetInform {
       latitude: json['latitude'],
       longitude: json['longitude'],
       username: json['username'],
+      phoneNumber: json['phoneNumber'],
       workplace: json['workplace'],
       subTypeName: json['subTypeName'],
       date: json['date'],

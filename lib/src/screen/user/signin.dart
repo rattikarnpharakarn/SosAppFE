@@ -235,7 +235,7 @@ class _SigninState extends State<Signin> {
                             Text(
                               msg,
                               style: TextStyle(
-                                color: Colors.white,
+                                color: Colors.red,
                                   fontSize: 16
                               ),
                             ),

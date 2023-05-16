@@ -54,6 +54,7 @@ class _HistoryPageState extends State<HistoryPage> {
                   latitude: data.latitude,
                   longitude: data.longitude,
                   username: data.username,
+                  phoneNumber: data.phoneNumber,
                   workplace: data.workplace,
                   subTypeName: data.subTypeName,
                   date: date,
@@ -172,7 +173,7 @@ class _HistoryPageState extends State<HistoryPage> {
           endDrawer: const EndDrawer(),
           endDrawerEnableOpenDragGesture: false,
           body: SingleChildScrollView(
-            padding: const EdgeInsets.all(10),
+            padding: const EdgeInsets.all(8),
             child: Column(
               children: [
                 for (GetInform m1 in getInformList) ...[

@@ -338,8 +338,8 @@ class _OTPState extends State<OTP> {
                                 const Text(
                                   'กรุณากรอก OTP ให้ครบ',
                                   style: TextStyle(
-                                    color: Colors.white,
-                                      fontSize: 16
+                                    color: Colors.red,
+                                      fontSize: 16,
                                   ),
                                 ),
                                 Colors.white
