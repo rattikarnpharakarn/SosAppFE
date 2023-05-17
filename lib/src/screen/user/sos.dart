@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:form_field_validator/form_field_validator.dart';
 import 'package:geolocator/geolocator.dart';
 
 import 'package:sos/src/component/bottom_bar.dart';
@@ -11,9 +10,9 @@ import 'package:sos/src/component/sosComponent.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sos/src/model/accounts/user.dart';
 import 'package:sos/src/model/emergency/request.dart';
+import 'package:sos/src/model/emergency/response.dart';
 import 'package:sos/src/provider/accounts/userService.dart';
 import 'package:sos/src/provider/common/socketConnectNotification.dart';
-import 'package:sos/src/provider/config.dart';
 import 'package:sos/src/provider/emergency/inform.dart';
 import 'package:sos/src/screen/common/detailImage.dart';
 import 'package:sos/src/screen/common/snack_bar_sos.dart';
@@ -22,37 +21,96 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:url_launcher/url_launcher_string.dart';
-
 import '../common/LoadingPage.dart';
 import 'history.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
+import 'package:sos/src/provider/emergency/type.dart' as provider;
 
 class SosPage extends StatefulWidget {
-  const SosPage({super.key});
+  const SosPage({super.key, required this.typeId});
+
+  final String typeId;
 
   @override
-  State<SosPage> createState() => NSosPageState();
+  State<SosPage> createState() => SosPageState();
 }
 
-class NSosPageState extends State<SosPage> {
+class SosPageState extends State<SosPage> {
   final GlobalKey<ScaffoldState> _formKey = GlobalKey();
 
   final int _pageNumber = 2;
   String _textArea = '';
   String _onSelectName = '';
 
-  int onSelect = 0;
+  late int onSelect = 0;
+  late List<bool> _isChecked;
 
   bool isLoading = false;
 
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration(milliseconds: 500), () {
-      setState(() {
-        isLoading = true;
-      });
+    _getSubType();
+    // Future.delayed(Duration(milliseconds: 500), () {
+    //   setState(() {
+    //     isLoading = true;
+    //   });
+    // });
+  }
+
+  List<GetSubType> getSubTypeList = [];
+
+  _getSubType() async {
+    String typeId = widget.typeId;
+    if (typeId == "0") {
+      await _getAllSubType();
+    } else {
+      await _getSubTypeByTypeId();
+    }
+    setState(() {
+      isLoading = true;
+    });
+  }
+
+  _getAllSubType() async {
+    await provider.getSubType().then((value) {
+      if (value.code == "0") {
+        setState(() {
+          for (var data in value.data) {
+            GetSubType getSubType = GetSubType(
+              id: data.id,
+              createdAt: data.createdAt,
+              updatedAt: data.updatedAt,
+              nameSubType: data.nameSubType,
+              imageSubType: data.imageSubType,
+              deletedBy: data.deletedBy,
+            );
+            getSubTypeList.add(getSubType);
+          }
+        });
+      }
+      _isChecked = List<bool>.filled(getSubTypeList.length + 1, false);
+    });
+  }
+
+  _getSubTypeByTypeId() async {
+    await provider.getTypeById(widget.typeId).then((value) {
+      if (value.code == "0") {
+        setState(() {
+          for (var data in value.data.getSubType!) {
+            GetSubType getType = GetSubType(
+              id: data.id,
+              createdAt: data.createdAt,
+              updatedAt: data.updatedAt,
+              nameSubType: data.nameSubType,
+              imageSubType: data.imageSubType,
+              deletedBy: data.deletedBy,
+            );
+            getSubTypeList.add(getType);
+          }
+        });
+      }
+      _isChecked = List<bool>.filled(getSubTypeList.length + 1, false);
     });
   }
 
@@ -124,122 +182,48 @@ class NSosPageState extends State<SosPage> {
                       padding: EdgeInsets.zero,
                       height: 380,
                       width: 400,
-                      child: GridView.count(
+                      child: GridView.builder(
                         primary: true,
-                        padding: const EdgeInsets.all(20),
-                        crossAxisSpacing: 10,
-                        mainAxisSpacing: 10,
-                        crossAxisCount: 2,
-                        children: [
-                          TextButton(
+                        padding: const EdgeInsets.all(10),
+                        itemCount: getSubTypeList.length,
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          crossAxisSpacing: 10,
+                          mainAxisSpacing: 10,
+                        ),
+                        itemBuilder: (BuildContext context, int index) {
+                          return TextButton(
                             autofocus: false,
                             style: TextButton.styleFrom(
                               foregroundColor: Colors.white,
                               shape: const CircleBorder(),
                             ),
-                            child: onSelect == 1 || onSelect == 0
-                                ? SosComponent(
-                                    images: 'assets/images/sick.png',
-                                    title: 'เจ็บป่วย',
-                                    isDisabledButton: true,
-                                  )
-                                : SosComponent(
-                                    images: 'assets/images/sick.png',
-                                    title: 'เจ็บป่วย',
-                                  ),
-                            onPressed: () {
-                              setState(() {
-                                if (onSelect == 1) {
-                                  onSelect = 0;
-                                } else {
-                                  _onSelectName = 'เจ็บป่วย';
-                                  onSelect = 1;
-                                }
-                              });
-                            },
-                          ),
-                          TextButton(
-                            autofocus: false,
-                            style: TextButton.styleFrom(
-                              foregroundColor: Colors.white,
-                              shape: const CircleBorder(),
+                            child: SosComponent(
+                              images: getSubTypeList[index].imageSubType,
+                              title: getSubTypeList[index].nameSubType,
+                              isDisabledButton: _isChecked[index],
                             ),
-                            child: onSelect == 2 || onSelect == 0
-                                ? SosComponent(
-                                    images: 'assets/images/accident.png',
-                                    title: 'อุบัติเหตุ',
-                                    isDisabledButton: true,
-                                  )
-                                : SosComponent(
-                                    images: 'assets/images/accident.png',
-                                    title: 'อุบัติเหตุ',
-                                  ),
                             onPressed: () {
                               setState(() {
-                                if (onSelect == 2) {
+                                if (onSelect ==
+                                    int.parse(getSubTypeList[index].id)) {
+                                  _isChecked = List<bool>.filled(
+                                      getSubTypeList.length + 1, false);
                                   onSelect = 0;
                                 } else {
-                                  _onSelectName = 'อุบัติเหตุ';
-                                  onSelect = 2;
+                                  _onSelectName =
+                                      getSubTypeList[index].nameSubType;
+                                  _isChecked = List<bool>.filled(
+                                      getSubTypeList.length + 1, false);
+                                  _isChecked[index] = true;
+                                  onSelect =
+                                      int.parse(getSubTypeList[index].id);
                                 }
                               });
                             },
-                          ),
-                          TextButton(
-                            autofocus: false,
-                            style: TextButton.styleFrom(
-                              foregroundColor: Colors.white,
-                              shape: const CircleBorder(),
-                            ),
-                            child: onSelect == 3 || onSelect == 0
-                                ? SosComponent(
-                                    images: 'assets/images/building.png',
-                                    title: 'อาคาร/สถานที่',
-                                    isDisabledButton: true,
-                                  )
-                                : SosComponent(
-                                    images: 'assets/images/building.png',
-                                    title: 'อาคาร/สถานที่',
-                                  ),
-                            onPressed: () {
-                              setState(() {
-                                if (onSelect == 3) {
-                                  onSelect = 0;
-                                } else {
-                                  _onSelectName = 'อาคาร/สถานที่';
-                                  onSelect = 3;
-                                }
-                              });
-                            },
-                          ),
-                          TextButton(
-                            autofocus: false,
-                            style: TextButton.styleFrom(
-                              foregroundColor: Colors.white,
-                              shape: const CircleBorder(),
-                            ),
-                            child: onSelect == 4 || onSelect == 0
-                                ? SosComponent(
-                                    images: 'assets/images/others.png',
-                                    title: 'อื่นๆ',
-                                    isDisabledButton: true,
-                                  )
-                                : SosComponent(
-                                    images: 'assets/images/others.png',
-                                    title: 'อื่นๆ',
-                                  ),
-                            onPressed: () {
-                              setState(() {
-                                if (onSelect == 4) {
-                                  onSelect = 0;
-                                } else {
-                                  _onSelectName = 'อื่นๆ';
-                                  onSelect = 4;
-                                }
-                              });
-                            },
-                          ),
-                        ],
+                          );
+                        },
                       ),
                     ),
                     Container(
@@ -419,18 +403,29 @@ class SosPage1 extends StatefulWidget {
 }
 
 class _SosPage1State extends State<SosPage1> {
-  late IO.Socket _socket;
-
   final GlobalKey<ScaffoldState> _key = GlobalKey();
-  bool isLoading = false;
-
   final TextEditingController _textPhoneNumber = TextEditingController();
   final formKey = GlobalKey<FormState>();
 
-  // String _textPhoneNumber = '';
   String latitude = '';
   String longitude = '';
   int userID = 0;
+
+  late IO.Socket _socket;
+  bool isLoading = false;
+
+  final int _pageNumber = 2;
+  String selected_location = '';
+  String location_on = '';
+
+  final ImagePicker imgpicker = ImagePicker();
+  String selected_camera_or_image = '';
+
+  String imagepath = '';
+  List<String> imagepages = [];
+
+  late String lat;
+  late String long;
 
   @override
   void initState() {
@@ -446,10 +441,6 @@ class _SosPage1State extends State<SosPage1> {
   _connectSocket() async {
     UserInfo data = await GetUserProfile();
     _socket = await connectSocket(data);
-    // todo Check location
-    // _socket.on('0', (data) {
-    //   // notificationEmergency(data);
-    // });
   }
 
   @override
@@ -457,16 +448,6 @@ class _SosPage1State extends State<SosPage1> {
     _socket.dispose();
     super.dispose();
   }
-
-  final int _pageNumber = 2;
-  String selected_location = '';
-  String location_on = '';
-
-  final ImagePicker imgpicker = ImagePicker();
-  String selected_camera_or_image = '';
-
-  String imagepath = '';
-  List<String> imagepages = [];
 
   openImage(String imageSource) async {
     try {
@@ -515,9 +496,6 @@ class _SosPage1State extends State<SosPage1> {
       print("error while picking file.");
     }
   }
-
-  late String lat;
-  late String long;
 
   Future<Position> _getCurrentLocation() async {
     bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
@@ -836,9 +814,8 @@ class _SosPage1State extends State<SosPage1> {
                             controller: _textPhoneNumber,
                             maxLines: 1,
                             maxLength: 10,
-                            decoration: const InputDecoration.collapsed(
-                              hintText: ""
-                            ),
+                            decoration:
+                                const InputDecoration.collapsed(hintText: ""),
                           ),
                         ),
                       ),

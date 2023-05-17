@@ -128,8 +128,6 @@ Future<ReturnResponse> PostInform(Inform req) async {
   }
 }
 
-
-
 Future<ReturnResponse> UpdateInformOps(UpdateInform req, String informId) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String? stringValue = prefs.getString('token') ?? '';
@@ -154,3 +152,4 @@ Future<ReturnResponse> UpdateInformOps(UpdateInform req, String informId) async 
     return resp;
   }
 }
+

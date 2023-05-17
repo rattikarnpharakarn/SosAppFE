@@ -1,13 +1,15 @@
+import 'dart:convert';
 import 'dart:ui';
 import 'package:flutter/material.dart';
-
+import 'package:sos/src/model/emergency/response.dart';
+import 'package:sos/src/provider/emergency/type.dart' as provider;
+import 'package:sos/src/screen/user/sos.dart';
 
 import '../../component/bottom_bar.dart';
 import '../../component/endDrawer.dart';
 import '../../component/image_navBer.dart';
 import '../../sharedInfo/user.dart';
 import '../common/LoadingPage.dart';
-
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -30,12 +32,10 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration(milliseconds: 500), () {
-      _getNameProfile();
-      setState(() {
-        isLoading = true;
-      });
-    });
+    // Future.delayed(Duration(milliseconds: 500), () {
+    // });
+    _getGetType();
+    _getNameProfile();
   }
 
   final int _pageNumber = 0;
@@ -46,6 +46,32 @@ class _HomeState extends State<Home> {
     var name = await getUserFirstNameSF();
     setState(() {
       _name = name;
+    });
+  }
+
+  List<GetType> getTypeList = [];
+
+  _getGetType() async {
+    await provider.getType().then((value) {
+      if (value.code == "0") {
+        setState(() {
+          for (var data in value.data) {
+            GetType getType = GetType(
+              id: data.id,
+              createdAt: data.createdAt,
+              updatedAt: data.updatedAt,
+              nameType: data.nameType,
+              imageType: data.imageType,
+              deletedBy: data.deletedBy,
+              getSubType: [],
+            );
+            getTypeList.add(getType);
+          }
+        });
+      }
+    });
+    setState(() {
+      isLoading = true;
     });
   }
 
@@ -138,16 +164,17 @@ class _HomeState extends State<Home> {
                       Container(
                         padding: const EdgeInsets.fromLTRB(0, 20, 230, 0),
                         child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor:
+                                const Color.fromARGB(255, 255, 255, 255),
+                          ),
+                          onPressed: () {},
                           child: const Text(
                             'คลิกเพื่ออ่านต่อ',
-                            style: const TextStyle(
+                            style: TextStyle(
                               color: Colors.black,
                             ),
                           ),
-                          style: ElevatedButton.styleFrom(
-                            primary: Color.fromARGB(255, 255, 255, 255),
-                          ),
-                          onPressed: () {},
                         ),
                       ),
                     ],
@@ -174,32 +201,42 @@ class _HomeState extends State<Home> {
                     mainAxisSpacing: 10,
                     crossAxisCount: 2,
                     children: [
-                      Container(
-                        padding: EdgeInsets.zero,
-                        child: Card(
-                          color: Color.fromRGBO(210, 250, 251, 1),
+                      for (GetType getType in getTypeList) ...[
+                        Card(
+                          color: const Color.fromRGBO(210, 250, 251, 1),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(15.0),
                           ),
                           child: TextButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      SosPage(typeId: getType.id),
+                                ),
+                              );
+                            },
                             child: Column(
                               children: [
                                 Container(
-                                    alignment: Alignment.topLeft,
-                                    padding:
-                                        const EdgeInsets.fromLTRB(0, 0, 0, 15),
-                                    child: Image.asset(
-                                      'assets/images/hospital.png',
-                                      height: 100,
-                                    )),
+                                  alignment: Alignment.topLeft,
+                                  padding:
+                                      const EdgeInsets.fromLTRB(0, 0, 0, 15),
+                                  child: getType.imageType != ""
+                                      ? Image.memory(
+                                          base64Decode(getType.imageType),
+                                          height: 100,
+                                        )
+                                      : const Text(""),
+                                ),
                                 Container(
                                   alignment: Alignment.topLeft,
                                   padding:
                                       const EdgeInsets.fromLTRB(10, 0, 0, 0),
-                                  child: const Text(
-                                    'โรงพยาบาล',
-                                    style: TextStyle(
+                                  child: Text(
+                                    getType.nameType,
+                                    style: const TextStyle(
                                       color: Color.fromRGBO(12, 75, 142, 1),
                                       fontSize: 25,
                                     ),
@@ -209,113 +246,7 @@ class _HomeState extends State<Home> {
                             ),
                           ),
                         ),
-                      ),
-                      Container(
-                        padding: EdgeInsets.zero,
-                        child: Card(
-                          color: const Color.fromRGBO(210, 250, 251, 1),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15.0),
-                          ),
-                          child: TextButton(
-                            onPressed: () {},
-                            child: Column(
-                              children: [
-                                Container(
-                                    alignment: Alignment.topLeft,
-                                    padding: EdgeInsets.fromLTRB(0, 0, 0, 15),
-                                    child: Image.asset(
-                                      'assets/images/emg.png',
-                                      height: 100,
-                                    )),
-                                Container(
-                                  alignment: Alignment.topLeft,
-                                  padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                                  child: const Text(
-                                    'ปอเต็กตึ๊ง',
-                                    style: TextStyle(
-                                      color: Color.fromRGBO(12, 75, 142, 1),
-                                      fontSize: 25,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                      Container(
-                        padding: EdgeInsets.zero,
-                        child: Card(
-                          color: const Color.fromRGBO(210, 250, 251, 1),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15.0),
-                          ),
-                          child: TextButton(
-                            onPressed: () {},
-                            child: Column(
-                              children: [
-                                Container(
-                                    alignment: Alignment.topLeft,
-                                    padding:
-                                        const EdgeInsets.fromLTRB(0, 0, 0, 15),
-                                    child: Image.asset(
-                                      'assets/images/other.png',
-                                      height: 100,
-                                    )),
-                                Container(
-                                  alignment: Alignment.topLeft,
-                                  padding:
-                                      const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                  child: const Text(
-                                    'สถานีดับเพลิง',
-                                    style: TextStyle(
-                                      color: Color.fromRGBO(12, 75, 142, 1),
-                                      fontSize: 25,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                      Container(
-                        padding: EdgeInsets.zero,
-                        child: Card(
-                          color: const Color.fromRGBO(210, 250, 251, 1),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15.0),
-                          ),
-                          child: TextButton(
-                            onPressed: () {},
-                            child: Column(
-                              children: [
-                                Container(
-                                    alignment: Alignment.topLeft,
-                                    padding:
-                                        const EdgeInsets.fromLTRB(0, 0, 0, 15),
-                                    child: Image.asset(
-                                      'assets/images/fire.png',
-                                      height: 100,
-                                    )),
-                                Container(
-                                  alignment: Alignment.topLeft,
-                                  padding:
-                                      const EdgeInsets.fromLTRB(10, 0, 0, 0),
-                                  child: const Text(
-                                    'สถานีตำรวจ',
-                                    style: TextStyle(
-                                      color: Color.fromRGBO(12, 75, 142, 1),
-                                      fontSize: 25,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
+                      ],
                     ],
                   ),
                 ),

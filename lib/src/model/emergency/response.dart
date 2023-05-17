@@ -251,3 +251,183 @@ class GetInformByIdImage {
     );
   }
 }
+
+// Type And SubType
+class GetTypeListModel {
+  String message = '';
+  String code = '';
+  final List<GetType> data;
+
+  GetTypeListModel({
+    required this.code,
+    required this.message,
+    required this.data,
+  });
+
+  factory GetTypeListModel.fromJson(Map<String, dynamic> json) {
+    List<GetType>? list = [];
+    for (dynamic type in json['data']) {
+      GetType arr = GetType(
+        id: type['id'] ?? "",
+        createdAt: type['createdAt'] ?? "",
+        updatedAt: type['updatedAt'] ?? "",
+        nameType: type['nameType'] ?? "",
+        imageType: type['imageType'] ?? "",
+        deletedBy: type['deletedBy'] ?? "",
+        getSubType: [],
+      );
+      list.add(arr);
+    }
+
+    return GetTypeListModel(
+      code: json['code'],
+      message: json['message'],
+      data: list,
+    );
+  }
+}
+
+class GetTypeByIdModel {
+  String message = '';
+  String code = '';
+  final GetType data;
+
+  GetTypeByIdModel({
+    required this.code,
+    required this.message,
+    required this.data,
+  });
+
+  factory GetTypeByIdModel.fromJson(Map<String, dynamic> json) {
+    List<GetSubType>? subTypeList = [];
+    for (dynamic sub in json['data']['subTypeRes']) {
+      GetSubType getSubType = GetSubType(
+        id: sub['id'] ?? "",
+        createdAt: sub['createdAt'] ?? "",
+        deletedBy: sub['deletedBy'] ?? "",
+        updatedAt: sub['updatedAt'] ?? "",
+        nameSubType: sub['nameSubType'] ?? "",
+        imageSubType: sub['imageSubType'] ?? "",
+      );
+
+      subTypeList.add(getSubType);
+    }
+
+    GetType getType = GetType(
+      id: json['id'] ?? "",
+      createdAt: json['createdAt'] ?? "",
+      updatedAt: json['updatedAt'] ?? "",
+      nameType: json['nameType'] ?? "",
+      imageType: json['imageType'] ?? "",
+      deletedBy: json['deletedBy'] ?? "",
+      getSubType: subTypeList,
+    );
+
+    return GetTypeByIdModel(
+      code: json['code'],
+      message: json['message'],
+      data: getType,
+    );
+  }
+}
+
+class GetType {
+  final String id;
+  final String createdAt;
+  final String updatedAt;
+  final String nameType;
+  final String imageType;
+  final String deletedBy;
+  final List<GetSubType>? getSubType;
+
+  GetType({
+    required this.id,
+    required this.createdAt,
+    required this.updatedAt,
+    required this.nameType,
+    required this.imageType,
+    required this.deletedBy,
+    required this.getSubType,
+  });
+
+  factory GetType.fromJson(Map<String, dynamic> json) {
+    List<GetSubType>? subtype = [];
+    for (dynamic sub in json['subTypeRes']) {
+      print(sub['id']);
+      print(sub['createdAt']);
+      print(sub['updatedAt']);
+    }
+
+    return GetType(
+      id: json['id'],
+      createdAt: json['createdAt'],
+      updatedAt: json['updatedAt'],
+      nameType: json['nameType'],
+      imageType: json['imageType'],
+      deletedBy: json['deletedBy'],
+      getSubType: subtype,
+    );
+  }
+}
+
+class GetSubTypeListModel {
+  String message = '';
+  String code = '';
+  final List<GetSubType> data;
+
+  GetSubTypeListModel({
+    required this.code,
+    required this.message,
+    required this.data,
+  });
+
+  factory GetSubTypeListModel.fromJson(Map<String, dynamic> json) {
+    List<GetSubType>? list = [];
+    for (dynamic type in json['data']) {
+      GetSubType arr = GetSubType(
+        id: type['id'] ?? "",
+        createdAt: type['createdAt'] ?? "",
+        updatedAt: type['updatedAt'] ?? "",
+        nameSubType: type['nameSubType'] ?? "",
+        imageSubType: type['imageSubType'] ?? "",
+        deletedBy: type['deletedBy'] ?? "",
+      );
+      list.add(arr);
+    }
+
+    return GetSubTypeListModel(
+      code: json['code'],
+      message: json['message'],
+      data: list,
+    );
+  }
+}
+
+class GetSubType {
+  final String id;
+  final String createdAt;
+  final String updatedAt;
+  final String nameSubType;
+  final String imageSubType;
+  final String deletedBy;
+
+  GetSubType({
+    required this.id,
+    required this.createdAt,
+    required this.updatedAt,
+    required this.nameSubType,
+    required this.imageSubType,
+    required this.deletedBy,
+  });
+
+  factory GetSubType.fromJson(Map<String, dynamic> json) {
+    return GetSubType(
+      id: json['id'],
+      createdAt: json['createdAt'],
+      updatedAt: json['updatedAt'],
+      nameSubType: json['nameSubType'],
+      imageSubType: json['imageSubType'],
+      deletedBy: json['deletedBy'],
+    );
+  }
+}

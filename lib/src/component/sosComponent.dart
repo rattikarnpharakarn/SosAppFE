@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 
 class SosComponent extends StatefulWidget {
@@ -32,15 +34,15 @@ class _SosComponentState extends State<SosComponent> {
               child: Container(
                 foregroundDecoration: widget.isDisabledButton == true
                     ? null
-                    : BoxDecoration(
+                    : const BoxDecoration(
                   color: Colors.grey,
                   backgroundBlendMode: BlendMode.saturation,
                 ),
                 padding: EdgeInsets.zero,
-                child: Image.asset(
-                  widget.images,
-                  fit: BoxFit.cover,
-                ),
+                child: widget.images != "" ? Image.memory(
+                  base64Decode(widget.images),
+                  height: 100,
+                ) : const Text(""),
               ),
             ),
           ),
@@ -48,7 +50,7 @@ class _SosComponentState extends State<SosComponent> {
             padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
             child: Text(
               // '${widget.call().isDisabledButton}',
-              '${widget.title}',
+              widget.title,
               style: const TextStyle(
                 color: Color.fromRGBO(0, 0, 0, 1),
                 fontSize: 16,

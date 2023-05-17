@@ -103,13 +103,14 @@ class _HomeScreenState extends State<MessengerPage> {
                 );
 
                 UserInfo userByid = await GetUserProfileById(data.senderUserId);
-                Message _messages = Message(
+
+                String senderUsername = '${userByid.firstName} ${userByid.lastName}';
+                Message msg = Message(
                     message: getChat.message,
                     sentAt: sentAt,
-                    senderUsername:
-                        userByid.firstName + " " + userByid.lastName);
+                    senderUsername:senderUsername);
                 Provider.of<ChatsProvider>(context, listen: false)
-                    .addNewMessage(_messages);
+                    .addNewMessage(msg);
 
                 // geMessageList.add(getChat);
               });

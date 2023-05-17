@@ -58,7 +58,7 @@ class _ButtonbarState extends State<Bottombar> {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => const SosPage(),
+            builder: (context) => const SosPage(typeId: "0"),
           ),
         );
       } else if (pageNumber == 3) {
