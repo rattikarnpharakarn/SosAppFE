@@ -1,4 +1,9 @@
+import 'dart:convert';
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:provider/provider.dart';
@@ -15,6 +20,8 @@ import 'package:sos/src/provider/messenger/messengerService.dart';
 import 'package:sos/src/screen/chats/model/message.dart';
 import 'package:sos/src/screen/chats/providers/messenger.dart';
 import 'package:sos/src/screen/chats/screens/members.dart';
+import 'package:sos/src/screen/common/detailImage.dart';
+import 'package:sos/src/screen/common/snack_bar_sos.dart';
 
 import '../../common/LoadingPage.dart';
 
@@ -57,19 +64,22 @@ class _HomeScreenState extends State<MessengerPage> {
   _connectSocket() async {
     _socket.connect();
     _socket.on(widget.getChat.roomChatID, (data) {
+
       Provider.of<ChatsProvider>(context, listen: false)
-          .addNewMessage(Message.fromJson(data));
+          .addNewMessage(Message.fromJson(data) , true);
     });
-    _getGetMessageById(widget.getChat.roomChatID);
+    await _getGetMessageById(widget.getChat.roomChatID);
+    isLoading = true;
   }
 
-  _sendMessage() async {
+  _sendMessage(String image) async {
     _socket.emit(widget.getChat.roomChatID, {
       'message': _messageInputController.text.trim(),
-      'sender': widget.userInfo.firstName + " " + widget.userInfo.lastName
+      'sender': widget.userInfo.firstName + " " + widget.userInfo.lastName,
+      'image': image,
     });
     PostMessage(
-        widget.getChat.roomChatID, _messageInputController.text.trim(), "");
+        widget.getChat.roomChatID, _messageInputController.text.trim(), image);
     _messageInputController.clear();
   }
 
@@ -97,6 +107,7 @@ class _HomeScreenState extends State<MessengerPage> {
                   id: data.id,
                   roomChatID: data.roomChatID,
                   message: data.message,
+                  image: data.image,
                   senderUserId: data.senderUserId,
                   createdAt: createdAt,
                   updatedAt: updatedAt,
@@ -104,13 +115,24 @@ class _HomeScreenState extends State<MessengerPage> {
 
                 UserInfo userByid = await GetUserProfileById(data.senderUserId);
 
-                String senderUsername = '${userByid.firstName} ${userByid.lastName}';
+                String image = "";
+                await GetImageByMessageId(data.id).then((value) {
+                  if (value.code == "0") {
+                    Future.forEach(value.list, (m1) async {
+                      image = m1.image;
+                    });
+                  }
+                });
+
+                String senderUsername =
+                    '${userByid.firstName} ${userByid.lastName}';
                 Message msg = Message(
                     message: getChat.message,
+                    image: image,
                     sentAt: sentAt,
-                    senderUsername:senderUsername);
+                    senderUsername: senderUsername);
                 Provider.of<ChatsProvider>(context, listen: false)
-                    .addNewMessage(msg);
+                    .addNewMessage(msg, false);
 
                 // geMessageList.add(getChat);
               });
@@ -123,10 +145,6 @@ class _HomeScreenState extends State<MessengerPage> {
       setState(() {
         isLoading = true;
       });
-    });
-
-    setState(() {
-      isLoading = true;
     });
   }
 
@@ -232,6 +250,11 @@ class _HomeScreenState extends State<MessengerPage> {
               Expanded(
                 child: Consumer<ChatsProvider>(
                   builder: (_, provider, __) => ListView.separated(
+                    addAutomaticKeepAlives: false,
+                    addRepaintBoundaries: false,
+                    addSemanticIndexes: false,
+                    reverse: true,
+                    shrinkWrap: true,
                     padding: const EdgeInsets.all(16),
                     itemBuilder: (context, index) {
                       final message = provider.messages[index];
@@ -257,22 +280,47 @@ class _HomeScreenState extends State<MessengerPage> {
                                     padding: EdgeInsets.all(1.0),
                                     child: Text(
                                       message.senderUsername,
-                                      style: TextStyle(fontSize: 13),
-                                    ),
-                                  ),
-                                  Container(
-                                    padding: EdgeInsets.all(1.0),
-                                    child: Text(
-                                      message.message,
                                       style: TextStyle(fontSize: 16),
                                     ),
                                   ),
+                                  message.image == ""
+                                      ? Container(
+                                          padding: EdgeInsets.all(1.0),
+                                          child: Text(
+                                            message.message,
+                                            style: TextStyle(fontSize: 16),
+                                          ),
+                                        )
+                                      : TextButton(
+                                          onPressed: () {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    DetailScreen(
+                                                        images: message.image),
+                                              ),
+                                            );
+                                          },
+                                          child: Card(
+                                            child: ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              child: Image.memory(
+                                                base64Decode(message.image),
+                                                width: 120,
+                                                height: 120,
+                                                fit: BoxFit.cover,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
                                   Container(
                                     padding: EdgeInsets.all(1.0),
                                     child: Text(
                                       DateFormat('dd-MM-yyyy HH:mm น.')
                                           .format(message.sentAt),
-                                      style: TextStyle(fontSize: 10),
+                                      style: TextStyle(fontSize: 12),
                                     ),
                                   )
                                 ],
@@ -316,7 +364,7 @@ class _HomeScreenState extends State<MessengerPage> {
                       IconButton(
                         onPressed: () {
                           if (_messageInputController.text.trim().isNotEmpty) {
-                            _sendMessage();
+                            _sendMessage("");
                           }
                         },
                         icon: const Icon(
@@ -336,12 +384,53 @@ class _HomeScreenState extends State<MessengerPage> {
     print('Emoji Icon Pressed...');
   }
 
-  void callAttachFile() {
+  final ImagePicker imgPicker = ImagePicker();
+  String imagePath = "";
+  String selectImage = "";
+
+  void callImageFile() async {
+    openImage("Gallery");
     print('Attach File Icon Pressed...');
   }
 
-  void callCamera() {
+  void callCamera() async {
+    openImage("Camera");
     print('Camera Icon Pressed...');
+  }
+
+  void openImage(String type) async {
+    try {
+      ImageSource source;
+      if (type == "Camera") {
+        source = ImageSource.camera;
+      } else if (type == "Gallery") {
+        source = ImageSource.gallery;
+      } else {
+        throw Exception("ไม่สามารถใช้งานในขณะนี้");
+      }
+      var pickedFile = await imgPicker.pickImage(source: source);
+      if (pickedFile != null) {
+        imagePath = pickedFile.path;
+        File imageFile = File(imagePath);
+        Uint8List imageBytes = await imageFile.readAsBytes();
+        String base64string = base64.encode(imageBytes);
+
+        Uint8List decodedBytes = base64.decode(base64string);
+
+        String selectImage = base64Encode(decodedBytes);
+        await _sendMessage(selectImage);
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        snackBarSos(
+            context,
+            Text(
+              e.toString(),
+              style: const TextStyle(color: Colors.red, fontSize: 16),
+            ),
+            Colors.white),
+      );
+    }
   }
 
   void callVoice() {
@@ -354,7 +443,7 @@ class _HomeScreenState extends State<MessengerPage> {
         Icons.photo_camera,
         color: Color(0xD3FF4646),
       ),
-      onPressed: () => callCamera(),
+      onPressed: () async => callCamera(),
     );
   }
 
@@ -364,17 +453,17 @@ class _HomeScreenState extends State<MessengerPage> {
         Icons.send,
         color: Color(0xD3FF4646),
       ),
-      onPressed: () => _sendMessage(),
+      onPressed: () => _sendMessage(""),
     );
   }
 
   Widget attachFile() {
     return IconButton(
       icon: const Icon(
-        Icons.attach_file,
+        Icons.image,
         color: Color(0xD3FF4646),
       ),
-      onPressed: () => callAttachFile(),
+      onPressed: () => callImageFile(),
     );
   }
 
@@ -385,75 +474,6 @@ class _HomeScreenState extends State<MessengerPage> {
           color: Color(0xD3FF4646),
         ),
         onPressed: () => callEmoji());
-  }
-
-  Widget containerMessageOwner(String name, message, imageProfile) {
-    return Container(
-      padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-      child: Row(
-        children: [
-          Spacer(),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Container(
-                alignment: Alignment.bottomRight,
-                padding: EdgeInsets.fromLTRB(0, 0, 5, 0),
-                width: 310,
-                child: Text(
-                  name,
-                  style: TextStyle(fontSize: 10, color: Colors.blueGrey),
-                ),
-              ),
-              Container(
-                alignment: Alignment.bottomRight,
-                padding: EdgeInsets.fromLTRB(0, 0, 5, 0),
-                width: 310,
-                child: Text(
-                  message,
-                  style: TextStyle(fontSize: 16, color: Colors.black),
-                ),
-              ),
-            ],
-          ),
-          Image_NavBer(width: 40, height: 40),
-        ],
-      ),
-    );
-  }
-
-  Widget containerMessageOp(String name, message, imageProfile) {
-    return Container(
-      padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-      child: Row(
-        children: [
-          Image_NavBer(width: 40, height: 40),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Container(
-                width: 310,
-                alignment: Alignment.topLeft,
-                padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
-                child: Text(
-                  name,
-                  style: const TextStyle(fontSize: 10, color: Colors.blueGrey),
-                ),
-              ),
-              Container(
-                alignment: Alignment.topLeft,
-                padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
-                width: 310,
-                child: Text(
-                  message,
-                  style: const TextStyle(fontSize: 16, color: Colors.black),
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
   }
 
   @override

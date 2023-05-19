@@ -108,6 +108,7 @@ class GetMessageModel {
         id: json['id'],
         roomChatID: json['roomChatID'],
         message: json['message'],
+        image: json['image'],
         senderUserId: json['senderUserId'],
         createdAt: json['createdAt'],
         updatedAt: json['updatedAt'],
@@ -128,6 +129,7 @@ class GetMessageList {
   final int id;
   final int roomChatID;
   final String message;
+  final String image;
   final int senderUserId;
   final String createdAt;
   final String updatedAt;
@@ -136,6 +138,7 @@ class GetMessageList {
     required this.id,
     required this.roomChatID,
     required this.message,
+    required this.image,
     required this.senderUserId,
     required this.createdAt,
     required this.updatedAt,
@@ -146,6 +149,7 @@ class GetMessageList {
       id: json['id'],
       roomChatID: json['roomChatID'],
       message: json['message'],
+      image: json['image'],
       senderUserId: json['senderUserId'],
       createdAt: json['createdAt'],
       updatedAt: json['updatedAt'],

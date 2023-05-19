@@ -44,6 +44,25 @@ Future<GetMessageModel> GetMessageById(id) async {
   }
 }
 
+Future<GetMessageModel> GetImageByMessageId(id) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String? stringValue = prefs.getString('token') ?? '';
+  final response = await http.get(
+    Uri.parse('${urlMessenger}user/chat/message/image/$id'),
+    headers: <String, String>{
+      'Authorization': 'Bearer ' + stringValue,
+    },
+  );
+
+  if (response.statusCode == 200) {
+    final res = jsonDecode(response.body);
+    var resp = GetMessageModel.fromJson(res);
+    return resp;
+  } else {
+    throw Exception('Send APIName : GetMessageById || statusCode : ${response.statusCode.toString()} || Msg : ${jsonDecode(response.body)}');
+  }
+}
+
 Future<GetMemberRoomChatModel> GetMembersRoomChat(roomChatId) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String? stringValue = prefs.getString('token') ?? '';
