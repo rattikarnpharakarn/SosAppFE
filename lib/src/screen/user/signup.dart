@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
@@ -53,7 +55,7 @@ class _SignupState extends State<Signup> {
       ScaffoldMessenger.of(context).showSnackBar(
         snackBarSos(
           context,
-          Text(
+            const Text(
             "รหัสผ่านไม่ตรงกัน",
             style: TextStyle(
               color: Colors.red,
@@ -77,7 +79,7 @@ class _SignupState extends State<Signup> {
           context,
           Text(
             msg,
-            style: TextStyle(
+            style: const TextStyle(
               color: Colors.red,
                 fontSize: 16
             ),
@@ -144,7 +146,7 @@ class _SignupState extends State<Signup> {
           context,
           Text(
             code,
-            style: TextStyle(
+            style: const TextStyle(
               color: Colors.red,
                 fontSize: 16
             ),
@@ -166,7 +168,6 @@ class _SignupState extends State<Signup> {
   openImage(String type) async {
     try {
       var pickedFile = await imgpicker.pickImage(source: ImageSource.gallery);
-
       if (pickedFile != null) {
         imagepath = pickedFile.path;
         File imagefile = File(imagepath);

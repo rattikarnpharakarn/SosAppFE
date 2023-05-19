@@ -6,8 +6,6 @@ import 'package:sos/src/provider/config.dart';
 import 'package:sos/src/screen/common/snack_bar_sos.dart';
 import '../../model/accounts/user.dart';
 
-
-
 Future<UserInfo> GetUserProfile() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String? stringValue = prefs.getString('token') ?? '';
@@ -102,26 +100,26 @@ Future<UserInfo> GetUserProfileById(userId) async {
     final role = data['userRole'];
 
     UserInfo userInfoRes = UserInfo(
-      id: data['id'],
-      phoneNumber: data['phoneNumber'],
-      firstName: data['firstName'],
-      lastName: data['lastName'],
-      email: data['email'],
-      birthday: data['birthday'],
-      gender: data['gender'],
-      imageProfile: data['imageProfile'],
+      id: data['id'] ?? "",
+      phoneNumber: data['phoneNumber'] ?? "",
+      firstName: data['firstName'] ?? "",
+      lastName: data['lastName'] ?? "",
+      email: data['email'] ?? "",
+      birthday: data['birthday'] ?? "",
+      gender: data['gender'] ?? "",
+      imageProfile: data['imageProfile'] ?? "",
       // IDCard
-      textIDCard: idCard['textIDCard'],
-      pathImage: idCard['pathImage'],
+      textIDCard: idCard['textIDCard'] ?? "",
+      pathImage: idCard['pathImage'] ?? "",
       // address
-      address: address['address'],
-      subDistrict: address['subDistrict'],
-      district: address['district'],
-      province: address['province'],
-      postalCode: address['postalCode'],
-      country: address['country'],
-      roleId: role['id'],
-      roleName: role['name'],
+      address: address['address'] ?? "",
+      subDistrict: address['subDistrict'] ?? "",
+      district: address['district'] ?? "",
+      province: address['province'] ?? "",
+      postalCode: address['postalCode'] ?? "",
+      country: address['country'] ?? "",
+      roleId: role['id'] ?? "",
+      roleName: role['name'] ?? "",
     );
     return userInfoRes;
   } else {
