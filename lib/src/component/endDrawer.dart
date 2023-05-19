@@ -197,7 +197,14 @@ class _EndDrawerState extends State<EndDrawer> {
             ListTile(
               leading: const Icon(Icons.home),
               title: const Text("Home"),
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const MyApp(),
+                  ),
+                );
+              },
             ),
             ListTile(
               leading: const Icon(Icons.edit),

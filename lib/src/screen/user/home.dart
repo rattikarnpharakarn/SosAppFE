@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:sos/src/model/emergency/response.dart';
 import 'package:sos/src/provider/emergency/type.dart' as provider;
 import 'package:sos/src/screen/user/sos.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../component/bottom_bar.dart';
 import '../../component/endDrawer.dart';
@@ -154,12 +155,12 @@ class _HomeState extends State<Home> {
                     children: <Widget>[
                       const ListTile(
                         // leading: Icon(Icons.album, size: 60),
-                        title: Text('ข่าวสาร',
+                        title: Text('ระบบรายงานข้อมูลอุบัติเหตุ',
                             style: TextStyle(
-                                fontSize: 20.0, color: Colors.white70)),
-                        subtitle: Text('เกิดเหตุการณ์ไฟไหม้ที่....',
+                                fontSize: 27.0, color: Colors.white)),
+                        subtitle: Text('ของกระทรวงคมนาคม',
                             style:
-                                TextStyle(fontSize: 27.0, color: Colors.white)),
+                                TextStyle(fontSize: 22.0, color: Colors.white)),
                       ),
                       Container(
                         padding: const EdgeInsets.fromLTRB(0, 20, 230, 0),
@@ -168,7 +169,13 @@ class _HomeState extends State<Home> {
                             backgroundColor:
                                 const Color.fromARGB(255, 255, 255, 255),
                           ),
-                          onPressed: () {},
+                          onPressed: () async {
+                            final Uri url = Uri.parse(
+                                'https://trams.mot.go.th/main-dashboard');
+                            if (!await launchUrl(url)) {
+                              throw Exception('Could not launch $url');
+                            }
+                          },
                           child: const Text(
                             'คลิกเพื่ออ่านต่อ',
                             style: TextStyle(

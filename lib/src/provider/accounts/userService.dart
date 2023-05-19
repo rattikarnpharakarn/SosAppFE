@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sos/src/provider/config.dart';
 import 'package:sos/src/screen/common/snack_bar_sos.dart';
+import '../../model/accounts/response.dart';
 import '../../model/accounts/user.dart';
 
 Future<UserInfo> GetUserProfile() async {
@@ -176,5 +177,27 @@ Future<GetUserListModel> GetSearchUser(value) async {
     final res = jsonDecode(response.body);
     var resp = GetUserListModel.fromJson(res);
     throw Exception(resp);
+  }
+}
+
+Future<ReturnResponse> updateImageVerifyAgain(phoneNumber, password , textIDCard , pathImage) async {
+  String url = '${urlAccount}updateImageVerifyAgain';
+  final response = await http.put(
+    Uri.parse(url),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: jsonEncode(<String, dynamic>{
+      'phoneNumber': phoneNumber,
+      'password' : password,
+      'textIDCard' : textIDCard,
+      'pathImage' : pathImage,
+    }),
+  );
+
+  if (response.statusCode == 200) {
+    return ReturnResponse.fromJson(jsonDecode(response.body));
+  } else {
+    throw Exception('Send APIName : updateImageVerifyAgain || statusCode : ${response.statusCode.toString()} || Msg : ${jsonDecode(response.body)}');
   }
 }

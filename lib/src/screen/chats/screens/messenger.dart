@@ -443,6 +443,16 @@ class _HomeScreenState extends State<MessengerPage> {
     );
   }
 
+  Widget attachFile() {
+    return IconButton(
+      icon: const Icon(
+        Icons.image,
+        color: Color(0xD3FF4646),
+      ),
+      onPressed: () => callImageFile(),
+    );
+  }
+
   Widget sendMessage() {
     return IconButton(
       icon: const Icon(
@@ -453,15 +463,7 @@ class _HomeScreenState extends State<MessengerPage> {
     );
   }
 
-  Widget attachFile() {
-    return IconButton(
-      icon: const Icon(
-        Icons.image,
-        color: Color(0xD3FF4646),
-      ),
-      onPressed: () => callImageFile(),
-    );
-  }
+
 
   Widget moodIcon() {
     return IconButton(
