@@ -347,7 +347,7 @@ class _HomeScreenState extends State<MessengerPage> {
                 child: SafeArea(
                   child: Row(
                     children: [
-                      moodIcon(),
+                      // moodIcon(),
                       attachFile(),
                       camera(),
                       Expanded(
@@ -381,7 +381,7 @@ class _HomeScreenState extends State<MessengerPage> {
         );
 
   void callEmoji() {
-    print('Emoji Icon Pressed...');
+
   }
 
   final ImagePicker imgPicker = ImagePicker();
@@ -431,10 +431,6 @@ class _HomeScreenState extends State<MessengerPage> {
             Colors.white),
       );
     }
-  }
-
-  void callVoice() {
-    print('Voice Icon Pressed...');
   }
 
   Widget camera() {
