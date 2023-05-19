@@ -10,9 +10,6 @@ import 'package:sos/src/screen/user/otp.dart';
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'dart:io';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:path_provider/path_provider.dart';
 
 class SignupPhoneNumber extends StatefulWidget {
   SignupPhoneNumber({Key? key}) : super(key: key);
@@ -125,6 +122,7 @@ class _SignupPhoneNumberState extends State<SignupPhoneNumber> {
                     child: TextFormField(
                       validator: RequiredValidator(errorText: "กรุณากรอกเบอร์"),
                       controller: _controllerPhone,
+                      maxLength: 10,
                       decoration: const InputDecoration(
                         labelText: 'Phone number',
                         labelStyle: TextStyle(color: Colors.white),

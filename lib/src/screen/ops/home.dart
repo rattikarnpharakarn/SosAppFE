@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +12,7 @@ import 'package:sos/src/provider/common/getCurrentLocation.dart';
 import 'package:sos/src/provider/common/getDistanceBetweenPoints.dart';
 import 'package:sos/src/provider/emergency/inform.dart';
 import 'package:sos/src/screen/common/detailImage.dart';
+import 'package:sos/src/screen/common/snack_bar_sos.dart';
 import 'package:sos/src/screen/ops/history.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import '../../component/endDrawer.dart';
@@ -66,7 +69,6 @@ class _HomeOpsState extends State<HomeOps> {
     await initializeService();
     await _getNameProfile();
     await callAPIGetInformList();
-
   }
 
   var newFormat = DateFormat("dd-MM-yyyy HH:mm น.");
@@ -177,8 +179,8 @@ class _HomeOpsState extends State<HomeOps> {
                       Container(
                         padding: const EdgeInsets.all(1),
                         child: Text(
-                          "Hi ${_name}",
-                          style: TextStyle(
+                          "Hi $_name",
+                          style: const TextStyle(
                             color: Color.fromARGB(255, 255, 255, 255),
                             fontSize: 20,
                             decorationStyle: TextDecorationStyle.solid,
@@ -219,7 +221,7 @@ class _HomeOpsState extends State<HomeOps> {
               children: [
                 Container(
                   padding: const EdgeInsets.all(10.0),
-                  child: Text(
+                  child: const Text(
                     "การรับแจ้งเหตุ",
                     style: TextStyle(fontSize: 18),
                   ),
@@ -255,7 +257,8 @@ class _HomeOpsState extends State<HomeOps> {
                               m1.subTypeName,
                               const TextStyle(fontSize: 16, color: Colors.red),
                               m1.date,
-                              TextStyle(fontSize: 15.0, color: Colors.black54),
+                              const TextStyle(
+                                  fontSize: 15.0, color: Colors.black54),
                             ),
                             Container(
                               alignment: Alignment.topLeft,
@@ -291,7 +294,7 @@ class _HomeOpsState extends State<HomeOps> {
                                 color: Colors.blue,
                               ),
                               '',
-                              TextStyle(fontSize: 15.0),
+                              const TextStyle(fontSize: 15.0),
                             ),
                             textRow(
                               'สถานะ : ',
@@ -306,7 +309,7 @@ class _HomeOpsState extends State<HomeOps> {
                                 color: Colors.red,
                               ),
                               '',
-                              TextStyle(fontSize: 15.0),
+                              const TextStyle(fontSize: 15.0),
                             ),
                           ],
                         ),
@@ -489,7 +492,8 @@ class _HistoryPageByIdState extends State<HistoryPageById> {
                           widget.getInform.subTypeName,
                           const TextStyle(fontSize: 16, color: Colors.red),
                           widget.getInform.date,
-                          TextStyle(fontSize: 15.0, color: Colors.black54),
+                          const TextStyle(
+                              fontSize: 15.0, color: Colors.black54),
                         ),
                         Container(
                           alignment: Alignment.topLeft,
@@ -525,7 +529,7 @@ class _HistoryPageByIdState extends State<HistoryPageById> {
                             color: Colors.blue,
                           ),
                           '',
-                          TextStyle(fontSize: 15.0),
+                          const TextStyle(fontSize: 15.0),
                         ),
                         textRow(
                           'สถานะ : ',
@@ -540,7 +544,7 @@ class _HistoryPageByIdState extends State<HistoryPageById> {
                             color: Colors.red,
                           ),
                           '',
-                          TextStyle(fontSize: 15.0),
+                          const TextStyle(fontSize: 15.0),
                         ),
                         Row(
                           children: [
@@ -572,7 +576,8 @@ class _HistoryPageByIdState extends State<HistoryPageById> {
                             Container(
                               alignment: Alignment.topLeft,
                               child: TextButton(
-                                onPressed: () => _openMap(widget.getInform.latitude,
+                                onPressed: () => _openMap(
+                                    widget.getInform.latitude,
                                     widget.getInform.longitude),
                                 child: const Text(
                                   'OpenMap',
@@ -598,7 +603,7 @@ class _HistoryPageByIdState extends State<HistoryPageById> {
                                     RoundedRectangleBorder(
                                       borderRadius:
                                           BorderRadius.circular(15.29),
-                                      side: BorderSide(
+                                      side: const BorderSide(
                                           width: 1, color: Colors.green),
                                     ),
                                   ),
@@ -693,16 +698,52 @@ class _HistoryPageByIdState extends State<HistoryPageById> {
                                                                 fontSize: 16),
                                                           ),
                                                           onPressed: () async {
-                                                            await _updateInform();
-                                                            Navigator
-                                                                .pushReplacement(
-                                                              context,
-                                                              MaterialPageRoute(
-                                                                builder:
-                                                                    (context) =>
-                                                                        HistoryPage(),
-                                                              ),
-                                                            );
+                                                            ReturnResponse res =
+                                                                await _updateInform();
+                                                            if (res.code !=
+                                                                "0") {
+                                                              Navigator.pop(
+                                                                  context);
+                                                              ScaffoldMessenger
+                                                                      .of(context)
+                                                                  .showSnackBar(
+                                                                snackBarSos(
+                                                                    context,
+                                                                    Text(
+                                                                      res.message,
+                                                                      style: const TextStyle(
+                                                                          color: Colors
+                                                                              .white,
+                                                                          fontSize:
+                                                                              16),
+                                                                    ),
+                                                                    Colors.red),
+                                                              );
+                                                              await Future.delayed(
+                                                                  const Duration(
+                                                                      milliseconds:
+                                                                          100),
+                                                                  () async {});
+                                                              Navigator
+                                                                  .pushReplacement(
+                                                                context,
+                                                                MaterialPageRoute(
+                                                                  builder:
+                                                                      (context) =>
+                                                                          const HomeOps(),
+                                                                ),
+                                                              );
+                                                            } else {
+                                                              Navigator
+                                                                  .pushReplacement(
+                                                                context,
+                                                                MaterialPageRoute(
+                                                                  builder:
+                                                                      (context) =>
+                                                                          const HistoryPage(),
+                                                                ),
+                                                              );
+                                                            }
                                                           },
                                                         ),
                                                       ),

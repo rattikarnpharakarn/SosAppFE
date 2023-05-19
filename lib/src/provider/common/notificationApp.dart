@@ -15,6 +15,7 @@ Future<void> showNotificationOTP(String otp, verifyCode) async {
     importance: Importance.max,
     priority: Priority.high,
     ticker: 'ticker',
+    icon: "",
   );
 
   const NotificationDetails platformChannelDetails = NotificationDetails(
@@ -43,16 +44,14 @@ Future<void> notificationEmergency(res) async {
     android: androidNotificationDetails,
   );
 
-
   var resp = NotificationModel.fromJson(res);
 
   // todo CurrentLocation
-  late double currentLatitude =0.0;
-  late double currentLongitude =0.0;
-
+  late double currentLatitude = 0.0;
+  late double currentLongitude = 0.0;
 
   // todo Destination Location
-  final double latitude =double.parse(resp.latitude);
+  final double latitude = double.parse(resp.latitude);
   final double longitude = double.parse(resp.longitude);
 
   await getCurrentLocation().then((value) async {
@@ -64,7 +63,7 @@ Future<void> notificationEmergency(res) async {
   double unit = await getDistanceBetweenPoints(
       latitude, longitude, currentLatitude, currentLongitude, "kilometers");
   unit += 2;
-  final String kilometer  = unit.toStringAsFixed(2);
+  final String kilometer = unit.toStringAsFixed(2);
 
   String msg = 'คำอธิบาย : ${resp.description} \n'
       "ระยะห่างจากคุณ โดยประมาณ : $kilometer กิโลเมตร";

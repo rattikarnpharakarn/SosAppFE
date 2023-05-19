@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:sos/main.dart';
 import 'package:sos/src/provider/common/notificationApp.dart';
 import 'package:sos/src/provider/config.dart';
 
@@ -10,9 +8,8 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:sos/src/screen/common/snack_bar_sos.dart';
 import 'package:sos/src/screen/user/signupPhoneNumber.dart';
-import 'dart:developer' as developer;
 
-import '../../model/accounts/signup.dart';
+import 'package:sos/src/model/accounts/signup.dart';
 import 'signup.dart';
 
 class OTP extends StatefulWidget {
@@ -114,6 +111,20 @@ class _OTPState extends State<OTP> {
       );
       return Data.fromJson(jsonDecode(response.body));
     } else {
+      final msg = json.decode(response.body);
+      ScaffoldMessenger.of(context).showSnackBar(
+        snackBarSos(
+            context,
+            Text(
+              msg['message'],
+              style: const TextStyle(
+                color: Colors.red,
+                fontSize: 16,
+              ),
+            ),
+            Colors.white
+        ),
+      );
       throw Exception('Send APIName : verifyOTP || statusCode : ${response.statusCode.toString()} || Msg : ${jsonDecode(response.body)}');
     }
   }

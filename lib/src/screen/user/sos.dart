@@ -89,7 +89,7 @@ class SosPageState extends State<SosPage> {
           }
         });
       }
-      _isChecked = List<bool>.filled(getSubTypeList.length + 1, false);
+      _isChecked = List<bool>.filled(getSubTypeList.length + 1, true);
     });
   }
 
