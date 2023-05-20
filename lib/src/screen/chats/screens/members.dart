@@ -40,13 +40,15 @@ class _MembersScreenState extends State<MembersPage> {
   @override
   void initState() {
     super.initState();
-    _getMembersRoomChat(widget.getChat.roomChatID);
+    _getUserProfile();
+    Future.delayed(Duration(milliseconds: 1000), () async {
+      _getMembersRoomChat(widget.getChat.roomChatID);
+    });
   }
 
   List<GetMemberRoomChatShow> _getMemberRoomChatShow = [];
 
   _getMembersRoomChat(roomChatId) async {
-    await _getUserProfile();
     await GetMembersRoomChat(roomChatId).then(
       (value) {
         if (value.code == "0") {
@@ -55,27 +57,22 @@ class _MembersScreenState extends State<MembersPage> {
               Future.forEach(
                 value.memberRoomChat,
                 (data) async {
-                  UserInfo userByid = await GetUserProfileById(data.userId);
-
                   GetMemberRoomChatShow getMemberRoomChat =
                       GetMemberRoomChatShow(
                     userId: data.userId,
-                    firstName: userByid.firstName,
-                    lastName: userByid.lastName,
+                    firstName: data.firstName,
+                    lastName: data.lastName,
                   );
 
                   _getMemberRoomChatShow.add(getMemberRoomChat);
                 },
               );
+              setState(() {
+                isLoading = true;
+              });
             },
           );
         }
-
-        Future.delayed(Duration(milliseconds: 1000), () async {
-          setState(() {
-            isLoading = true;
-          });
-        });
       },
     ).onError((error, stackTrace) {
       setState(() {
@@ -153,7 +150,6 @@ class _MembersScreenState extends State<MembersPage> {
       }
 
       userInfo = data;
-      isLoading = true;
     });
   }
 

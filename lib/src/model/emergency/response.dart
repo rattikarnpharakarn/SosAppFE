@@ -353,9 +353,6 @@ class GetType {
   factory GetType.fromJson(Map<String, dynamic> json) {
     List<GetSubType>? subtype = [];
     for (dynamic sub in json['subTypeRes']) {
-      print(sub['id']);
-      print(sub['createdAt']);
-      print(sub['updatedAt']);
     }
 
     return GetType(

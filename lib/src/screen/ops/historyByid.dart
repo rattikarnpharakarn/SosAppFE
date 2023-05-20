@@ -76,6 +76,10 @@ class _HistoryPageByIdState extends State<HistoryPageById> {
   }
 
   _navigatorChatPage() async {
+    Navigator.pop(
+      context,
+    );
+
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
@@ -243,7 +247,8 @@ class _HistoryPageByIdState extends State<HistoryPageById> {
                           ),
                           '',
                           const TextStyle(fontSize: 16, color: Colors.red),
-                          'อัพเดทเมื่อ : ${widget.getInform.updateDate}',
+                          '',
+                          // 'อัพเดทเมื่อ : ${widget.getInform.updateDate}',
                           TextStyle(fontSize: 15.0, color: Colors.black54),
                         ),
                         Container(

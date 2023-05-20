@@ -30,6 +30,10 @@ Future<double> getDistanceBetweenPoints(
 Future<bool> checkDistanceBetweenPoints(double currentLatitude,double currentLongitude, String lat , String long) async{
   bool res = false;
 
+  if (lat == "" || long == ""){
+    return res;
+  }
+
   // todo Destination Location
    double latitude = double.parse(lat);
    double longitude = double.parse(long);

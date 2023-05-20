@@ -179,6 +179,8 @@ class GetMemberRoomChatModel {
     for (dynamic json in json['data']['memberRoomChat']) {
       GetMemberRoomChatList arr = GetMemberRoomChatList(
         userId: json['userId'],
+        firstName: json['firstname'],
+        lastName: json['lastname'],
       );
       list.add(arr);
     }
@@ -196,14 +198,20 @@ class GetMemberRoomChatModel {
 
 class GetMemberRoomChatList {
   final int userId;
+  final String firstName;
+  final String lastName;
 
   GetMemberRoomChatList({
     required this.userId,
+    required this.firstName,
+    required this.lastName,
   });
 
   factory GetMemberRoomChatList.fromJson(Map<String, dynamic> json) {
     return GetMemberRoomChatList(
       userId: json['userId'],
+      firstName: json['firstname'],
+      lastName: json['lastname'],
     );
   }
 }
@@ -224,8 +232,8 @@ class GetMemberRoomChatShow {
   factory GetMemberRoomChatShow.fromJson(Map<String, dynamic> json) {
     return GetMemberRoomChatShow(
       userId: json['userId'],
-      firstName: json['firstName'],
-      lastName: json['lastName'],
+      firstName: json['firstname'],
+      lastName: json['lastname'],
     );
   }
 }

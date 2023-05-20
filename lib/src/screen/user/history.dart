@@ -217,7 +217,8 @@ class _HistoryPageState extends State<HistoryPage> {
                               ),
                               '',
                               const TextStyle(fontSize: 16, color: Colors.red),
-                              'อัพเดทเมื่อ : ${m1.updateDate}' ,
+                              '' ,
+                              // 'อัพเดทเมื่อ : ${m1.updateDate}' ,
                               TextStyle(fontSize: 15.0, color: Colors.black54),
                             ),
                             // Container(
