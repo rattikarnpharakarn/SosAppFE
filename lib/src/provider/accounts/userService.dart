@@ -57,7 +57,7 @@ Future<UserInfo> GetUserProfile() async {
       phoneNumber: data['phoneNumber'],
       firstName: data['firstName'],
       lastName: data['lastName'],
-      email: data['email'],
+      email: data['email'] ?? "",
       birthday: data['birthday'],
       gender: data['gender'],
       imageProfile: data['imageProfile'],

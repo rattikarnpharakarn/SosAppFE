@@ -116,7 +116,7 @@ class GetUserListModel {
           phoneNumber: json['phoneNumber'],
           firstName: json['firstName'],
           lastName: json['lastName'],
-          email: json['email'],
+          email: json['email'] ?? "",
           birthday: json['birthday'],
           gender: json['gender'],
           imageProfile: json['imageProfile'],

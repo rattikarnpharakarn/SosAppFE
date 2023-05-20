@@ -153,8 +153,8 @@ class GetInformByIdModel {
     if (json['data']['image'] != null) {
       for (dynamic e in json['data']['image']) {
         GetInformByIdImage arr = GetInformByIdImage(
-          imageId: e['ImageId'] ?? '',
-          image: e['Image'] ?? '',
+          imageId: e['ImageId'],
+          image: e['Image'],
         );
         images.add(arr);
       }

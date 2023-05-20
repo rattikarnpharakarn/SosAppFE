@@ -271,7 +271,7 @@ class _MembersScreenState extends State<MembersPage> {
                                             Text(
                                               msg,
                                               style: const TextStyle(
-                                                  color: Colors.white,
+                                                  color: Colors.red,
                                                   fontSize: 16),
                                             ),
                                             Colors.white,
@@ -281,7 +281,7 @@ class _MembersScreenState extends State<MembersPage> {
                                         _joinRoomChat(
                                             widget.getChat.roomChatID);
                                         msg =
-                                            'เพิ่มผู้ใช้งานเข้าในห้องแชทเรียบร้อนแล้ว';
+                                            'เพิ่มผู้ใช้งานเข้าในห้องแชทเรียบร้อยแล้ว';
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(
                                           snackBarSos(
@@ -289,7 +289,7 @@ class _MembersScreenState extends State<MembersPage> {
                                             Text(
                                               msg,
                                               style: const TextStyle(
-                                                  color: Colors.white,
+                                                  color: Colors.red,
                                                   fontSize: 16),
                                             ),
                                             Colors.white,
@@ -357,7 +357,7 @@ class _MembersScreenState extends State<MembersPage> {
                                               Text(
                                                 msg,
                                                 style: const TextStyle(
-                                                    color: Colors.white,
+                                                    color: Colors.red,
                                                     fontSize: 16),
                                               ),
                                               Colors.white,
@@ -371,7 +371,7 @@ class _MembersScreenState extends State<MembersPage> {
                                               .text.length <
                                           3) {
                                         String msg =
-                                            'ตัวอักษรต้องไม่ต่ำกว่า 3 ตัวขึ้นไป';
+                                            'ตัวอักษรต้องไม่น้อยกว่า 3 อักษรตัวขึ้นไป';
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(
                                           snackBarSos(
@@ -379,7 +379,7 @@ class _MembersScreenState extends State<MembersPage> {
                                             Text(
                                               msg,
                                               style: const TextStyle(
-                                                  color: Colors.white,
+                                                  color: Colors.red,
                                                   fontSize: 16),
                                             ),
                                             Colors.white,
