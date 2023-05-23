@@ -907,7 +907,7 @@ class _SignupState extends State<Signup> {
                             }
                           },
                           child: const Text(
-                            "SingUp",
+                            "Sign Up",
                             style: TextStyle(fontSize: 24),
                           ),
                         ),

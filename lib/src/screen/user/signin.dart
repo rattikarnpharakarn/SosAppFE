@@ -379,7 +379,7 @@ class _SigninState extends State<Signin> {
                       }));
                     },
                     child: const Text(
-                      "Signup",
+                      "Sign Up",
                       style: TextStyle(fontSize: 24),
                     ),
                   ),
